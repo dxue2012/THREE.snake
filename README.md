@@ -4,4 +4,4 @@ The game is a two player variant of a classic snake game which takes place on a 
 
 ## Team Members
 
-Jie Liang Li, Tiancheng Zheng, Dyland Xue
+Jie Liang Lee, Tiancheng Zheng, Dyland Xue
