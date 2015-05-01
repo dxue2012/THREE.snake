@@ -29,9 +29,30 @@ This is the main page for the game. Currently it still shows the animation assin
 
 Our starting code is adopted from [COS426 Assignment 4](http://www.cs.princeton.edu/courses/archive/spring15/cos426/assign4/). Please push directly to the branch gh-pages for now so that the results are immediately visible on [github.io](http://dxue2012.github.io/THREE.snake).
 
-### Setting Up TypeScript
-We prefer [TypeScript](http://www.typescriptlang.org/) over JavaScript for its better type system (Well to be fair, JavaScript has no types...). A really cool plugin called **TSD** allows us to install typings from project [DefinitelyTyped](https://github.com/DefinitelyTyped/tsd), from which we retrieve typings for existing 3rd-party librarys such as **THREE.js**. To setup your dev environment, follow the instructions on their [home page](https://github.com/DefinitelyTyped/tsd) and then run
+### npm
+[npm](https://github.com/npm/npm) is a package manager for JavaScript. It is similar to what **pip** is to python, but instead of a `requirements.txt`, it stores settings in `packages.json`.
 
+If you already have **npm** installed, please skip this step. Otherwise, install **npm** by running
+```
+curl -L https://www.npmjs.com/install.sh | sh
+```
+
+Or if you're a Mac user and prefer **HomeBrew**, do
+```
+brew install node
+```
+
+If **npm** is installed successfully, `npm -v` should give you the version number of **npm** (the latest one is 2.x).
+
+### TypeScript
+We prefer [TypeScript](http://www.typescriptlang.org/) over JavaScript for its better type system (Well to be fair, JavaScript has no types...). A really cool plugin called **TSD** allows us to install typings from project [DefinitelyTyped](https://github.com/DefinitelyTyped/tsd), from which we retrieve typings for existing 3rd-party librarys such as **THREE.js**. 
+
+To setup your dev environment, first install **TypeScript** and **TSD** by running
+```
+npm install -g typescript
+npm install tsd@next -g
+```
+and then run
 ```
 tsd reinstall
 ```
