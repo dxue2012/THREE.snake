@@ -1,0 +1,24 @@
+{
+    "version": "1.5.0-alpha",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./main.ts",
+        "./typings/All.d.ts",
+        "./typings/Emitter.d.ts",
+        "./typings/ParticleEngine.d.ts",
+        "./typings/Renderer.d.ts",
+        "./typings/Scene.d.ts",
+        "./typings/SystemSettings.d.ts"
+    ]
+}
