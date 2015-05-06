@@ -62,6 +62,14 @@ function init() {
     scene.add(MovingCube);
     var ambientlight = new THREE.AmbientLight(0x111111);
     scene.add(ambientlight);
+
+    var sphere_geo = new THREE.SphereGeometry(100, 50, 50);
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00 });
+    var sphere = new THREE.Mesh(sphere_geo, material);
+    sphere.position.y = 100;
+
+    scene.add(sphere);
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     // renderer.setClearColorHex(0x000000, 1);
     renderer.autoClear = false;
