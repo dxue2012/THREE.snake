@@ -83,14 +83,10 @@ function update() {
     var delta = clock.getDelta();
     var moveDistance = 200 * delta;
     var rotateAngle = Math.PI / 2 * delta;
-    if (keyboard.pressed("W"))
-        MovingCube.translateZ(-moveDistance);
-    if (keyboard.pressed("S"))
-        MovingCube.translateZ(moveDistance);
-    if (keyboard.pressed("Q"))
-        MovingCube.translateX(-moveDistance);
-    if (keyboard.pressed("E"))
-        MovingCube.translateX(moveDistance);
+
+    // always move forward
+    MovingCube.translateZ(-moveDistance);
+
     var rotation_matrix = new THREE.Matrix4().identity();
     if (keyboard.pressed("A"))
         MovingCube.rotateOnAxis(new THREE.Vector3(0, 1, 0), rotateAngle);
@@ -100,10 +96,12 @@ function update() {
         MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), rotateAngle);
     if (keyboard.pressed("F"))
         MovingCube.rotateOnAxis(new THREE.Vector3(1, 0, 0), -rotateAngle);
+
     if (keyboard.pressed("Z")) {
         MovingCube.position.set(0, 25.1, 0);
         MovingCube.rotation.set(0, 0, 0);
     }
+
     var relativeCameraOffset = new THREE.Vector3(0, 50, 200 + 100);
     var cameraOffset = relativeCameraOffset.applyMatrix4(MovingCube.matrixWorld);
     chaseCamera.position.x = cameraOffset.x;
