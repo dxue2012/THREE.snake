@@ -8,10 +8,11 @@
 
 <body>
     <!-- Core THREE.js -->
-    <script src="libjs/dat.gui.min.js"> </script>
+    <!-- // <script src="libjs/dat.gui.min.js"> </script> -->
     <script src="libjs/stats.min.js"></script>
-    <script src="libjs/three.min.js"></script>
-    <script src="libjs/TrackballControls.js"></script>
+    <script src="bower_components/threejs/build/three.js"></script>
+    <script src="bower_components/threex.keyboardstate/threex.keyboardstate.js"></script>
+    <!-- // <script src="libjs/TrackballControls.js"></script> -->
 
     <script id="vertexShader" type="x-shader/x-vertex">
         // attribute vec3 position; // apparently three.js builds in position. Similarly the projection and model-view matrices
@@ -47,15 +48,16 @@
     </script>
 
         <!-- Our program -->
-    <script src="js/utils.js"></script>
-    <script src="js/initializers.js"></script>
-    <script src="js/updaters.js"></script>
-    <script src="js/ParticleEngine.js"></script>
-    <script src="js/systemSettings.js"></script>
-    <script src="js/renderer.js"></script>
-    <script src="js/scene.js"></script>
-
-    <script src="js/main.js"> </script>
+    <!-- // <script src="js/utils.js"></script>
+    // <script src="js/initializers.js"></script>
+    // <script src="js/updaters.js"></script>
+    // <script src="js/ParticleEngine.js"></script>
+    // <script src="js/systemSettings.js"></script>
+    // <script src="js/renderer.js"></script>
+    // <script src="js/scene.js"></script>
+    //
+    // <script src="js/main.js"> </script> -->
+    <script src="js/dual-viewports.js"></script>
 
     <div id="stats"></div>
     <div id="main_div">

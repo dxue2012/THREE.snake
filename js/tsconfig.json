@@ -13,6 +13,7 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "./dual-viewports.ts",
         "./main.ts",
         "./typings/All.d.ts",
         "./typings/Emitter.d.ts",

@@ -63,12 +63,12 @@ window.onload = function() {
     // Setup renderer, scene and gui
     // Gui.init( Main.controlsChangeCallback,
     //           Main.displayChangeCallback );
-    Scene.create();
-
-    // Add particle system
-    Main.particleSystemChangeCallback( SystemSettings.snakeWorld );
-
-    Renderer.create( Scene, document.getElementById("canvas") );
-
-    Renderer.update();
+    // Scene.create();
+    //
+    // // Add particle system
+    // Main.particleSystemChangeCallback( SystemSettings.snakeWorld );
+    //
+    // Renderer.create( Scene, document.getElementById("canvas") );
+    //
+    // Renderer.update();
 };

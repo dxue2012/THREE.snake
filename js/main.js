@@ -44,8 +44,4 @@ Main.particleSystemChangeCallback = function (InputSettings) {
 };
 window.onload = function () {
     //Student.updateHTML();
-    Scene.create();
-    Main.particleSystemChangeCallback(SystemSettings.snakeWorld);
-    Renderer.create(Scene, document.getElementById("canvas"));
-    Renderer.update();
 };
