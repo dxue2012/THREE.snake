@@ -65,21 +65,11 @@ SystemSettings.snakeWorld = {
 
         Scene.addObject( plane );
 
-        var sphere_geo = new THREE.SphereGeometry(50, 32, 32);
+        var sphere_geo = new THREE.SphereGeometry(32, 32, 32);
         var material = new THREE.MeshBasicMaterial( {color: 0xffff00 });
         var sphere = new THREE.Mesh(sphere_geo, material);
 
+        sphere.position.y = 32;
         Scene.addObject( sphere );
-
-        // add a point light
-        // var pointLight = new THREE.PointLight(0xFFFFFF);
-        //
-        // // set its position
-        // pointLight.position.x = 10;
-        // pointLight.position.y = 50;
-        // pointLight.position.z = 130;
-        //
-        // // add to the scene
-        // scene.addObject(pointLight);
     },
 };
