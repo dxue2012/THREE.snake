@@ -29,7 +29,7 @@ class Snake implements ISnake {
 
     public growHead() {
         var head: Particle;
-        var deltaT = 1 / 10.0;
+        var deltaT = 1 / 100.0;
 
         // update head position
         this.headPosition

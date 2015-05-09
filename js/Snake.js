@@ -14,7 +14,7 @@ var Snake = (function () {
     };
     Snake.prototype.growHead = function () {
         var head;
-        var deltaT = 1 / 10.0;
+        var deltaT = 1 / 100.0;
         this.headPosition
             .add(this.direction.clone().multiplyScalar(deltaT))
             .setLength(this.surface.radius);

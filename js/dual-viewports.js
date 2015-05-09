@@ -80,6 +80,8 @@ function init() {
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
+
+    updateCameraPositions();
 }
 
 function animate() {
@@ -105,10 +107,10 @@ function update() {
     // snake.turn("A");
 
     // always move forward
-    // snake.moveForward();
+    snake.moveForward();
 
     // updateCameraPositions
-    updateCameraPositions();
+    // updateCameraPositions();
 
     // update stats
     updateStats();
