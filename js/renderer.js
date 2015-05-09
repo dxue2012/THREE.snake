@@ -16,14 +16,19 @@ var Renderer = Renderer || {
 
 };
 
+// TODO: always fullscreen for now
 Renderer.getDims = function() {
     var width  = window.innerWidth;
     var height = window.innerHeight;
+
+    /*
     if (Gui.values.windowSize !== "full") {
         var parts = Gui.values.windowSize.split('x');
         width  = parseInt(parts[0]);
         height = parseInt(parts[1]);
     }
+    */
+
     Renderer._width  = width;
     Renderer._height = height;
     Renderer._aspect = width/height;
