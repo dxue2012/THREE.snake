@@ -46,6 +46,10 @@ function init() {
     light.position.set(0, 250, 0);
     scene.add(light);
 
+    var directionalLight = new THREE.DirectionalLight(0xffffff);
+    directionalLight.position.set(0, 10, 0);
+    scene.add(directionalLight);
+
     // var floorTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
     // floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
     // floorTexture.repeat.set(10, 10);
@@ -66,7 +70,7 @@ function init() {
 
     // sphere
     var sphere_geo = new THREE.SphereGeometry(1, 32, 32);
-    var material = new THREE.MeshBasicMaterial( {color: 0x000000 });
+    var material = new THREE.MeshBasicMaterial( {color: 0x0011ff });
     var sphere = new THREE.Mesh(sphere_geo, material);
     scene.add(sphere);
 
