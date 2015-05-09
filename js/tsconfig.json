@@ -13,13 +13,18 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
-        "./dual-viewports.ts",
+        "./Particle.ts",
+        "./Snake.ts",
+        "./Updater.ts",
         "./main.ts",
         "./typings/All.d.ts",
         "./typings/Emitter.d.ts",
+        "./typings/Particle.d.ts",
         "./typings/ParticleEngine.d.ts",
+        "./typings/Queue.d.ts",
         "./typings/Renderer.d.ts",
         "./typings/Scene.d.ts",
+        "./typings/Snake.d.ts",
         "./typings/SystemSettings.d.ts"
     ]
 }

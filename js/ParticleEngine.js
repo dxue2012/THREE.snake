@@ -332,4 +332,3 @@ Emitter.prototype.getSpawnable = function ( toAdd ) {
 
     return toSpawn;
 };
-
