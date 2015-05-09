@@ -71,8 +71,19 @@ function init() {
     // sphere
     var sphere_geo = new THREE.SphereGeometry(1, 32, 32);
     var material = new THREE.MeshBasicMaterial( {color: 0x0011ff });
-    var sphere = new THREE.Mesh(sphere_geo, material);
-    scene.add(sphere);
+    // var sphere = new THREE.Mesh(sphere_geo, material);
+    // scene.add(sphere);
+
+    // var redMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, transparent: true, opacity: 0.5 } );
+    // var sphere = new THREE.Mesh( sphere_geo, redMaterial );
+    // sphere.position.set(0,0,0);
+    // scene.add( sphere );
+
+    var moonTexture = THREE.ImageUtils.loadTexture( 'images/earthcloud.jpg' );
+    var moonMaterial = new THREE.MeshLambertMaterial( { map: moonTexture, transparent: true, opacity: 0.75 } );
+    var moon = new THREE.Mesh( sphere_geo, moonMaterial );
+    moon.position.set(0, 0, 0);
+    scene.add( moon );
 
     var geometricSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 1);
 
