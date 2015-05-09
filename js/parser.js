@@ -8,12 +8,12 @@ Parser.getCommands = function( url ) {
     // eliminate anything in string up through '?'
     var pos = url.lastIndexOf("?");
     url = url.substr(pos + 1);
-    
+
     // split the URL by the word 'apply'
     url = url.replace(/apply/g, '|');
     var applies = url.split('|');
     var paramsArray = [];
-    
+
     for ( var i = 0; i < applies.length; i++ ) {
         var params = {};
         var commands = applies[i].split('&');
@@ -81,4 +81,3 @@ Parser.parseJson = function( jsonFile ) {
     var obj = JSON.parse( request.responseText );
     return obj;
 };
-

@@ -2,16 +2,17 @@
 <html>
 
 <head>
-    <title> COS426 Assignment 2 &mdash; Mesh Processing &mdash; Interactive</title>
+    <title>THREE.Snake</title>
     <link href="css/style.css" type="text/css" rel="stylesheet"/>
 </head>
 
 <body>
     <!-- Core THREE.js -->
-    <script src="libjs/dat.gui.min.js"> </script>
+    <!-- // <script src="libjs/dat.gui.min.js"> </script> -->
     <script src="libjs/stats.min.js"></script>
-    <script src="libjs/three.min.js"></script>
-    <script src="libjs/TrackballControls.js"></script>
+    <script src="bower_components/threejs/build/three.js"></script>
+    <script src="bower_components/threex.keyboardstate/threex.keyboardstate.js"></script>
+    <!-- // <script src="libjs/TrackballControls.js"></script> -->
 
     <script id="vertexShader" type="x-shader/x-vertex">
         // attribute vec3 position; // apparently three.js builds in position. Similarly the projection and model-view matrices
@@ -47,23 +48,20 @@
     </script>
 
         <!-- Our program -->
-    <script src="js/utils.js"></script>
-    <script src="js/gui.js"></script>
-    <script src="js/initializers.js"></script>
-    <script src="js/updaters.js"></script>
-    <script src="js/ParticleEngine.js"></script>
-    <script src="js/systemSettings.js"></script>
-    <script src="js/renderer.js"></script>
-    <script src="js/scene.js"></script>
-    <script src="js/student.js"> </script>
-    <script src="js/parser.js"> </script>
-
-    <script src="js/main.js"> </script>
+    <!-- // <script src="js/utils.js"></script>
+    // <script src="js/initializers.js"></script>
+    // <script src="js/updaters.js"></script>
+    // <script src="js/ParticleEngine.js"></script>
+    // <script src="js/systemSettings.js"></script>
+    // <script src="js/renderer.js"></script>
+    // <script src="js/scene.js"></script>
+    //
+    // <script src="js/main.js"> </script> -->
+    <script src="js/dual-viewports.js"></script>
 
     <div id="stats"></div>
     <div id="main_div">
-        <h1> <span class="assignment">COS426 Assignment 4<br></span> Particles </h1>
-        <h2 id="student"></h2>
+        <h1> THREE.Snake </h1>
         <canvas id="canvas"> </canvas>
     </div>
     <div id="alert_div" title="alert"> </div>
