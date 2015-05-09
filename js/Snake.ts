@@ -1,13 +1,24 @@
-class Snake implements Snake {
-    private particles: Queue<Particle>;
-    private direction: THREE.Vector3;
-    private headPosition: THREE.Vector3;
+declare var Queue;
 
-    constructor(parts: Queue<Particle>, headPos: THREE.Vector3,
-        dir: THREE.Vector3) {
-        this.particles = parts;
+class Snake implements ISnake {
+    particles: Queue<IParticle>;
+    direction: THREE.Vector3;
+    headPosition: THREE.Vector3;
+
+    // suppose surface is a sphere, and surface is centered at origin
+    surface: THREE.Sphere;
+
+    constructor(headPos: THREE.Vector3,
+        dir: THREE.Vector3, sphere: THREE.Sphere) {
         this.direction = dir;
         this.headPosition = headPos;
+        this.particles = new Queue();
+
+        this.surface = sphere;
+
+        for (var i = 0; i < 30; i++) {
+            this.growHead();
+        }
     }
 
     public getLength(): number {
@@ -16,12 +27,21 @@ class Snake implements Snake {
 
     public growHead() {
         var head: Particle;
+        var deltaT = 1 / 10.0;
 
-        // calculate new head position
+        // update head position
+        this.headPosition
+            .add(this.direction.clone().multiplyScalar(deltaT))
+            .setLength(this.surface.radius);
 
+        // update head
+        head = new Particle(this.headPosition);
         this.particles.enqueue(head);
 
-        // update direction, headPosition
+        // update direction
+        var normal: THREE.Vector3 = this.headPosition.clone().normalize();
+        var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
+        this.direction.sub(normDir).normalize();
     }
 
     public chopTail() {
@@ -44,5 +64,8 @@ class Snake implements Snake {
     public moveForward() {
         this.chopTail();
         this.growHead();
+    }
+
+    private _checkInvariants() {
     }
 }

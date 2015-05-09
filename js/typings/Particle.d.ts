@@ -1,3 +1,3 @@
-interface Particle {
+interface IParticle {
     position: THREE.Vector3;
 }

@@ -4,8 +4,8 @@
 var container, scene, renderer, controls, stats;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
-var MovingCube;
 var chaseCamera, topCamera;
+var snake;
 
 init();
 animate();
@@ -45,36 +45,38 @@ function init() {
     light.position.set(0, 250, 0);
     scene.add(light);
 
-    var floorTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
-    floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    floorTexture.repeat.set(10, 10);
-    var floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture, side: THREE.DoubleSide });
-    var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
-    var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    floor.position.y = -0.5;
-    floor.rotation.x = Math.PI / 2;
-    scene.add(floor);
+    // var floorTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
+    // floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+    // floorTexture.repeat.set(10, 10);
+    // var floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture, side: THREE.DoubleSide });
+    // var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+    // var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    // floor.position.y = -0.5;
+    // floor.rotation.x = Math.PI / 2;
+    // scene.add(floor);
 
     var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
     var skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x9999ff, side: THREE.BackSide });
     var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
     scene.add(skyBox);
 
-    var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
-    var MovingCubeGeom = new THREE.CubeGeometry(50, 50, 50, 1, 1, 1);
-    MovingCube = new THREE.Mesh(MovingCubeGeom, material);
-    MovingCube.position.set(0, 25.1, 0);
-    scene.add(MovingCube);
-
     var ambientlight = new THREE.AmbientLight(0x111111);
     scene.add(ambientlight);
 
     // sphere
-    var sphere_geo = new THREE.SphereGeometry(100, 50, 50);
+    var sphere_geo = new THREE.SphereGeometry(1, 32, 32);
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00 });
     var sphere = new THREE.Mesh(sphere_geo, material);
-    sphere.position.y = 100;
     scene.add(sphere);
+
+    var geometricSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 1);
+
+    // our snake
+    var headPos = new THREE.Vector3(1, 0, 0);
+    var dir = new THREE.Vector3(0, 1, 0);
+    snake = new Snake(headPos, dir, geometricSphere);
+
+    // add snake to scene
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
@@ -86,36 +88,12 @@ function animate() {
     update();
 }
 
-function turn(direction) {
-    var LEFT = "A";
-    var RIGHT = "D";
-
-    if (keyboard.pressed(LEFT)) {
-        // update velocity
-    } else if (keyboard.pressed(RIGHT)) {
-        // update velocity
-    }
-}
-
-function spawnParticle() {
-
-}
-
-function killParticle() {
-
-}
-
-function moveForward() {
-
-}
-
 function updateCameraPositions() {
-    var relativeCameraOffset = new THREE.Vector3(0, 50, 200 + 100);
-    var cameraOffset = relativeCameraOffset.applyMatrix4(MovingCube.matrixWorld);
-    chaseCamera.position.x = cameraOffset.x;
-    chaseCamera.position.y = cameraOffset.y;
-    chaseCamera.position.z = cameraOffset.z;
-    chaseCamera.lookAt(MovingCube.position);
+    var snakeHead = snake.headPosition;
+    chaseCamera.position.x = snakeHead.x * 5;
+    chaseCamera.position.y = snakeHead.y * 5;
+    chaseCamera.position.z = snakeHead.z * 5;
+    chaseCamera.lookAt(new THREE.Vector3(0, 0, 0));
 }
 
 function updateStats() {
@@ -124,10 +102,10 @@ function updateStats() {
 
 function update() {
     // rotate first
-    turn();
+    // snake.turn("A");
 
     // always move forward
-    moveForward();
+    // snake.moveForward();
 
     // updateCameraPositions
     updateCameraPositions();
