@@ -54,7 +54,7 @@ npm install tsd@next -g
 ```
 and then run
 ```
-tsd reinstall
+tsd reinstall --save
 ```
 
 This re-installs (or if it is the first time, just installs) the definitions listed in `tsd.json` to the folder `typings/`. Note that `typings/` is ignored by `.gitignore` so that it doesn't clutter our repo.
