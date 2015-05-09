@@ -7,14 +7,16 @@ class Snake implements ISnake {
 
     // suppose surface is a sphere, and surface is centered at origin
     surface: THREE.Sphere;
+    scene: THREE.Scene;
 
     constructor(headPos: THREE.Vector3,
-        dir: THREE.Vector3, sphere: THREE.Sphere) {
+        dir: THREE.Vector3, sphere: THREE.Sphere, scene: THREE.Scene) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
 
         this.surface = sphere;
+        this.scene = scene;
 
         for (var i = 0; i < 30; i++) {
             this.growHead();
@@ -42,10 +44,15 @@ class Snake implements ISnake {
         var normal: THREE.Vector3 = this.headPosition.clone().normalize();
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
         this.direction.sub(normDir).normalize();
+
+        // add to scene
+        this.scene.add(head.sphere);
     }
 
     public chopTail() {
-        this.particles.dequeue();
+        var tailParticle = this.particles.dequeue();
+
+        this.scene.remove(tailParticle.sphere);
     }
 
     public turn(input: String) {
@@ -68,4 +75,5 @@ class Snake implements ISnake {
 
     private _checkInvariants() {
     }
+
 }

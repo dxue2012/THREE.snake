@@ -1,9 +1,10 @@
 var Snake = (function () {
-    function Snake(headPos, dir, sphere) {
+    function Snake(headPos, dir, sphere, scene) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
         this.surface = sphere;
+        this.scene = scene;
         for (var i = 0; i < 30; i++) {
             this.growHead();
         }
@@ -22,9 +23,11 @@ var Snake = (function () {
         var normal = this.headPosition.clone().normalize();
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
         this.direction.sub(normDir).normalize();
+        this.scene.add(head.sphere);
     };
     Snake.prototype.chopTail = function () {
-        this.particles.dequeue();
+        var tailParticle = this.particles.dequeue();
+        this.scene.remove(tailParticle.sphere);
     };
     Snake.prototype.turn = function (input) {
         var LEFT = "A";

@@ -65,7 +65,7 @@ function init() {
 
     // sphere
     var sphere_geo = new THREE.SphereGeometry(1, 32, 32);
-    var material = new THREE.MeshBasicMaterial( {color: 0xffff00 });
+    var material = new THREE.MeshBasicMaterial( {color: 0x000000 });
     var sphere = new THREE.Mesh(sphere_geo, material);
     scene.add(sphere);
 
@@ -74,7 +74,7 @@ function init() {
     // our snake
     var headPos = new THREE.Vector3(1, 0, 0);
     var dir = new THREE.Vector3(0, 1, 0);
-    snake = new Snake(headPos, dir, geometricSphere);
+    snake = new Snake(headPos, dir, geometricSphere, scene);
 
     // add snake to scene
 
