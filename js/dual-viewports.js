@@ -6,6 +6,7 @@ var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 var chaseCamera, topCamera;
 var snake;
+var foodCollection;
 
 init();
 animate();
@@ -15,8 +16,8 @@ function _initCamera(scene) {
     var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
     topCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(topCamera);
-    topCamera.position.set(0, 200 + 50, 550 + 200);
-    topCamera.lookAt(scene.position);
+    // topCamera.position.set(0, 200 + 50, 550 + 200);
+    // topCamera.lookAt(scene.position);
     chaseCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
     scene.add(chaseCamera);
 }
@@ -74,14 +75,22 @@ function init() {
     // our snake
     var headPos = new THREE.Vector3(1, 0, 0);
     var dir = new THREE.Vector3(0, 1, 0);
+    var headPos2 = new THREE.Vector3(-1, 0, 0);
+    var dir2 = new THREE.Vector3(0, 1, 0);
     snake = new Snake(headPos, dir, geometricSphere, scene);
+    snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
 
     // add snake to scene
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
 
+    // initialize camera position
     updateCameraPositions();
+
+    // add Food
+    // foodCollection = new Food(geometricSphere, scene);
+    // foodCollection.addFood();
 }
 
 function animate() {
@@ -96,6 +105,14 @@ function updateCameraPositions() {
     chaseCamera.position.y = snakeHead.y * 5;
     chaseCamera.position.z = snakeHead.z * 5;
     chaseCamera.lookAt(new THREE.Vector3(0, 0, 0));
+    chaseCamera.up = snake.direction;
+
+    var snake2Head = snake2.headPosition;
+    topCamera.position.x = snake2Head.x * 5;
+    topCamera.position.y = snake2Head.y * 5;
+    topCamera.position.z = snake2Head.z * 5;
+    topCamera.lookAt(new THREE.Vector3(0, 0, 0));
+    topCamera.up = snake2.direction;
 }
 
 function updateStats() {
@@ -110,14 +127,23 @@ function update() {
         snake.turn("D");
     }
 
+    if (keyboard.pressed("left")) {
+        snake2.turn("A");
+    } else if (keyboard.pressed("right")) {
+        snake2.turn("D");
+    }
     // always move forward
     snake.moveForward();
+    snake2.moveForward();
 
     // updateCameraPositions
-    // updateCameraPositions();
+    updateCameraPositions();
 
     // update stats
     updateStats();
+
+    // Spawn food
+    // spawnFood();
 
 }
 
