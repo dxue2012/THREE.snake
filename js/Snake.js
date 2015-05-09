@@ -32,12 +32,12 @@ var Snake = (function () {
     Snake.prototype.turn = function (input) {
         var LEFT = "A";
         var RIGHT = "D";
-        var rotationAngle = Math.PI / 6;
+        var rotationAngle = Math.PI / 60;
         if (input === LEFT) {
             this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), rotationAngle);
         }
         else if (input === RIGHT) {
-            this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), rotationAngle);
+            this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), -rotationAngle);
         }
     };
     Snake.prototype.moveForward = function () {

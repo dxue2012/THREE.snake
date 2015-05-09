@@ -104,7 +104,11 @@ function updateStats() {
 
 function update() {
     // rotate first
-    // snake.turn("A");
+    if (keyboard.pressed("A")) {
+        snake.turn("A");
+    } else if (keyboard.pressed("D")) {
+        snake.turn("D");
+    }
 
     // always move forward
     snake.moveForward();
