@@ -50,23 +50,30 @@ function init() {
     directionalLight.position.set(0, 10, 0);
     scene.add(directionalLight);
 
-    // var floorTexture = new THREE.ImageUtils.loadTexture('images/checkerboard.jpg');
-    // floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
-    // floorTexture.repeat.set(10, 10);
-    // var floorMaterial = new THREE.MeshBasicMaterial({ map: floorTexture, side: THREE.DoubleSide });
-    // var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
-    // var floor = new THREE.Mesh(floorGeometry, floorMaterial);
-    // floor.position.y = -0.5;
-    // floor.rotation.x = Math.PI / 2;
-    // scene.add(floor);
+    // Skybox with dawnmountain scene
+    var imagePrefix = "images/sky-";
+    var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+    var imageSuffix = ".jpg";
+    var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );   
+    
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+        materialArray.push( new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+            side: THREE.BackSide
+        }));
+    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+    scene.add( skyBox );
 
-    var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
-    var skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x9999ff, side: THREE.BackSide });
-    var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
-    scene.add(skyBox);
+    // Plain skybox
+    // var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
+    // var skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x9999ff, side: THREE.BackSide });
+    // var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
+    // scene.add(skyBox);
 
-    var ambientlight = new THREE.AmbientLight(0x111111);
-    scene.add(ambientlight);
+    // var ambientlight = new THREE.AmbientLight(0x111111);
+    // scene.add(ambientlight);
 
     // sphere
     var sphere_geo = new THREE.SphereGeometry(1, 32, 32);
@@ -115,16 +122,16 @@ function animate() {
 
 function updateCameraPositions() {
     var snakeHead = snake.headPosition;
-    chaseCamera.position.x = snakeHead.x * 5;
-    chaseCamera.position.y = snakeHead.y * 5;
-    chaseCamera.position.z = snakeHead.z * 5;
+    chaseCamera.position.x = snakeHead.x * 3.5;
+    chaseCamera.position.y = snakeHead.y * 3.5;
+    chaseCamera.position.z = snakeHead.z * 3.5;
     chaseCamera.lookAt(new THREE.Vector3(0, 0, 0));
     chaseCamera.up = snake.direction;
 
     var snake2Head = snake2.headPosition;
-    topCamera.position.x = snake2Head.x * 5;
-    topCamera.position.y = snake2Head.y * 5;
-    topCamera.position.z = snake2Head.z * 5;
+    topCamera.position.x = snake2Head.x * 3.5;
+    topCamera.position.y = snake2Head.y * 3.5;
+    topCamera.position.z = snake2Head.z * 3.5;
     topCamera.lookAt(new THREE.Vector3(0, 0, 0));
     topCamera.up = snake2.direction;
 }
