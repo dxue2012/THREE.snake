@@ -55,8 +55,9 @@ class Updater {
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
 
-        var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
-        var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
+        // TODO: self collision
+        // var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
+        // var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
 
         if (aIntoB && bIntoA) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);

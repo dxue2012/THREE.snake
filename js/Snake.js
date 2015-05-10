@@ -1,5 +1,5 @@
 var Snake = (function () {
-    function Snake(headPos, dir, sphere, scene) {
+    function Snake(headPos, dir, sphere, scene, color) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
@@ -7,6 +7,7 @@ var Snake = (function () {
         this.scene = scene;
         this.invulnerableTime = 0;
         this.lengthToGrow = 0;
+        this.color = color ? color : Snake.DEFAULT_COLOR;
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead();
         }
@@ -34,7 +35,7 @@ var Snake = (function () {
         this.headPosition
             .add(this.direction.clone().multiplyScalar(deltaT))
             .setLength(this.surface.radius);
-        head = new Particle(this.headPosition.clone());
+        head = new Particle(this.headPosition.clone(), this.color);
         this.particles.enqueue(head);
         var normal = this.headPosition.clone().normalize();
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
@@ -62,6 +63,7 @@ var Snake = (function () {
     Snake.prototype._checkInvariants = function () {
     };
     Snake.INIT_LENGTH = 50;
+    Snake.DEFAULT_COLOR = new THREE.Color(0x0000ff);
     Snake.LEFT = 1;
     Snake.RIGHT = -1;
     return Snake;

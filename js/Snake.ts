@@ -2,6 +2,8 @@ declare var Queue;
 
 class Snake implements ISnake {
     private static INIT_LENGTH: number = 50;
+    private static DEFAULT_COLOR: THREE.Color = new THREE.Color(0x0000ff);
+
     public static LEFT: number = 1;
     public static RIGHT: number = -1;
 
@@ -10,13 +12,18 @@ class Snake implements ISnake {
     headPosition: THREE.Vector3;
     invulnerableTime: number;
     lengthToGrow: number;
+    color: THREE.Color;
 
     // for now assume surface is a sphere centered at origin
     surface: THREE.Sphere;
     scene: THREE.Scene;
 
-    constructor(headPos: THREE.Vector3,
-        dir: THREE.Vector3, sphere: THREE.Sphere, scene: THREE.Scene) {
+    constructor(
+        headPos: THREE.Vector3,
+        dir: THREE.Vector3,
+        sphere: THREE.Sphere,
+        scene: THREE.Scene,
+        color?: THREE.Color) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
@@ -26,6 +33,8 @@ class Snake implements ISnake {
 
         this.invulnerableTime = 0;
         this.lengthToGrow = 0;
+
+        this.color = color ? color : Snake.DEFAULT_COLOR;
 
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead();
@@ -64,7 +73,7 @@ class Snake implements ISnake {
             .setLength(this.surface.radius);
 
         // update head
-        head = new Particle(this.headPosition.clone());
+        head = new Particle(this.headPosition.clone(), this.color);
         this.particles.enqueue(head);
 
         // update direction
