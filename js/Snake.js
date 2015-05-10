@@ -5,7 +5,7 @@ var Snake = (function () {
         this.particles = new Queue();
         this.surface = sphere;
         this.scene = scene;
-        for (var i = 0; i < 30; i++) {
+        for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead();
         }
     }
@@ -46,5 +46,6 @@ var Snake = (function () {
     };
     Snake.prototype._checkInvariants = function () {
     };
+    Snake.INIT_LENGTH = 30;
     return Snake;
 })();

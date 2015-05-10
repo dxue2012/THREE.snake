@@ -54,8 +54,8 @@ function init() {
     var imagePrefix = "images/sky-";
     var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
     var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );   
-    
+    var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );
+
     var materialArray = [];
     for (var i = 0; i < 6; i++)
         materialArray.push( new THREE.MeshBasicMaterial({
@@ -100,8 +100,6 @@ function init() {
     var dir2 = new THREE.Vector3(0, 1, 0);
     snake = new Snake(headPos, dir, geometricSphere, scene);
     snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
-
-    // add snake to scene
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;

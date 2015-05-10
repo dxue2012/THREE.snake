@@ -1,11 +1,13 @@
 declare var Queue;
 
 class Snake implements ISnake {
+    private static INIT_LENGTH: number = 30;
+
     particles: Queue<IParticle>;
     direction: THREE.Vector3;
     headPosition: THREE.Vector3;
 
-    // suppose surface is a sphere, and surface is centered at origin
+    // for now assume surface is a sphere centered at origin
     surface: THREE.Sphere;
     scene: THREE.Scene;
 
@@ -18,7 +20,7 @@ class Snake implements ISnake {
         this.surface = sphere;
         this.scene = scene;
 
-        for (var i = 0; i < 30; i++) {
+        for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead();
         }
     }
