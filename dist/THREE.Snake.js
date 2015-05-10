@@ -1006,6 +1006,33 @@ THREEx.KeyboardState.prototype.eventMatches = function(event, keyDesc) {
 
 
 
+var Collision = (function () {
+    function Collision() {
+    }
+    Collision.snakeWithSnake = function (snakeA, snakeB) {
+        if (snakeA.isInvulnerable()) {
+            return false;
+        }
+        var snakeAHead = new THREE.Sphere(snakeA.headPosition, 0.05);
+        var collided = false;
+        snakeB.particles.forEach(function (currParticle) {
+            var currPart = new THREE.Sphere(currParticle.position, 0.05);
+            if (currPart.intersectsSphere(snakeAHead)) {
+                collided = true;
+                return false;
+            }
+            return true;
+        });
+        return collided;
+    };
+    Collision.snakeWithFood = function (snake, foodParticle) {
+        var snakeHead = new THREE.Sphere(snake.headPosition, 0.05);
+        var foodSphere = new THREE.Sphere(foodParticle.position, 0.05);
+        return snakeHead.intersectsSphere(foodSphere);
+    };
+    return Collision;
+})();
+
 var FoodParticle = (function () {
     function FoodParticle(pos) {
         this.position = pos;
@@ -1019,10 +1046,48 @@ var FoodParticle = (function () {
     return FoodParticle;
 })();
 
+var NeutralItemCollection = (function () {
+    function NeutralItemCollection(scene) {
+        this.scene = scene;
+        this.foodCollection = [];
+    }
+    NeutralItemCollection.randomPointOnSphere = function (r) {
+        var u = Math.random();
+        var v = Math.random();
+        var theta = 2 * Math.PI * u;
+        var phi = Math.acos(2 * v - 1);
+        var x = r * Math.sin(phi) * Math.cos(theta);
+        var y = r * Math.sin(phi) * Math.sin(theta);
+        var z = r * Math.cos(phi);
+        return new THREE.Vector3(x, y, z);
+    };
+    NeutralItemCollection.prototype.getFoodCollection = function () {
+        return this.foodCollection;
+    };
+    NeutralItemCollection.prototype.respawnFood = function (foodParticle) {
+        this._deleteFood(foodParticle);
+        this.spawnFood();
+    };
+    NeutralItemCollection.prototype._deleteFood = function (foodParticle) {
+        this.scene.remove(foodParticle.sphere);
+        var index = this.foodCollection.indexOf(foodParticle);
+        if (index > -1) {
+            this.foodCollection.splice(index, 1);
+        }
+    };
+    NeutralItemCollection.prototype.spawnFood = function () {
+        var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
+        var food = new FoodParticle(spawnLocation);
+        this.scene.add(food.sphere);
+        this.foodCollection.push(food);
+    };
+    return NeutralItemCollection;
+})();
+
 var Particle = (function () {
     function Particle(pos) {
         this.position = pos;
-        var sphereGeo = new THREE.SphereGeometry(0.05, 4, 4);
+        var sphereGeo = new THREE.SphereGeometry(0.05, 2, 2);
         var standardMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
         this.sphere = new THREE.Mesh(sphereGeo, standardMaterial);
         this.sphere.position.x = pos.x;
@@ -1101,6 +1166,16 @@ function Queue() {
     return (queue.length > 0 ? queue[offset] : undefined);
   }
 
+  /* Executes the provided function once for each element present in this array
+  */
+  this.forEach = function(callBack) {
+      for (var i = offset; i < queue.length; i++) {
+          if (callBack(queue[i]) === false) {
+              return;
+          }
+      }
+  }
+
 }
 
 var Snake = (function () {
@@ -1110,6 +1185,8 @@ var Snake = (function () {
         this.particles = new Queue();
         this.surface = sphere;
         this.scene = scene;
+        this.invulnerableTime = 0;
+        this.lengthToGrow = 0;
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead();
         }
@@ -1117,13 +1194,24 @@ var Snake = (function () {
     Snake.prototype.getLength = function () {
         return this.particles.getLength();
     };
+    Snake.prototype.makeInvulnerable = function (time) {
+        this.invulnerableTime = time;
+    };
+    Snake.prototype.isInvulnerable = function () {
+        return this.invulnerableTime > 0;
+    };
+    Snake.prototype.shorten = function (length) {
+        for (var i = 0; i < length; i++) {
+            this.chopTail();
+        }
+    };
     Snake.prototype.growHead = function () {
         var head;
-        var deltaT = 1 / 100.0;
+        var deltaT = 1 / 50.0;
         this.headPosition
             .add(this.direction.clone().multiplyScalar(deltaT))
             .setLength(this.surface.radius);
-        head = new Particle(this.headPosition);
+        head = new Particle(this.headPosition.clone());
         this.particles.enqueue(head);
         var normal = this.headPosition.clone().normalize();
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
@@ -1139,24 +1227,29 @@ var Snake = (function () {
         this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), leftOrRight * rotationAngle);
     };
     Snake.prototype.moveForward = function () {
-        this.chopTail();
         this.growHead();
+        if (this.lengthToGrow <= 0) {
+            this.chopTail();
+        }
+        this.lengthToGrow--;
+        this.invulnerableTime = (this.invulnerableTime > 0) ? this.invulnerableTime - 1 : 0;
     };
     Snake.prototype._checkInvariants = function () {
     };
-    Snake.INIT_LENGTH = 30;
+    Snake.INIT_LENGTH = 50;
     Snake.LEFT = 1;
     Snake.RIGHT = -1;
     return Snake;
 })();
 
 var Updater = (function () {
-    function Updater(scene, snakeA, snakeB, cameraA, cameraB) {
+    function Updater(scene, snakeA, snakeB, cameraA, cameraB, neutralItemCollection) {
         this.scene = scene;
         this.snakeA = snakeA;
         this.snakeB = snakeB;
         this.cameraA = cameraA;
         this.cameraB = cameraB;
+        this.neutralItemCollection = neutralItemCollection;
     }
     Updater.prototype.updateCameraPositions = function () {
         var snakeHead = this.snakeA.headPosition;
@@ -1175,21 +1268,6 @@ var Updater = (function () {
     Updater.prototype.updateStats = function () {
         stats.update();
     };
-    Updater.randomPointOnSphere = function (r) {
-        var u = Math.random();
-        var v = Math.random();
-        var theta = 2 * Math.PI * u;
-        var phi = Math.acos(2 * v - 1);
-        var x = r * Math.sin(phi) * Math.cos(theta);
-        var y = r * Math.sin(phi) * Math.sin(theta);
-        var z = r * Math.cos(phi);
-        return new THREE.Vector3(x, y, z);
-    };
-    Updater.prototype.spawnFood = function () {
-        var spawnLocation = Updater.randomPointOnSphere(1);
-        var food = new FoodParticle(spawnLocation);
-        this.scene.add(food.sphere);
-    };
     Updater.prototype.update = function () {
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
@@ -1205,10 +1283,34 @@ var Updater = (function () {
         }
         this.snakeA.moveForward();
         this.snakeB.moveForward();
+        var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
+        var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
+        var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
+        var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
+        if (aIntoB && bIntoA) {
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+        }
+        else if (aIntoB) {
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+        }
+        else if (bIntoA) {
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+        }
+        var foodCollection = this.neutralItemCollection.getFoodCollection();
+        for (var i = foodCollection.length - 1; i >= 0; i--) {
+            if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
+            }
+        }
         this.updateCameraPositions();
         this.updateStats();
-        this.spawnFood();
     };
+    Updater.InvulnerableTime = 500;
     return Updater;
 })();
 
@@ -1219,6 +1321,7 @@ var container, scene, renderer, controls, stats;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 var leftCamera, rightCamera;
+var neutralItems;
 var updater;
 
 init();
@@ -1248,12 +1351,12 @@ function _initUpdater() {
     var headPos = new THREE.Vector3(1, 0, 0);
     var dir = new THREE.Vector3(0, 1, 0);
     var headPos2 = new THREE.Vector3(-1, 0, 0);
-    var dir2 = new THREE.Vector3(0, 1, 0);
+    var dir2 = new THREE.Vector3(0, -1, 0);
 
     var snake = new Snake(headPos, dir, geometricSphere, scene);
     var snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
 
-    updater = new Updater(scene, snake, snake2, leftCamera, rightCamera);
+    updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
 
 function _initScene() {
@@ -1304,11 +1407,19 @@ function _initRenderer() {
     renderer.autoClear = false;
 }
 
+function _initNeutralItems() {
+    neutralItems = new NeutralItemCollection(scene);
+    neutralItems.spawnFood();
+    neutralItems.spawnFood();
+    neutralItems.spawnFood();
+}
+
 function init() {
     _initScene();
     _initCamera();
     _initRenderer();
     _initStats();
+    _initNeutralItems();
     _initUpdater();
 }
 
