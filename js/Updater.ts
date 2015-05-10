@@ -4,10 +4,10 @@ declare var keyboard;
 class Updater {
 
     constructor(
-        private cameraA: THREE.PerspectiveCamera,
-        private cameraB: THREE.PerspectiveCamera,
         private snakeA: ISnake,
-        private snakeB: ISnake
+        private snakeB: ISnake,
+        private cameraA: THREE.PerspectiveCamera,
+        private cameraB: THREE.PerspectiveCamera
     ) {
     }
 

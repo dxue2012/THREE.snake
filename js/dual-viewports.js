@@ -7,6 +7,7 @@ var clock = new THREE.Clock();
 var chaseCamera, topCamera;
 var snake;
 var foodCollection;
+var updater;
 
 init();
 animate();
@@ -75,9 +76,6 @@ function init() {
     // var ambientlight = new THREE.AmbientLight(0x111111);
     // scene.add(ambientlight);
 
-    // sphere
-    var sphere_geo = new THREE.SphereGeometry(1, 32, 32);
-
     // Translucent red color
     // var redMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, transparent: true, opacity: 0.5 } );
     // var sphere = new THREE.Mesh( sphere_geo, redMaterial );
@@ -87,25 +85,29 @@ function init() {
     // Translucent with image texture
     var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.png' );
     var moonMaterial = new THREE.MeshLambertMaterial( { map: moonTexture, transparent: true, opacity: 0.75 } );
+    var sphere_geo = new THREE.SphereGeometry(1, 32, 32);
     var moon = new THREE.Mesh( sphere_geo, moonMaterial );
     moon.position.set(0, 0, 0);
     scene.add( moon );
 
+    // our snake
     var geometricSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 1);
 
-    // our snake
     var headPos = new THREE.Vector3(1, 0, 0);
     var dir = new THREE.Vector3(0, 1, 0);
     var headPos2 = new THREE.Vector3(-1, 0, 0);
     var dir2 = new THREE.Vector3(0, 1, 0);
+
     snake = new Snake(headPos, dir, geometricSphere, scene);
     snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
+
+    updater = new Updater(snake, snake2, chaseCamera, topCamera);
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
 
     // initialize camera position
-    updateCameraPositions();
+    updater.updateCameraPositions();
 
     // add Food
     // foodCollection = new Food(geometricSphere, scene);
@@ -115,7 +117,7 @@ function init() {
 function animate() {
     requestAnimationFrame(animate);
     render();
-    update();
+    updater.update();
 }
 
 function updateCameraPositions() {

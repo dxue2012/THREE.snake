@@ -1,9 +1,9 @@
 var Updater = (function () {
-    function Updater(cameraA, cameraB, snakeA, snakeB) {
-        this.cameraA = cameraA;
-        this.cameraB = cameraB;
+    function Updater(snakeA, snakeB, cameraA, cameraB) {
         this.snakeA = snakeA;
         this.snakeB = snakeB;
+        this.cameraA = cameraA;
+        this.cameraB = cameraB;
     }
     Updater.prototype.updateCameraPositions = function () {
         var snakeHead = this.snakeA.headPosition;
