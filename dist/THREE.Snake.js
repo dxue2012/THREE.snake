@@ -1034,7 +1034,7 @@ var Collision = (function () {
 })();
 
 var FoodParticle = (function () {
-    function FoodParticle(pos) {
+    function FoodParticle(pos, value) {
         this.position = pos;
         var sphereGeo = new THREE.SphereGeometry(0.05, 4, 4);
         var standardMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -1042,7 +1042,9 @@ var FoodParticle = (function () {
         this.sphere.position.x = pos.x;
         this.sphere.position.y = pos.y;
         this.sphere.position.z = pos.z;
+        this.value = value ? value : FoodParticle.DEFAULT_VALUE;
     }
+    FoodParticle.DEFAULT_VALUE = 10;
     return FoodParticle;
 })();
 
@@ -1085,10 +1087,10 @@ var NeutralItemCollection = (function () {
 })();
 
 var Particle = (function () {
-    function Particle(pos) {
+    function Particle(pos, color) {
         this.position = pos;
         var sphereGeo = new THREE.SphereGeometry(0.05, 2, 2);
-        var standardMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+        var standardMaterial = new THREE.MeshBasicMaterial({ color: color.getHex() });
         this.sphere = new THREE.Mesh(sphereGeo, standardMaterial);
         this.sphere.position.x = pos.x;
         this.sphere.position.y = pos.y;
@@ -1179,7 +1181,7 @@ function Queue() {
 }
 
 var Snake = (function () {
-    function Snake(headPos, dir, sphere, scene) {
+    function Snake(headPos, dir, sphere, scene, color) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
@@ -1187,6 +1189,7 @@ var Snake = (function () {
         this.scene = scene;
         this.invulnerableTime = 0;
         this.lengthToGrow = 0;
+        this.color = color ? color : Snake.DEFAULT_COLOR;
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead();
         }
@@ -1205,13 +1208,16 @@ var Snake = (function () {
             this.chopTail();
         }
     };
+    Snake.prototype.growLength = function (length) {
+        this.lengthToGrow += length;
+    };
     Snake.prototype.growHead = function () {
         var head;
         var deltaT = 1 / 50.0;
         this.headPosition
             .add(this.direction.clone().multiplyScalar(deltaT))
             .setLength(this.surface.radius);
-        head = new Particle(this.headPosition.clone());
+        head = new Particle(this.headPosition.clone(), this.color);
         this.particles.enqueue(head);
         var normal = this.headPosition.clone().normalize();
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
@@ -1231,12 +1237,15 @@ var Snake = (function () {
         if (this.lengthToGrow <= 0) {
             this.chopTail();
         }
-        this.lengthToGrow--;
+        else {
+            this.lengthToGrow--;
+        }
         this.invulnerableTime = (this.invulnerableTime > 0) ? this.invulnerableTime - 1 : 0;
     };
     Snake.prototype._checkInvariants = function () {
     };
     Snake.INIT_LENGTH = 50;
+    Snake.DEFAULT_COLOR = new THREE.Color(0x0000ff);
     Snake.LEFT = 1;
     Snake.RIGHT = -1;
     return Snake;
@@ -1285,8 +1294,6 @@ var Updater = (function () {
         this.snakeB.moveForward();
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
-        var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
-        var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
         if (aIntoB && bIntoA) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
@@ -1304,13 +1311,18 @@ var Updater = (function () {
         var foodCollection = this.neutralItemCollection.getFoodCollection();
         for (var i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
+                this.snakeA.growLength(foodCollection[i].value);
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
+            }
+            if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
+                this.snakeB.growLength(foodCollection[i].value);
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
         this.updateCameraPositions();
         this.updateStats();
     };
-    Updater.InvulnerableTime = 500;
+    Updater.InvulnerableTime = 200;
     return Updater;
 })();
 
@@ -1353,8 +1365,8 @@ function _initUpdater() {
     var headPos2 = new THREE.Vector3(-1, 0, 0);
     var dir2 = new THREE.Vector3(0, -1, 0);
 
-    var snake = new Snake(headPos, dir, geometricSphere, scene);
-    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
+    var snake = new Snake(headPos, dir, geometricSphere, scene, new THREE.Color(0, 0, 1));
+    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene, new THREE.Color(1, 0, 0));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
