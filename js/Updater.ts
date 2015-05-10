@@ -33,6 +33,7 @@ class Updater {
         stats.update();
     }
 
+    // TODO: move this function to Utils
     private static randomPointOnSphere(r: number) {
         // using the method described here:
         // http://mathworld.wolfram.com/SpherePointPicking.html

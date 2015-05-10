@@ -19,32 +19,6 @@ module.exports = function(grunt) {
         dest: 'dist/<%= pkg.name %>.min.js'
       }
     },
-    karma: {
-        unit: {
-            configFile: './test/karma-unit.conf.js',
-            autoWatch: false,
-            singleRun: true
-        },
-        unit_auto: {
-            configFile: './test/karma-unit.conf.js'
-        }
-        // midway: {
-        //   configFile: './test/karma-midway.conf.js',
-        //   autoWatch: false,
-        //   singleRun: true
-        // },
-        // midway_auto: {
-        //   configFile: './test/karma-midway.conf.js'
-        // },
-        // e2e: {
-        //   configFile: './test/karma-e2e.conf.js',
-        //   autoWatch: false,
-        //   singleRun: true
-        // },
-        // e2e_auto: {
-        //   configFile: './test/karma-e2e.conf.js'
-        // }
-    },
     typescript: {
         base: {
             src: ['js/**/*.ts'],
@@ -57,27 +31,12 @@ module.exports = function(grunt) {
             }
         }
     },
-    /*
-    less: {
-        development: {
-            options: {
-                paths: ["less/"],
-                watch: true
-            },
-            files: {
-                "less/header.css" : "less/header.less",
-                "less/footer.css" : "less/footer.less",
-                "less/course-search.css" : "less/course-search.less",
-                "less/nice.css" : "less/nice.less",
-                "less/calendar.css" : "less/calendar.less",
-                "less/queue.css" : "less/queue.less",
-                "less/modal.css" : "less/modal.less",
-                "less/course-evaluation.css" : "less/course-evaluation.less",
-                "less/main.css" : "less/main.less",
-            }
-        },
+    concat: {
+        dist: {
+            src: ['./js/*.js'],
+            dest: './THREE.Snake.js'
+        }
     },
-    */
     watch: {
         /*
         less: {
@@ -108,18 +67,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-typescript');
-  // grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-concurrent');
-  grunt.loadNpmTasks('grunt-karma');
 
   // Default task.
   grunt.registerTask('default', ["concurrent:dev"]);
-
-  // karma
-
-  grunt.registerTask('test', ['connect:testserver','karma:unit','karma:midway', 'karma:e2e']);
-  grunt.registerTask('test:unit', ['karma:unit']);
-  grunt.registerTask('test:midway', ['connect:testserver','karma:midway']);
-  grunt.registerTask('test:e2e', ['connect:testserver', 'karma:e2e']);
-
+  grunt.registerTask('compile', ["concat:dist"]);
 };
