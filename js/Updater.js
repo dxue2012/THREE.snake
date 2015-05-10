@@ -53,9 +53,19 @@ var Updater = (function () {
         }
         this.snakeA.moveForward();
         this.snakeB.moveForward();
+        var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
+        var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
+        if (aIntoB && bIntoA) {
+            console.log("both");
+        }
+        else if (aIntoB) {
+            console.log("a into b");
+        }
+        else if (bIntoA) {
+            console.log("b into a");
+        }
         this.updateCameraPositions();
         this.updateStats();
-        this.spawnFood();
     };
     return Updater;
 })();

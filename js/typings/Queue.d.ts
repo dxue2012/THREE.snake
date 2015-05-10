@@ -3,4 +3,5 @@ interface Queue<T> {
     enqueue(item: T);
     dequeue(): T;
     peek(): T;
+    forEach(callBack: (item: T) => boolean): void;
 }

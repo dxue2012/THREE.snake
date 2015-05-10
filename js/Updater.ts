@@ -75,6 +75,17 @@ class Updater {
         this.snakeA.moveForward();
         this.snakeB.moveForward();
 
+        var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
+        var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
+
+        if (aIntoB && bIntoA) {
+            console.log("both");
+        } else if (aIntoB) {
+            console.log("a into b");
+        } else if (bIntoA) {
+            console.log("b into a");
+        }
+
         // updateCameraPositions
         this.updateCameraPositions();
 
@@ -82,6 +93,6 @@ class Updater {
         this.updateStats();
 
         // Spawn food
-        this.spawnFood();
+        // this.spawnFood();
     }
 }

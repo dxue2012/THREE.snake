@@ -96,6 +96,11 @@ function init() {
     _initRenderer();
     _initStats();
     _initUpdater();
+
+    // init food
+    updater.spawnFood();
+    updater.spawnFood();
+    updater.spawnFood();
 }
 
 function animate() {

@@ -14,11 +14,11 @@ var Snake = (function () {
     };
     Snake.prototype.growHead = function () {
         var head;
-        var deltaT = 1 / 100.0;
+        var deltaT = 1 / 50.0;
         this.headPosition
             .add(this.direction.clone().multiplyScalar(deltaT))
             .setLength(this.surface.radius);
-        head = new Particle(this.headPosition);
+        head = new Particle(this.headPosition.clone());
         this.particles.enqueue(head);
         var normal = this.headPosition.clone().normalize();
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
@@ -39,7 +39,7 @@ var Snake = (function () {
     };
     Snake.prototype._checkInvariants = function () {
     };
-    Snake.INIT_LENGTH = 30;
+    Snake.INIT_LENGTH = 100;
     Snake.LEFT = 1;
     Snake.RIGHT = -1;
     return Snake;

@@ -67,4 +67,14 @@ function Queue() {
     return (queue.length > 0 ? queue[offset] : undefined);
   }
 
+  /* Executes the provided function once for each element present in this array
+  */
+  this.forEach = function(callBack) {
+      for (var i = offset; i < queue.length; i++) {
+          if (callBack(queue[i]) === false) {
+              return;
+          }
+      }
+  }
+
 }

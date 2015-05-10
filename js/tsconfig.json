@@ -13,11 +13,11 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "./Collision.ts",
         "./FoodParticle.ts",
         "./Particle.ts",
         "./Snake.ts",
         "./Updater.ts",
-        "./main.ts",
         "./typings/All.d.ts",
         "./typings/Emitter.d.ts",
         "./typings/Food.d.ts",

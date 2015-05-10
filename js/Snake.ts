@@ -1,7 +1,7 @@
 declare var Queue;
 
 class Snake implements ISnake {
-    private static INIT_LENGTH: number = 30;
+    private static INIT_LENGTH: number = 100;
     public static LEFT: number = 1;
     public static RIGHT: number = -1;
 
@@ -33,7 +33,7 @@ class Snake implements ISnake {
 
     public growHead() {
         var head: Particle;
-        var deltaT = 1 / 100.0;
+        var deltaT = 1 / 50.0;
 
         // update head position
         this.headPosition
@@ -41,7 +41,7 @@ class Snake implements ISnake {
             .setLength(this.surface.radius);
 
         // update head
-        head = new Particle(this.headPosition);
+        head = new Particle(this.headPosition.clone());
         this.particles.enqueue(head);
 
         // update direction
