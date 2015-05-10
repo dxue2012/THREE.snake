@@ -59,6 +59,11 @@ tsd reinstall --save
 
 This re-installs (or if it is the first time, just installs) the definitions listed in `tsd.json` to the folder `typings/`. Note that `typings/` is ignored by `.gitignore` so that it doesn't clutter our repo.
 
+### Compilation
+
+Run `grunt compile` to generate the compiled version of the game used in `THREE.Snake.html`.
+The files are listed as `dist/THREE.Snake.js` and `dist/THREE.Snake.min.js`.
+
 ## Team Members
 
 Jie Liang Lee, Tiancheng Zheng, Dyland Xue
