@@ -60,12 +60,17 @@ var Updater = (function () {
         var foodCollection = this.neutralItemCollection.getFoodCollection();
         for (var i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
+                this.snakeA.growLength(foodCollection[i].value);
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
+            }
+            if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
+                this.snakeB.growLength(foodCollection[i].value);
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
         this.updateCameraPositions();
         this.updateStats();
     };
-    Updater.InvulnerableTime = 500;
+    Updater.InvulnerableTime = 200;
     return Updater;
 })();

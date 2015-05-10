@@ -50,6 +50,10 @@ class Snake implements ISnake {
         }
     }
 
+    public growLength(length: number): void {
+        this.lengthToGrow += length;
+    }
+
     public growHead() {
         var head: Particle;
         var deltaT = 1 / 50.0;
@@ -90,9 +94,9 @@ class Snake implements ISnake {
         // grow a certain length
         if (this.lengthToGrow <= 0) {
             this.chopTail();
+        } else {
+            this.lengthToGrow--;
         }
-
-        this.lengthToGrow--;
 
         this.invulnerableTime = (this.invulnerableTime > 0) ? this.invulnerableTime - 1 : 0;
     }

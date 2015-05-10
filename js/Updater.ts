@@ -2,7 +2,7 @@ declare var stats;
 declare var keyboard;
 
 class Updater {
-    private static InvulnerableTime = 500;
+    private static InvulnerableTime = 200;
 
     constructor(
         private scene: THREE.Scene,
@@ -74,10 +74,18 @@ class Updater {
         var foodCollection = this.neutralItemCollection.getFoodCollection();
         for (let i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
-                // kill food particle
-                // spawn new food particle
-                this.neutralItemCollection.respawnFood(foodCollection[i]);
                 // grow snake
+                this.snakeA.growLength(foodCollection[i].value);
+
+                // kill food particle, spawn new food particle
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
+            }
+
+            if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
+                // grow snake
+                this.snakeB.growLength(foodCollection[i].value);
+
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
 

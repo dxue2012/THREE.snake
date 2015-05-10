@@ -14,6 +14,7 @@ interface ISnake {
     turn(leftOrRight: number): void;
     moveForward(): void;
     shorten(length: number): void;
+    growLength(length: number): void;
 
     makeInvulnerable(time: number): void;
     isInvulnerable(): boolean;

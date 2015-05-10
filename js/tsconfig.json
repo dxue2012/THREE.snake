@@ -22,6 +22,7 @@
         "./typings/All.d.ts",
         "./typings/Emitter.d.ts",
         "./typings/Food.d.ts",
+        "./typings/IFoodParticle.d.ts",
         "./typings/Particle.d.ts",
         "./typings/ParticleEngine.d.ts",
         "./typings/Queue.d.ts",

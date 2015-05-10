@@ -1,5 +1,5 @@
 class NeutralItemCollection {
-    private foodCollection: Array<FoodParticle>;
+    private foodCollection: Array<IFoodParticle>;
 
     constructor(private scene: THREE.Scene) {
         this.foodCollection = [];
@@ -21,16 +21,16 @@ class NeutralItemCollection {
         return new THREE.Vector3(x, y, z);
     }
 
-    public getFoodCollection(): Array<FoodParticle> {
+    public getFoodCollection(): Array<IFoodParticle> {
         return this.foodCollection;
     }
 
-    public respawnFood(foodParticle: FoodParticle) {
+    public respawnFood(foodParticle: IFoodParticle) {
         this._deleteFood(foodParticle);
         this.spawnFood();
     }
 
-    private _deleteFood(foodParticle: FoodParticle) {
+    private _deleteFood(foodParticle: IFoodParticle) {
         this.scene.remove(foodParticle.sphere);
 
         var index = this.foodCollection.indexOf(foodParticle);

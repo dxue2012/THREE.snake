@@ -25,6 +25,9 @@ var Snake = (function () {
             this.chopTail();
         }
     };
+    Snake.prototype.growLength = function (length) {
+        this.lengthToGrow += length;
+    };
     Snake.prototype.growHead = function () {
         var head;
         var deltaT = 1 / 50.0;
@@ -51,7 +54,9 @@ var Snake = (function () {
         if (this.lengthToGrow <= 0) {
             this.chopTail();
         }
-        this.lengthToGrow--;
+        else {
+            this.lengthToGrow--;
+        }
         this.invulnerableTime = (this.invulnerableTime > 0) ? this.invulnerableTime - 1 : 0;
     };
     Snake.prototype._checkInvariants = function () {
