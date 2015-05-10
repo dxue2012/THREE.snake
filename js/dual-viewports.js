@@ -4,9 +4,7 @@
 var container, scene, renderer, controls, stats;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
-var chaseCamera, topCamera;
-var snake;
-var foodCollection;
+var leftCamera, rightCamera;
 var updater;
 
 init();
@@ -15,12 +13,11 @@ animate();
 function _initCamera() {
     var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
     var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
-    topCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-    scene.add(topCamera);
-    // topCamera.position.set(0, 200 + 50, 550 + 200);
-    // topCamera.lookAt(scene.position);
-    chaseCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-    scene.add(chaseCamera);
+    leftCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+    scene.add(leftCamera);
+
+    rightCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+    scene.add(rightCamera);
 }
 
 function _initStats() {
@@ -38,10 +35,11 @@ function _initUpdater() {
     var dir = new THREE.Vector3(0, 1, 0);
     var headPos2 = new THREE.Vector3(-1, 0, 0);
     var dir2 = new THREE.Vector3(0, 1, 0);
-    snake = new Snake(headPos, dir, geometricSphere, scene);
-    snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
 
-    updater = new Updater(snake, snake2, chaseCamera, topCamera);
+    var snake = new Snake(headPos, dir, geometricSphere, scene);
+    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
+
+    updater = new Updater(snake, snake2, leftCamera, rightCamera);
 }
 
 function _initScene() {
@@ -67,6 +65,7 @@ function _initScene() {
             map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
             side: THREE.BackSide
         }));
+
     var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
     var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
     scene.add( skyBox );
@@ -107,14 +106,14 @@ function animate() {
 
 function render() {
     var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
-    chaseCamera.aspect = 0.5 * SCREEN_WIDTH / SCREEN_HEIGHT;
-    topCamera.aspect = 0.5 * SCREEN_WIDTH / SCREEN_HEIGHT;
-    chaseCamera.updateProjectionMatrix();
-    topCamera.updateProjectionMatrix();
+    leftCamera.aspect = 0.5 * SCREEN_WIDTH / SCREEN_HEIGHT;
+    rightCamera.aspect = 0.5 * SCREEN_WIDTH / SCREEN_HEIGHT;
+    leftCamera.updateProjectionMatrix();
+    rightCamera.updateProjectionMatrix();
     renderer.setViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     renderer.clear();
     renderer.setViewport(1, 1, 0.5 * SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
-    renderer.render(scene, chaseCamera);
+    renderer.render(scene, leftCamera);
     renderer.setViewport(0.5 * SCREEN_WIDTH + 1, 1, 0.5 * SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
-    renderer.render(scene, topCamera);
+    renderer.render(scene, rightCamera);
 }
