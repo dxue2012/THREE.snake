@@ -29,16 +29,9 @@ var Snake = (function () {
         var tailParticle = this.particles.dequeue();
         this.scene.remove(tailParticle.sphere);
     };
-    Snake.prototype.turn = function (input) {
-        var LEFT = "A";
-        var RIGHT = "D";
+    Snake.prototype.turn = function (leftOrRight) {
         var rotationAngle = Math.PI / 60;
-        if (input === LEFT) {
-            this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), rotationAngle);
-        }
-        else if (input === RIGHT) {
-            this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), -rotationAngle);
-        }
+        this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), leftOrRight * rotationAngle);
     };
     Snake.prototype.moveForward = function () {
         this.chopTail();
@@ -47,5 +40,7 @@ var Snake = (function () {
     Snake.prototype._checkInvariants = function () {
     };
     Snake.INIT_LENGTH = 30;
+    Snake.LEFT = 1;
+    Snake.RIGHT = -1;
     return Snake;
 })();

@@ -7,5 +7,6 @@ interface ISnake {
     surface: THREE.Sphere;
     scene: THREE.Scene;
 
-    turn(input: String);
+    turn(leftOrRight: number): void;
+    moveForward(): void;
 }

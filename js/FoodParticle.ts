@@ -11,5 +11,4 @@ class FoodParticle implements IParticle {
         this.sphere.position.y = pos.y;
         this.sphere.position.z = pos.z;
     }
-
 }

@@ -2,6 +2,8 @@ declare var Queue;
 
 class Snake implements ISnake {
     private static INIT_LENGTH: number = 30;
+    public static LEFT: number = 1;
+    public static RIGHT: number = -1;
 
     particles: Queue<IParticle>;
     direction: THREE.Vector3;
@@ -57,17 +59,10 @@ class Snake implements ISnake {
         this.scene.remove(tailParticle.sphere);
     }
 
-    public turn(input: String) {
-        var LEFT = "A";
-        var RIGHT = "D";
+    // the input leftOrRight is either -1 or 1
+    public turn(leftOrRight: number) {
         var rotationAngle = Math.PI / 60;
-
-        if (input === LEFT) {
-            this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), rotationAngle);
-        }
-        else if (input === RIGHT) {
-            this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), -rotationAngle);
-        }
+        this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), leftOrRight * rotationAngle);
     }
 
     public moveForward() {
