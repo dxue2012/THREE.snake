@@ -1,10 +1,11 @@
 var Updater = (function () {
-    function Updater(scene, snakeA, snakeB, cameraA, cameraB) {
+    function Updater(scene, snakeA, snakeB, cameraA, cameraB, neutralItemCollection) {
         this.scene = scene;
         this.snakeA = snakeA;
         this.snakeB = snakeB;
         this.cameraA = cameraA;
         this.cameraB = cameraB;
+        this.neutralItemCollection = neutralItemCollection;
     }
     Updater.prototype.updateCameraPositions = function () {
         var snakeHead = this.snakeA.headPosition;
@@ -23,21 +24,6 @@ var Updater = (function () {
     Updater.prototype.updateStats = function () {
         stats.update();
     };
-    Updater.randomPointOnSphere = function (r) {
-        var u = Math.random();
-        var v = Math.random();
-        var theta = 2 * Math.PI * u;
-        var phi = Math.acos(2 * v - 1);
-        var x = r * Math.sin(phi) * Math.cos(theta);
-        var y = r * Math.sin(phi) * Math.sin(theta);
-        var z = r * Math.cos(phi);
-        return new THREE.Vector3(x, y, z);
-    };
-    Updater.prototype.spawnFood = function () {
-        var spawnLocation = Updater.randomPointOnSphere(1);
-        var food = new FoodParticle(spawnLocation);
-        this.scene.add(food.sphere);
-    };
     Updater.prototype.update = function () {
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
@@ -55,17 +41,31 @@ var Updater = (function () {
         this.snakeB.moveForward();
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
+        var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
+        var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
         if (aIntoB && bIntoA) {
-            console.log("both");
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
         }
         else if (aIntoB) {
-            console.log("a into b");
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
         }
         else if (bIntoA) {
-            console.log("b into a");
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+        }
+        var foodCollection = this.neutralItemCollection.getFoodCollection();
+        for (var i = foodCollection.length - 1; i >= 0; i--) {
+            if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
+            }
         }
         this.updateCameraPositions();
         this.updateStats();
     };
+    Updater.InvulnerableTime = 500;
     return Updater;
 })();

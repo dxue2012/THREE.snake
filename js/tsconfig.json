@@ -15,6 +15,7 @@
     "files": [
         "./Collision.ts",
         "./FoodParticle.ts",
+        "./NeutralItemCollection.ts",
         "./Particle.ts",
         "./Snake.ts",
         "./Updater.ts",

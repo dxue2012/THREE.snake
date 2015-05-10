@@ -5,6 +5,7 @@ var container, scene, renderer, controls, stats;
 var keyboard = new THREEx.KeyboardState();
 var clock = new THREE.Clock();
 var leftCamera, rightCamera;
+var neutralItems;
 var updater;
 
 init();
@@ -34,12 +35,12 @@ function _initUpdater() {
     var headPos = new THREE.Vector3(1, 0, 0);
     var dir = new THREE.Vector3(0, 1, 0);
     var headPos2 = new THREE.Vector3(-1, 0, 0);
-    var dir2 = new THREE.Vector3(0, 1, 0);
+    var dir2 = new THREE.Vector3(0, -1, 0);
 
     var snake = new Snake(headPos, dir, geometricSphere, scene);
     var snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
 
-    updater = new Updater(scene, snake, snake2, leftCamera, rightCamera);
+    updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
 
 function _initScene() {
@@ -90,17 +91,20 @@ function _initRenderer() {
     renderer.autoClear = false;
 }
 
+function _initNeutralItems() {
+    neutralItems = new NeutralItemCollection(scene);
+    neutralItems.spawnFood();
+    neutralItems.spawnFood();
+    neutralItems.spawnFood();
+}
+
 function init() {
     _initScene();
     _initCamera();
     _initRenderer();
     _initStats();
+    _initNeutralItems();
     _initUpdater();
-
-    // init food
-    updater.spawnFood();
-    updater.spawnFood();
-    updater.spawnFood();
 }
 
 function animate() {

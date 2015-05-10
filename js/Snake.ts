@@ -1,13 +1,15 @@
 declare var Queue;
 
 class Snake implements ISnake {
-    private static INIT_LENGTH: number = 100;
+    private static INIT_LENGTH: number = 50;
     public static LEFT: number = 1;
     public static RIGHT: number = -1;
 
     particles: Queue<IParticle>;
     direction: THREE.Vector3;
     headPosition: THREE.Vector3;
+    invulnerableTime: number;
+    lengthToGrow: number;
 
     // for now assume surface is a sphere centered at origin
     surface: THREE.Sphere;
@@ -22,6 +24,9 @@ class Snake implements ISnake {
         this.surface = sphere;
         this.scene = scene;
 
+        this.invulnerableTime = 0;
+        this.lengthToGrow = 0;
+
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead();
         }
@@ -29,6 +34,20 @@ class Snake implements ISnake {
 
     public getLength(): number {
         return this.particles.getLength();
+    }
+
+    public makeInvulnerable(time: number) {
+        this.invulnerableTime = time;
+    }
+
+    public isInvulnerable(): boolean {
+        return this.invulnerableTime > 0;
+    }
+
+    public shorten(length: number): void {
+        for (let i = 0; i < length; i++) {
+            this.chopTail();
+        }
     }
 
     public growHead() {
@@ -66,8 +85,16 @@ class Snake implements ISnake {
     }
 
     public moveForward() {
-        this.chopTail();
         this.growHead();
+
+        // grow a certain length
+        if (this.lengthToGrow <= 0) {
+            this.chopTail();
+        }
+
+        this.lengthToGrow--;
+
+        this.invulnerableTime = (this.invulnerableTime > 0) ? this.invulnerableTime - 1 : 0;
     }
 
     private _checkInvariants() {

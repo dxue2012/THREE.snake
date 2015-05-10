@@ -2,14 +2,15 @@ declare var stats;
 declare var keyboard;
 
 class Updater {
-    private foodCollection: any;
+    private static InvulnerableTime = 500;
 
     constructor(
         private scene: THREE.Scene,
         private snakeA: ISnake,
         private snakeB: ISnake,
         private cameraA: THREE.PerspectiveCamera,
-        private cameraB: THREE.PerspectiveCamera
+        private cameraB: THREE.PerspectiveCamera,
+        private neutralItemCollection: NeutralItemCollection
     ) {
     }
 
@@ -33,30 +34,6 @@ class Updater {
         stats.update();
     }
 
-    // TODO: move this function to Utils
-    private static randomPointOnSphere(r: number) {
-        // using the method described here:
-        // http://mathworld.wolfram.com/SpherePointPicking.html
-        var u = Math.random();
-        var v = Math.random();
-        var theta = 2 * Math.PI * u;
-        var phi = Math.acos(2 * v - 1);
-
-        var x = r * Math.sin(phi) * Math.cos(theta);
-        var y = r * Math.sin(phi) * Math.sin(theta);
-        var z = r * Math.cos(phi);
-
-        return new THREE.Vector3(x, y, z);
-    }
-
-    // make food disappear after a while
-    public spawnFood() {
-        // TODO: assume map is a unit sphere
-        var spawnLocation = Updater.randomPointOnSphere(1);
-        var food = new FoodParticle(spawnLocation);
-        this.scene.add(food.sphere);
-    }
-
     public update() {
         // rotate first
         if (keyboard.pressed("A")) {
@@ -78,12 +55,30 @@ class Updater {
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
 
+        var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
+        var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
+
         if (aIntoB && bIntoA) {
-            console.log("both");
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
         } else if (aIntoB) {
-            console.log("a into b");
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
         } else if (bIntoA) {
-            console.log("b into a");
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+        }
+
+        var foodCollection = this.neutralItemCollection.getFoodCollection();
+        for (let i = foodCollection.length - 1; i >= 0; i--) {
+            if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
+                // kill food particle
+                // spawn new food particle
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
+                // grow snake
+            }
         }
 
         // updateCameraPositions
