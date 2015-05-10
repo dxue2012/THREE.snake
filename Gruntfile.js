@@ -33,8 +33,10 @@ module.exports = function(grunt) {
     },
     concat: {
         dist: {
-            src: ['./js/*.js'],
-            dest: './THREE.Snake.js'
+            src: ['./libjs/stats.min.js', './bower_components/threejs/build/three.min.js',
+            'bower_components/threex.keyboardstate/threex.keyboardstate.js',
+            './js/*.js'],
+            dest: 'dist/<%= pkg.name %>.js'
         }
     },
     watch: {
@@ -71,5 +73,5 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', ["concurrent:dev"]);
-  grunt.registerTask('compile', ["concat:dist"]);
+  grunt.registerTask('compile', ["concat", "uglify"]);
 };
