@@ -1,5 +1,6 @@
 var Updater = (function () {
-    function Updater(snakeA, snakeB, cameraA, cameraB) {
+    function Updater(scene, snakeA, snakeB, cameraA, cameraB) {
+        this.scene = scene;
         this.snakeA = snakeA;
         this.snakeB = snakeB;
         this.cameraA = cameraA;
@@ -22,6 +23,21 @@ var Updater = (function () {
     Updater.prototype.updateStats = function () {
         stats.update();
     };
+    Updater.randomPointOnSphere = function (r) {
+        var u = Math.random();
+        var v = Math.random();
+        var theta = 2 * Math.PI * u;
+        var phi = Math.acos(2 * v - 1);
+        var x = r * Math.sin(phi) * Math.cos(theta);
+        var y = r * Math.sin(phi) * Math.sin(theta);
+        var z = r * Math.cos(phi);
+        return new THREE.Vector3(x, y, z);
+    };
+    Updater.prototype.spawnFood = function () {
+        var spawnLocation = Updater.randomPointOnSphere(1);
+        var food = new FoodParticle(spawnLocation);
+        this.scene.add(food.sphere);
+    };
     Updater.prototype.update = function () {
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
@@ -39,6 +55,7 @@ var Updater = (function () {
         this.snakeB.moveForward();
         this.updateCameraPositions();
         this.updateStats();
+        this.spawnFood();
     };
     return Updater;
 })();

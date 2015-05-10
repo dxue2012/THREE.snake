@@ -39,7 +39,7 @@ function _initUpdater() {
     var snake = new Snake(headPos, dir, geometricSphere, scene);
     var snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
 
-    updater = new Updater(snake, snake2, leftCamera, rightCamera);
+    updater = new Updater(scene, snake, snake2, leftCamera, rightCamera);
 }
 
 function _initScene() {

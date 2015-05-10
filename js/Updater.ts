@@ -2,8 +2,10 @@ declare var stats;
 declare var keyboard;
 
 class Updater {
+    private foodCollection: any;
 
     constructor(
+        private scene: THREE.Scene,
         private snakeA: ISnake,
         private snakeB: ISnake,
         private cameraA: THREE.PerspectiveCamera,
@@ -31,6 +33,29 @@ class Updater {
         stats.update();
     }
 
+    private static randomPointOnSphere(r: number) {
+        // using the method described here:
+        // http://mathworld.wolfram.com/SpherePointPicking.html
+        var u = Math.random();
+        var v = Math.random();
+        var theta = 2 * Math.PI * u;
+        var phi = Math.acos(2 * v - 1);
+
+        var x = r * Math.sin(phi) * Math.cos(theta);
+        var y = r * Math.sin(phi) * Math.sin(theta);
+        var z = r * Math.cos(phi);
+
+        return new THREE.Vector3(x, y, z);
+    }
+
+    // make food disappear after a while
+    public spawnFood() {
+        // TODO: assume map is a unit sphere
+        var spawnLocation = Updater.randomPointOnSphere(1);
+        var food = new FoodParticle(spawnLocation);
+        this.scene.add(food.sphere);
+    }
+
     public update() {
         // rotate first
         if (keyboard.pressed("A")) {
@@ -56,7 +81,6 @@ class Updater {
         this.updateStats();
 
         // Spawn food
-        // spawnFood();
-
+        this.spawnFood();
     }
 }
