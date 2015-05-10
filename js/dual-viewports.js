@@ -12,7 +12,7 @@ var updater;
 init();
 animate();
 
-function _initCamera(scene) {
+function _initCamera() {
     var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
     var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
     topCamera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
@@ -23,7 +23,7 @@ function _initCamera(scene) {
     scene.add(chaseCamera);
 }
 
-function _initStats(container) {
+function _initStats() {
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
@@ -31,17 +31,21 @@ function _initStats(container) {
     container.appendChild(stats.domElement);
 }
 
-function init() {
+function _initUpdater() {
+    // our snakes!
+    var geometricSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 1);
+    var headPos = new THREE.Vector3(1, 0, 0);
+    var dir = new THREE.Vector3(0, 1, 0);
+    var headPos2 = new THREE.Vector3(-1, 0, 0);
+    var dir2 = new THREE.Vector3(0, 1, 0);
+    snake = new Snake(headPos, dir, geometricSphere, scene);
+    snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
+
+    updater = new Updater(snake, snake2, chaseCamera, topCamera);
+}
+
+function _initScene() {
     scene = new THREE.Scene();
-    _initCamera(scene);
-
-    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    container = document.body;
-    container.appendChild(renderer.domElement);
-
-    _initStats(container);
 
     var light = new THREE.PointLight(0xffffff);
     light.position.set(0, 250, 0);
@@ -67,21 +71,6 @@ function init() {
     var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
     scene.add( skyBox );
 
-    // Plain skybox
-    // var skyBoxGeometry = new THREE.CubeGeometry(10000, 10000, 10000);
-    // var skyBoxMaterial = new THREE.MeshBasicMaterial({ color: 0x9999ff, side: THREE.BackSide });
-    // var skyBox = new THREE.Mesh(skyBoxGeometry, skyBoxMaterial);
-    // scene.add(skyBox);
-
-    // var ambientlight = new THREE.AmbientLight(0x111111);
-    // scene.add(ambientlight);
-
-    // Translucent red color
-    // var redMaterial = new THREE.MeshBasicMaterial( { color: 0xff0000, transparent: true, opacity: 0.5 } );
-    // var sphere = new THREE.Mesh( sphere_geo, redMaterial );
-    // sphere.position.set(0,0,0);
-    // scene.add( sphere );
-
     // Translucent with image texture
     var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.png' );
     var moonMaterial = new THREE.MeshLambertMaterial( { map: moonTexture, transparent: true, opacity: 0.75 } );
@@ -89,83 +78,31 @@ function init() {
     var moon = new THREE.Mesh( sphere_geo, moonMaterial );
     moon.position.set(0, 0, 0);
     scene.add( moon );
+}
 
-    // our snake
-    var geometricSphere = new THREE.Sphere(new THREE.Vector3(0, 0, 0), 1);
-
-    var headPos = new THREE.Vector3(1, 0, 0);
-    var dir = new THREE.Vector3(0, 1, 0);
-    var headPos2 = new THREE.Vector3(-1, 0, 0);
-    var dir2 = new THREE.Vector3(0, 1, 0);
-
-    snake = new Snake(headPos, dir, geometricSphere, scene);
-    snake2 = new Snake(headPos2, dir2, geometricSphere, scene);
-
-    updater = new Updater(snake, snake2, chaseCamera, topCamera);
+function _initRenderer() {
+    var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    container = document.body;
+    container.appendChild(renderer.domElement);
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.autoClear = false;
+}
 
-    // initialize camera position
-    updater.updateCameraPositions();
-
-    // add Food
-    // foodCollection = new Food(geometricSphere, scene);
-    // foodCollection.addFood();
+function init() {
+    _initScene();
+    _initCamera();
+    _initRenderer();
+    _initStats();
+    _initUpdater();
 }
 
 function animate() {
     requestAnimationFrame(animate);
     render();
     updater.update();
-}
-
-function updateCameraPositions() {
-    var snakeHead = snake.headPosition;
-    chaseCamera.position.x = snakeHead.x * 3.5;
-    chaseCamera.position.y = snakeHead.y * 3.5;
-    chaseCamera.position.z = snakeHead.z * 3.5;
-    chaseCamera.lookAt(new THREE.Vector3(0, 0, 0));
-    chaseCamera.up = snake.direction;
-
-    var snake2Head = snake2.headPosition;
-    topCamera.position.x = snake2Head.x * 3.5;
-    topCamera.position.y = snake2Head.y * 3.5;
-    topCamera.position.z = snake2Head.z * 3.5;
-    topCamera.lookAt(new THREE.Vector3(0, 0, 0));
-    topCamera.up = snake2.direction;
-}
-
-function updateStats() {
-    stats.update();
-}
-
-function update() {
-    // rotate first
-    if (keyboard.pressed("A")) {
-        snake.turn("A");
-    } else if (keyboard.pressed("D")) {
-        snake.turn("D");
-    }
-
-    if (keyboard.pressed("left")) {
-        snake2.turn("A");
-    } else if (keyboard.pressed("right")) {
-        snake2.turn("D");
-    }
-    // always move forward
-    snake.moveForward();
-    snake2.moveForward();
-
-    // updateCameraPositions
-    updateCameraPositions();
-
-    // update stats
-    updateStats();
-
-    // Spawn food
-    // spawnFood();
-
 }
 
 function render() {
