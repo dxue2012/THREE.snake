@@ -37,7 +37,7 @@ function _initUpdater() {
     var headPos2 = new THREE.Vector3(-1, 0, 0);
     var dir2 = new THREE.Vector3(0, -1, 0);
 
-    var snake = new Snake(headPos, dir, geometricSphere, scene, new THREE.Color(0, 1, 1));
+    var snake = new Snake(headPos, dir, geometricSphere, scene, new THREE.Color(0, 0, 1));
     var snake2 = new Snake(headPos2, dir2, geometricSphere, scene, new THREE.Color(1, 0, 0));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
