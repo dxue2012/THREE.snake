@@ -138,14 +138,23 @@ function animate() {
 function stopGame() {
     stopAnimation();
 
+    var leftEndMessage = $('#left-end-message');
+    var rightEndMessage = $('#right-end-message');
+
     var winner = updater.getWinner();
     if (winner == Updater.SNAKE_A) {
-        console.log('tie');
+        leftEndMessage.text("You win!");
+        rightEndMessage.text("You lose :(");
     } else if (winner == Updater.TIE) {
-
+        leftEndMessage.text("Tie");
+        rightEndMessage.text("Tie");
     } else {
-
+        leftEndMessage.text("You lose :(");
+        rightEndMessage.text("You win!");
     }
+
+    leftEndMessage.show();
+    rightEndMessage.show();
 }
 
 function stopAnimation() {
