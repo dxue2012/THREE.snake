@@ -33,9 +33,13 @@ module.exports = function(grunt) {
     },
     concat: {
         dist: {
-            src: ['./libjs/stats.min.js', './bower_components/threejs/build/three.min.js',
-            'bower_components/threex.keyboardstate/threex.keyboardstate.js',
-            './js/*.js'],
+            src: [
+                './libjs/stats.min.js',
+                './bower_components/threejs/build/three.min.js',
+                'bower_components/threex.keyboardstate/threex.keyboardstate.js',
+                'bower_components/jquery/dist/jquery.min.js',
+                'bower_components/flipclock/compiled/flipclock.min.js',
+                './js/*.js'],
             dest: 'dist/<%= pkg.name %>.js'
         }
     },
