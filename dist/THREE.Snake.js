@@ -1339,6 +1339,19 @@ var Updater = (function () {
         this.cameraB = cameraB;
         this.neutralItemCollection = neutralItemCollection;
     }
+    Updater.prototype.getWinner = function () {
+        var snakeALength = this.snakeA.getLength();
+        var snakeBLength = this.snakeB.getLength();
+        if (snakeALength > snakeBLength) {
+            return Updater.SNAKE_A;
+        }
+        else if (snakeALength === snakeBLength) {
+            return Updater.TIE;
+        }
+        else {
+            return Updater.SNAKE_B;
+        }
+    };
     Updater.prototype.updateCameraPositions = function () {
         var snakeHead = this.snakeA.headPosition;
         this.cameraA.position.x = snakeHead.x * 3.5;
@@ -1402,6 +1415,9 @@ var Updater = (function () {
         this.updateStats();
     };
     Updater.InvulnerableTime = 200;
+    Updater.SNAKE_A = 1;
+    Updater.TIE = 0;
+    Updater.SNAKE_B = -1;
     return Updater;
 })();
 
@@ -1411,10 +1427,16 @@ var leftCamera, rightCamera;
 var neutralItems;
 var updater;
 var clock;
+var animationFrameId;
+
+var GAME_TIME = 5;
 
 window.onload = function () {
     init();
     animate();
+
+    var restartButton = $('#restart-button');
+    restartButton.click(restart);
 }
 
 function _initCamera() {
@@ -1520,9 +1542,7 @@ function _initNeutralItems() {
 
 function _initClock() {
     var display = $('#game-timer');
-    clock = new Clock(5, display, function () {
-        console.log('hey');
-    });
+    clock = new Clock(GAME_TIME, display, stopGame);
 }
 
 function init() {
@@ -1536,9 +1556,37 @@ function init() {
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
+
     render();
     updater.update();
+}
+
+function stopGame() {
+    stopAnimation();
+
+    var leftEndMessage = $('#left-end-message');
+    var rightEndMessage = $('#right-end-message');
+    var restartButton = $('#restart-button');
+    var winner = updater.getWinner();
+    if (winner == Updater.SNAKE_A) {
+        leftEndMessage.text("You win!");
+        rightEndMessage.text("You lose :(");
+    } else if (winner == Updater.TIE) {
+        leftEndMessage.text("Tie");
+        rightEndMessage.text("Tie");
+    } else {
+        leftEndMessage.text("You lose :(");
+        rightEndMessage.text("You win!");
+    }
+
+    leftEndMessage.show();
+    rightEndMessage.show();
+    restartButton.show();
+}
+
+function stopAnimation() {
+    cancelAnimationFrame(animationFrameId);
 }
 
 function render() {
@@ -1553,6 +1601,22 @@ function render() {
     renderer.render(scene, leftCamera);
     renderer.setViewport(0.5 * SCREEN_WIDTH + 1, 1, 0.5 * SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
     renderer.render(scene, rightCamera);
+}
+
+function restart() {
+    // clear everything first
+    var leftEndMessage = $('#left-end-message');
+    var rightEndMessage = $('#right-end-message');
+    var restartButton = $('#restart-button');
+    leftEndMessage.hide();
+    rightEndMessage.hide();
+    restartButton.hide();
+
+    var oldCanvas = $('canvas');
+    oldCanvas.remove();
+
+    init();
+    animate();
 }
 
 // TODO
