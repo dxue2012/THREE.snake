@@ -11,6 +11,9 @@ var GAME_TIME = 5;
 window.onload = function () {
     init();
     animate();
+
+    var restartButton = $('#restart-button');
+    restartButton.click(restart);
 }
 
 function _initCamera() {
@@ -131,6 +134,7 @@ function init() {
 
 function animate() {
     animationFrameId = requestAnimationFrame(animate);
+
     render();
     updater.update();
 }
@@ -140,7 +144,7 @@ function stopGame() {
 
     var leftEndMessage = $('#left-end-message');
     var rightEndMessage = $('#right-end-message');
-
+    var restartButton = $('#restart-button');
     var winner = updater.getWinner();
     if (winner == Updater.SNAKE_A) {
         leftEndMessage.text("You win!");
@@ -155,6 +159,7 @@ function stopGame() {
 
     leftEndMessage.show();
     rightEndMessage.show();
+    restartButton.show();
 }
 
 function stopAnimation() {
@@ -173,4 +178,20 @@ function render() {
     renderer.render(scene, leftCamera);
     renderer.setViewport(0.5 * SCREEN_WIDTH + 1, 1, 0.5 * SCREEN_WIDTH - 2, SCREEN_HEIGHT - 2);
     renderer.render(scene, rightCamera);
+}
+
+function restart() {
+    // clear everything first
+    var leftEndMessage = $('#left-end-message');
+    var rightEndMessage = $('#right-end-message');
+    var restartButton = $('#restart-button');
+    leftEndMessage.hide();
+    rightEndMessage.hide();
+    restartButton.hide();
+
+    var oldCanvas = $('canvas');
+    oldCanvas.remove();
+
+    init();
+    animate();
 }
