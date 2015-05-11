@@ -29,7 +29,13 @@ var NeutralItemCollection = (function () {
     };
     NeutralItemCollection.prototype.spawnFood = function () {
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
-        var food = new FoodParticle(spawnLocation);
+        var rand = Math.random();
+        if (rand < 0.1) {
+            var food = new FoodParticle(spawnLocation, 20);
+        }
+        else {
+            var food = new FoodParticle(spawnLocation);
+        }
         this.scene.add(food.sphere);
         this.foodCollection.push(food);
     };

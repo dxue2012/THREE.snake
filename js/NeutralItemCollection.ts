@@ -43,7 +43,13 @@ class NeutralItemCollection {
     public spawnFood() {
         // TODO: assume map is a unit sphere
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
-        var food = new FoodParticle(spawnLocation);
+        var rand = Math.random();
+        if (rand < 0.1) {
+          var food = new FoodParticle(spawnLocation, 20);
+        }
+        else {
+          var food = new FoodParticle(spawnLocation);
+        }
         this.scene.add(food.sphere);
 
         this.foodCollection.push(food);
