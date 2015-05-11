@@ -54,11 +54,11 @@ function _initScene() {
     directionalLight.position.set(0, 10, 0);
     scene.add(directionalLight);
 
-    // Skybox with dawnmountain scene
+    // // Skybox with dawnmountain scene
     var imagePrefix = "images/sky-";
     var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
     var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );
+    var skyGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
 
     var materialArray = [];
     for (var i = 0; i < 6; i++)
@@ -70,6 +70,20 @@ function _initScene() {
     var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
     var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
     scene.add( skyBox );
+
+    // Skybox with stars
+    // var skyGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
+    //
+    // var materialArray = [];
+    // for (var i = 0; i < 6; i++)
+    //     materialArray.push( new THREE.MeshBasicMaterial({
+    //         map: THREE.ImageUtils.loadTexture( "images/stars.jpg" ),
+    //         side: THREE.BackSide
+    //     }));
+    //
+    // var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+    // var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+    // scene.add( skyBox );
 
     // Translucent with image texture
     var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.png' );

@@ -4,4 +4,5 @@ interface Queue<T> {
     dequeue(): T;
     peek(): T;
     forEach(callBack: (item: T) => boolean): void;
+    forEachInBody(callBack: (item: T) => boolean): void;
 }

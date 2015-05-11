@@ -77,4 +77,11 @@ function Queue() {
       }
   }
 
+  this.forEachInBody = function(callBack) {
+      for (var i = offset; i < queue.length-20; i++) {
+          if (callBack(queue[i]) === false) {
+            return;
+          }
+      }
+  }
 }
