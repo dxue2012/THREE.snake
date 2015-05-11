@@ -13,6 +13,7 @@ class Snake implements ISnake {
     invulnerableTime: number;
     lengthToGrow: number;
     color: THREE.Color;
+    head: THREE.Mesh;
 
     // for now assume surface is a sphere centered at origin
     surface: THREE.Sphere;
@@ -21,6 +22,7 @@ class Snake implements ISnake {
     constructor(
         headPos: THREE.Vector3,
         dir: THREE.Vector3,
+        // head: THREE.Mesh,
         sphere: THREE.Sphere,
         scene: THREE.Scene,
         color?: THREE.Color) {
@@ -35,6 +37,12 @@ class Snake implements ISnake {
         this.lengthToGrow = 0;
 
         this.color = color ? color : Snake.DEFAULT_COLOR;
+
+        var headGeo = new THREE.SphereGeometry(0.05, 8,8);
+        var headMat = new THREE.MeshBasicMaterial( {color: this.color.getHex()} );
+        this.head = new THREE.Mesh(headGeo, headMat);
+        this.head.position.set(headPos.x, headPos.y, headPos.z);
+        this.scene.add(this.head);
 
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead();
@@ -64,7 +72,7 @@ class Snake implements ISnake {
     }
 
     public growHead() {
-        var head: Particle;
+        var headParticle: Particle;
         var deltaT = 1 / 50.0;
 
         // update head position
@@ -73,8 +81,8 @@ class Snake implements ISnake {
             .setLength(this.surface.radius);
 
         // update head
-        head = new Particle(this.headPosition.clone(), this.color);
-        this.particles.enqueue(head);
+        headParticle = new Particle(this.headPosition.clone(), this.color);
+        this.particles.enqueue(headParticle);
 
         // update direction
         var normal: THREE.Vector3 = this.headPosition.clone().normalize();
@@ -82,7 +90,10 @@ class Snake implements ISnake {
         this.direction.sub(normDir).normalize();
 
         // add to scene
-        this.scene.add(head.sphere);
+        this.scene.add(headParticle.sphere);
+
+        // update the head mesh
+        this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
     }
 
     public chopTail() {

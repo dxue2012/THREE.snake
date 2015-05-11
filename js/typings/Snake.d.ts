@@ -2,6 +2,7 @@ interface ISnake {
     particles: Queue<IParticle>;
     direction: THREE.Vector3;
     headPosition: THREE.Vector3;
+    head: THREE.Mesh;
 
     invulnerableTime: number;
     lengthToGrow: number;
