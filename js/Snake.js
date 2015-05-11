@@ -8,8 +8,8 @@ var Snake = (function () {
         this.invulnerableTime = 0;
         this.lengthToGrow = 0;
         this.color = color ? color : Snake.DEFAULT_COLOR;
-        var headGeo = new THREE.SphereGeometry(0.05, 8, 8);
-        var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true });
+        var headGeo = new THREE.SphereGeometry(0.08, 4, 4);
+        var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex() });
         this.head = new THREE.Mesh(headGeo, headMat);
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
