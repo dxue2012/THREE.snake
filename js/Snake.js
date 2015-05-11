@@ -9,7 +9,7 @@ var Snake = (function () {
         this.lengthToGrow = 0;
         this.color = color ? color : Snake.DEFAULT_COLOR;
         var headGeo = new THREE.SphereGeometry(0.05, 8, 8);
-        var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex() });
+        var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true });
         this.head = new THREE.Mesh(headGeo, headMat);
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
@@ -46,6 +46,12 @@ var Snake = (function () {
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
         this.direction.sub(normDir).normalize();
         this.scene.add(headParticle.sphere);
+        if (this.isInvulnerable) {
+            ;
+        }
+        else {
+            ;
+        }
         this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
     };
     Snake.prototype.chopTail = function () {
