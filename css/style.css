@@ -25,6 +25,7 @@ body {
 }
 
 #game-timer {
+    position: absolute;
     top: 10px;
     left: 44vw;
     width: 10vw;
@@ -43,13 +44,6 @@ img {
 
 .image {
     display:inline;
-}
-
-#game-timer {
-    position: absolute;
-    top: 10px;
-    left: 40vw;
-    z-index: 1000;
 }
 
 #alert_div {

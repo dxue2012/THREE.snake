@@ -113,7 +113,9 @@ function _initNeutralItems() {
 
 function _initClock() {
     var display = $('#game-timer');
-    clock = new Clock(300, display);
+    clock = new Clock(5, display, function () {
+        console.log('hey');
+    });
 }
 
 function init() {

@@ -1,15 +1,18 @@
 class Clock {
+    private refreshInterval: number;
+
     constructor(
         private duration: number,
-        private display: any
+        private display: any,
+        stopCallback: () => any
     ) {
-        this.startTimer(duration, display);
+        this.startTimer(duration, display, stopCallback);
     }
 
-    public startTimer(duration: number, display) {
+    public startTimer(duration: number, display, stopCallback) {
         var timer = duration;
         var minutes, seconds;
-        setInterval(function () {
+        this.refreshInterval = setInterval(() => {
             minutes = parseInt((timer / 60).toString(), 10);
             seconds = parseInt((timer % 60).toString(), 10);
 
@@ -19,8 +22,13 @@ class Clock {
             display.text(minutes + ":" + seconds);
 
             if (--timer < 0) {
-                timer = duration;
+                this.stopTimer();
+                stopCallback();
             }
         }, 1000);
+    }
+
+    public stopTimer() {
+        clearInterval(this.refreshInterval);
     }
 }
