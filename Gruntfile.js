@@ -43,6 +43,17 @@ module.exports = function(grunt) {
             dest: 'dist/<%= pkg.name %>.js'
         }
     },
+    cssmin: {
+        options: {
+            shorthandCompacting: false,
+            roundingPrecision: -1
+        },
+        target: {
+            files: {
+                'dist/THREE.Snake.css': ['css/style.css', 'bower_components/flipclock/compiled/flipclock.css']
+            }
+        }
+    },
     watch: {
         /*
         less: {
@@ -72,10 +83,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-typescript');
   grunt.loadNpmTasks('grunt-concurrent');
 
   // Default task.
   grunt.registerTask('default', ["concurrent:dev"]);
-  grunt.registerTask('compile', ["concat", "uglify"]);
+  grunt.registerTask('compile', ["concat", "uglify", "cssmin"]);
 };
