@@ -4,6 +4,9 @@ var leftCamera, rightCamera;
 var neutralItems;
 var updater;
 var clock;
+var animationFrameId;
+
+var GAME_TIME = 5;
 
 window.onload = function () {
     init();
@@ -113,9 +116,7 @@ function _initNeutralItems() {
 
 function _initClock() {
     var display = $('#game-timer');
-    clock = new Clock(5, display, function () {
-        console.log('hey');
-    });
+    clock = new Clock(GAME_TIME, display, stopGame);
 }
 
 function init() {
@@ -129,9 +130,26 @@ function init() {
 }
 
 function animate() {
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
     render();
     updater.update();
+}
+
+function stopGame() {
+    stopAnimation();
+
+    var winner = updater.getWinner();
+    if (winner == Updater.SNAKE_A) {
+        console.log('tie');
+    } else if (winner == Updater.TIE) {
+
+    } else {
+
+    }
+}
+
+function stopAnimation() {
+    cancelAnimationFrame(animationFrameId);
 }
 
 function render() {

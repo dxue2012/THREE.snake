@@ -3,6 +3,9 @@ declare var keyboard;
 
 class Updater {
     private static InvulnerableTime = 200;
+    public static SNAKE_A: number = 1;
+    public static TIE: number = 0;
+    public static SNAKE_B: number = -1;
 
     constructor(
         private scene: THREE.Scene,
@@ -12,6 +15,18 @@ class Updater {
         private cameraB: THREE.PerspectiveCamera,
         private neutralItemCollection: NeutralItemCollection
     ) {
+    }
+
+    public getWinner(): number {
+        var snakeALength = this.snakeA.getLength();
+        var snakeBLength = this.snakeB.getLength();
+        if (snakeALength > snakeBLength) {
+            return Updater.SNAKE_A;
+        } else if (snakeALength === snakeBLength) {
+            return Updater.TIE;
+        } else {
+            return Updater.SNAKE_B;
+        }
     }
 
     public updateCameraPositions() {

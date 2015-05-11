@@ -7,6 +7,19 @@ var Updater = (function () {
         this.cameraB = cameraB;
         this.neutralItemCollection = neutralItemCollection;
     }
+    Updater.prototype.getWinner = function () {
+        var snakeALength = this.snakeA.getLength();
+        var snakeBLength = this.snakeB.getLength();
+        if (snakeALength > snakeBLength) {
+            return Updater.SNAKE_A;
+        }
+        else if (snakeALength === snakeBLength) {
+            return Updater.TIE;
+        }
+        else {
+            return Updater.SNAKE_B;
+        }
+    };
     Updater.prototype.updateCameraPositions = function () {
         var snakeHead = this.snakeA.headPosition;
         this.cameraA.position.x = snakeHead.x * 3.5;
@@ -70,5 +83,8 @@ var Updater = (function () {
         this.updateStats();
     };
     Updater.InvulnerableTime = 200;
+    Updater.SNAKE_A = 1;
+    Updater.TIE = 0;
+    Updater.SNAKE_B = -1;
     return Updater;
 })();
