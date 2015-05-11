@@ -112,16 +112,8 @@ function _initNeutralItems() {
 }
 
 function _initClock() {
-    clock = $('#game-timer').FlipClock(300, {
-        clockFace: 'Counter',
-        countdown: true
-    });
-
-    setTimeout(function() {
-        setInterval(function() {
-            clock.decrement();
-        }, 1000);
-    });
+    var display = $('#game-timer');
+    clock = new Clock(300, display);
 }
 
 function init() {
