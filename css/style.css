@@ -9,15 +9,6 @@ html, body {
     user-select: none;
 }
 
-.selectable {
-    -webkit-touch-callout: text;
-    -webkit-user-select: text;
-    -khtml-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-}
-
 body {
     font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
     font-size: 20px;
@@ -42,23 +33,17 @@ img {
     margin-left: 30px;
 }
 
-.assignment {
-    font-size: 60%;
-    color: #ddd;
-}
-
 .image {
     display:inline;
 }
 
-#loading {
-    position:absolute;
-    top:  200px;
-    left: 200px;
-    font-size:47px;
-    font-weight:bold;
-    font-color:#ddd;
+#game-timer {
+    position: absolute;
+    top: 10px;
+    left: 40vw;
+    z-index: 1000;
 }
+
 #alert_div {
     position:absolute;
     top:  50px;
@@ -77,11 +62,6 @@ img {
     border-radius: 8px;
     display: none;
 
-}
-#result_div {
-    margin: 0 auto;
-    text-align: center;
-    font-color:#FF0;
 }
 
 h1, h2, h3 {

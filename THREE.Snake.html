@@ -4,6 +4,7 @@
 <head>
     <title>THREE.Snake</title>
     <link href="css/style.css" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="bower_components/flipclock/compiled/flipclock.css">
 </head>
 
 <body>
@@ -45,6 +46,9 @@
     <script src="bower_components/threejs/build/three.js"></script>
     <script src="bower_components/threex.keyboardstate/threex.keyboardstate.js"></script>
 
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/flipclock/compiled/flipclock.js"></script>
+
     <script src="js/Snake.js"></script>
     <script src="js/Particle.js"></script>
     <script src="js/Queue.js"></script>
@@ -60,9 +64,8 @@
     <div id="stats"></div>
     <div id="main_div">
         <h1> THREE.Snake </h1>
+        <div id="game-timer"> </div>
         <canvas id="canvas"> </canvas>
     </div>
-    <div id="alert_div" title="alert"> </div>
-
 </body>
 </html>

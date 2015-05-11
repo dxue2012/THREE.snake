@@ -1,15 +1,14 @@
-/// <reference path="../typings/tsd.d.ts" />
-/// <reference path="./typings/All.d.ts"/>
-
 var container, scene, renderer, controls, stats;
 var keyboard = new THREEx.KeyboardState();
-var clock = new THREE.Clock();
 var leftCamera, rightCamera;
 var neutralItems;
 var updater;
+var clock;
 
-init();
-animate();
+window.onload = function () {
+    init();
+    animate();
+}
 
 function _initCamera() {
     var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
@@ -112,6 +111,19 @@ function _initNeutralItems() {
     neutralItems.spawnFood();
 }
 
+function _initClock() {
+    clock = $('#game-timer').FlipClock(300, {
+        clockFace: 'Counter',
+        countdown: true
+    });
+
+    setTimeout(function() {
+        setInterval(function() {
+            clock.decrement();
+        }, 1000);
+    });
+}
+
 function init() {
     _initScene();
     _initCamera();
@@ -119,6 +131,7 @@ function init() {
     _initStats();
     _initNeutralItems();
     _initUpdater();
+    _initClock();
 }
 
 function animate() {
