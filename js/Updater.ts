@@ -134,6 +134,7 @@ class Updater {
                 // Food with value 15 makes the snake invincible
                 if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
                     this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                    Sound.powerup();
                 }
 
                 // kill food particle, spawn new food particle
@@ -149,6 +150,7 @@ class Updater {
                 // Food with value 15 makes the snake invincible
                 if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
                     this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                    Sound.powerup();
                 }
 
                 this.neutralItemCollection.respawnFood(foodCollection[i]);

@@ -112,6 +112,7 @@ var Updater = (function () {
                 this.gameStats.addSnakeAFood();
                 if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
                     this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                    Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -121,6 +122,7 @@ var Updater = (function () {
                 console.log(this.gameStats.snakeBFood);
                 if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
                     this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                    Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }

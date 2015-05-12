@@ -21,6 +21,7 @@ window.onload = function () {
 
     var restartButton = $('#restart-button');
     restartButton.click(restart);
+    _initSound();
 }
 
 function _initCamera() {
@@ -149,7 +150,6 @@ function init() {
     _initNeutralItems();
     _initUpdater();
     _initClock();
-    _initSound();
 }
 
 function animate() {
