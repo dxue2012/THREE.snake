@@ -37,7 +37,26 @@ var Updater = (function () {
     Updater.prototype.updateStats = function () {
         stats.update();
     };
+    Updater.prototype._updateKeys = function () {
+        $('#left-left').removeClass('key-pressed');
+        $('#left-right').removeClass('key-pressed');
+        if (keyboard.pressed("A")) {
+            $('#left-left').addClass('key-pressed');
+        }
+        else if (keyboard.pressed("D")) {
+            $('#left-right').addClass('key-pressed');
+        }
+        $('#right-left').removeClass('key-pressed');
+        $('#right-right').removeClass('key-pressed');
+        if (keyboard.pressed("left")) {
+            $('#right-left').addClass('key-pressed');
+        }
+        else if (keyboard.pressed("right")) {
+            $('#right-right').addClass('key-pressed');
+        }
+    };
     Updater.prototype.update = function () {
+        this._updateKeys();
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
         }
