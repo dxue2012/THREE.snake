@@ -3,7 +3,7 @@ declare var keyboard;
 
 class Updater {
     private static InvulnerableTime = 200;
-    private static ENHANCE_VALUE = 15;
+    private static SpeedupTime = 200;
     public static SNAKE_A: number = 1;
     public static TIE: number = 0;
     public static SNAKE_B: number = -1;
@@ -132,8 +132,13 @@ class Updater {
                 this.gameStats.addSnakeAFood();
 
                 // Food with value 15 makes the snake invincible
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                if (foodCollection[i].value === FoodParticle.ENHANCE_VALUE) {
                     this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                }
+
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeA.speed = Snake.BOOSTED_SPEED;
+                    this.snakeA.speedupTime = Updater.SpeedupTime;
                 }
 
                 // kill food particle, spawn new food particle
@@ -147,8 +152,13 @@ class Updater {
                 console.log(this.gameStats.snakeBFood)
 
                 // Food with value 15 makes the snake invincible
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
                     this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                }
+
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeB.speed = Snake.BOOSTED_SPEED;
+                    this.snakeB.speedupTime = Updater.SpeedupTime;
                 }
 
                 this.neutralItemCollection.respawnFood(foodCollection[i]);

@@ -110,8 +110,12 @@ var Updater = (function () {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
                 this.snakeA.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeAFood();
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                if (foodCollection[i].value === FoodParticle.ENHANCE_VALUE) {
                     this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                }
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeA.speed = Snake.BOOSTED_SPEED;
+                    this.snakeA.speedupTime = Updater.SpeedupTime;
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -119,8 +123,12 @@ var Updater = (function () {
                 this.snakeB.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeBFood();
                 console.log(this.gameStats.snakeBFood);
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
                     this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                }
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeB.speed = Snake.BOOSTED_SPEED;
+                    this.snakeB.speedupTime = Updater.SpeedupTime;
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -137,7 +145,7 @@ var Updater = (function () {
         this.updateStats();
     };
     Updater.InvulnerableTime = 200;
-    Updater.ENHANCE_VALUE = 15;
+    Updater.SpeedupTime = 200;
     Updater.SNAKE_A = 1;
     Updater.TIE = 0;
     Updater.SNAKE_B = -1;
