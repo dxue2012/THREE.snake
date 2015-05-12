@@ -18,12 +18,12 @@ window.onload = function () {
 
     $('#myModal').on('hidden.bs.modal', function () {
         clock.startTimer();
+        _initSound();
         animate();
     });
 
     var restartButton = $('#restart-button');
     restartButton.click(restart);
-    _initSound();
 }
 
 function _initCamera() {
