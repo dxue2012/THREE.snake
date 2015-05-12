@@ -103,7 +103,6 @@ img {
     width: 5vw;
 }
 
-/*
 .top {
     margin: 30px;
 }
@@ -128,6 +127,9 @@ h1, h2, h3 {
 h1 {
     font-size: 100%;
 }
+
+
+/*
 h2 {
     margin-top:10px;
     font-size: 70%;
