@@ -39,30 +39,30 @@ class GameStats  {
 
     public printLeftStats(display) {
         if (this.snakeA.getLength() > this.snakeB.getLength()) {
-            display.html("You win!");
+          display.find('.panel-heading').find('.panel-title').text('You win!');
         } else if (this.snakeA.getLength() == this.snakeB.getLength()){
-            display.html("Tie");
+            display.find('.panel-heading').find('.panel-title').text('Tie');
         } else {
-            display.html("You lose");
+          display.find('.panel-heading').find('.panel-title').text('You lose ):');
         }
 
-        display.append("<br> Snake Length: " + this.snakeA.getLength());
-        display.append("<br> Bumped into Enemy: " + this.snakeAKilled);
-        display.append("<br> Bumped into Yourself: " + this.snakeASuicides);
+        display.find('.panel-body').html("Snake Length:          " + this.snakeA.getLength() + "<br>" +
+                                         "Bumped into Enemy:     " + this.snakeAKilled + "<br>" +
+                                         "Bumped into Yourself:  " + this.snakeASuicides)
     }
 
     public printRightStats(display) {
         if (this.snakeA.getLength() > this.snakeB.getLength()) {
-            display.html("You lose!");
+          display.find('.panel-heading').find('.panel-title').text('You lose ):');
         } else if (this.snakeA.getLength() == this.snakeB.getLength()){
-            display.html("Tie");
+            display.find('.panel-heading').find('.panel-title').text('Tie');
         } else {
-            display.html("You win");
+          display.find('.panel-heading').find('.panel-title').text('You lose ):');
         }
 
-        display.append("<br> Snake Length: " + this.snakeB.getLength());
-        display.append("<br> Bumped into Enemy: " + this.snakeBKilled);
-        display.append("<br> Bumped into Yourself: " + this.snakeBSuicides);
+        display.find('.panel-body').html("Snake Length:          " + this.snakeB.getLength() + "<br>" +
+                                         "Bumped into Enemy:     " + this.snakeBKilled + "<br>" +
+                                         "Bumped into Yourself:  " + this.snakeBSuicides)
     }
 
 
