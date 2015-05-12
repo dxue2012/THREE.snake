@@ -10,7 +10,15 @@ var GAME_TIME = 60;
 
 window.onload = function () {
     init();
-    animate();
+    // animate();
+
+    $('#myModal').modal('show');
+
+    $('#myModal').on('hidden.bs.modal', function () {
+        // init();
+        _initClock();
+        animate();
+    });
 
     var restartButton = $('#restart-button');
     restartButton.click(restart);
@@ -138,7 +146,6 @@ function init() {
     _initStats();
     _initNeutralItems();
     _initUpdater();
-    _initClock();
 }
 
 function animate() {
@@ -205,5 +212,6 @@ function restart() {
     oldStats.remove();
 
     init();
+    _initClock();
     animate();
 }

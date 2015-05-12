@@ -1500,6 +1500,8 @@ window.onload = function () {
     init();
     animate();
 
+    $('#myModal').modal('show');
+
     var restartButton = $('#restart-button');
     restartButton.click(restart);
 }
