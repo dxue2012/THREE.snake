@@ -101,10 +101,16 @@ var Updater = (function () {
         for (var i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
                 this.snakeA.growLength(foodCollection[i].value);
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                    this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
             if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
                 this.snakeB.growLength(foodCollection[i].value);
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                    this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
@@ -112,6 +118,7 @@ var Updater = (function () {
         this.updateStats();
     };
     Updater.InvulnerableTime = 200;
+    Updater.ENHANCE_VALUE = 15;
     Updater.SNAKE_A = 1;
     Updater.TIE = 0;
     Updater.SNAKE_B = -1;

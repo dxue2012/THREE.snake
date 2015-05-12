@@ -31,6 +31,9 @@ var NeutralItemCollection = (function () {
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
         var rand = Math.random();
         if (rand < 0.1) {
+            var food = new FoodParticle(spawnLocation, 15);
+        }
+        else if (rand < 0.2) {
             var food = new FoodParticle(spawnLocation, 20);
         }
         else {
