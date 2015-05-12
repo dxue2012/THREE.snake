@@ -1152,31 +1152,31 @@ var GameStats = (function () {
     };
     GameStats.prototype.printLeftStats = function (display) {
         if (this.snakeA.getLength() > this.snakeB.getLength()) {
-            display.html("You win!");
+            display.find('.panel-heading').find('.panel-title').text('You win!');
         }
         else if (this.snakeA.getLength() == this.snakeB.getLength()) {
-            display.html("Tie");
+            display.find('.panel-heading').find('.panel-title').text('Tie');
         }
         else {
-            display.html("You lose");
+            display.find('.panel-heading').find('.panel-title').text('You lose ):');
         }
-        display.append("<br> Snake Length: " + this.snakeA.getLength());
-        display.append("<br> Bumped into Enemy: " + this.snakeAKilled);
-        display.append("<br> Bumped into Yourself: " + this.snakeASuicides);
+        display.find('.panel-body').html("Snake Length:          " + this.snakeA.getLength() + "<br>" +
+            "Bumped into Enemy:     " + this.snakeAKilled + "<br>" +
+            "Bumped into Yourself:  " + this.snakeASuicides);
     };
     GameStats.prototype.printRightStats = function (display) {
         if (this.snakeA.getLength() > this.snakeB.getLength()) {
-            display.html("You lose!");
+            display.find('.panel-heading').find('.panel-title').text('You lose ):');
         }
         else if (this.snakeA.getLength() == this.snakeB.getLength()) {
-            display.html("Tie");
+            display.find('.panel-heading').find('.panel-title').text('Tie');
         }
         else {
-            display.html("You win");
+            display.find('.panel-heading').find('.panel-title').text('You win!');
         }
-        display.append("<br> Snake Length: " + this.snakeB.getLength());
-        display.append("<br> Bumped into Enemy: " + this.snakeBKilled);
-        display.append("<br> Bumped into Yourself: " + this.snakeBSuicides);
+        display.find('.panel-body').html("Snake Length:          " + this.snakeB.getLength() + "<br>" +
+            "Bumped into Enemy:     " + this.snakeBKilled + "<br>" +
+            "Bumped into Yourself:  " + this.snakeBSuicides);
     };
     return GameStats;
 })();
@@ -1214,12 +1214,12 @@ var NeutralItemCollection = (function () {
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
         var rand = Math.random();
         if (rand < 0.1) {
-            var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
-        }
-        else if (rand < 0.2) {
             var food = new FoodParticle(spawnLocation, FoodParticle.ENHANCE_VALUE);
         }
-        else if (rand < 0.3) {
+        else if (rand < 0.5) {
+            var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
+        }
+        else if (rand < 0.9) {
             var food = new FoodParticle(spawnLocation, FoodParticle.BOOST_VALUE);
         }
         else {
@@ -1333,7 +1333,7 @@ function Queue() {
 }
 
 var Snake = (function () {
-    function Snake(headPos, dir, speed, sphere, scene, statusBarId, color) {
+    function Snake(headPos, dir, speed, sphere, scene, leftOrRight, color) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
@@ -1349,8 +1349,10 @@ var Snake = (function () {
         this.head = new THREE.Mesh(headGeo, headMat);
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
-        this.statusBar = $('#' + statusBarId);
-        this.statusBar.hide();
+        this.invulnerableBar = $('#' + leftOrRight + '-invulnerable-bar');
+        this.invulnerableBar.hide();
+        this.speedupBar = $('#' + leftOrRight + '-speedup-bar');
+        this.speedupBar.hide();
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead(Snake.DEFAULT_SPEED);
         }
@@ -1358,36 +1360,64 @@ var Snake = (function () {
     Snake.prototype.getLength = function () {
         return this.particles.getLength();
     };
-    Snake.prototype.stopStatusBar = function () {
-        this.statusBar.stop();
+    Snake.prototype.stopStatusBars = function () {
+        this._stopInvulnerableBar();
+        this._stopSpeedupBar();
     };
-    Snake.prototype._animateStatusBar = function (duration) {
-        var _this = this;
-        if (this.statusBar.is(":visible")) {
-            this.statusBar.stop();
+    Snake.prototype._stopSpeedupBar = function () {
+        this.speedupBar.stop();
+    };
+    Snake.prototype._stopInvulnerableBar = function () {
+        this.invulnerableBar.stop();
+    };
+    Snake.prototype._animateStatusBar = function (statusBar, duration) {
+        if (statusBar.is(":visible")) {
+            statusBar.stop();
         }
-        this.statusBar.css('width', '100%').attr('aria-valuenow', 100);
-        this.statusBar.show();
-        this.statusBar.animate({
+        statusBar.css('width', '100%').attr('aria-valuenow', 100);
+        statusBar.show();
+        statusBar.animate({
             width: '0px',
         }, {
             duration: duration,
             easing: "linear",
             complete: function () {
-                _this.statusBar.hide();
+                statusBar.hide();
             }
         });
     };
-    Snake.prototype._setStatusBarColor = function (color) {
-        this.statusBar.css('background-color', color);
+    Snake.prototype._animateSpeedupBar = function (duration) {
+        var otherZIndex = +this.invulnerableBar.css('z-index');
+        this.speedupBar.css('z-index', otherZIndex - 1);
+        this._animateStatusBar(this.speedupBar, duration);
+    };
+    Snake.prototype._animateInvulnerableBar = function (duration) {
+        var otherZIndex = +this.speedupBar.css('z-index');
+        this.invulnerableBar.css('z-index', otherZIndex - 1);
+        this._animateStatusBar(this.invulnerableBar, duration);
+    };
+    Snake.prototype._setStatusBarColor = function (statusBar, color) {
+        statusBar.css('background-color', color);
+    };
+    Snake.prototype._setInvulnerableBarColor = function (color) {
+        this._setStatusBarColor(this.invulnerableBar, color);
+    };
+    Snake.prototype._setSpeedupBarColor = function (color) {
+        this._setStatusBarColor(this.speedupBar, color);
     };
     Snake.prototype.makeInvulnerable = function (time) {
         this.invulnerableTime = time;
-        this._setStatusBarColor("#ffd700");
-        this._animateStatusBar(Snake.INVULNERABLE_DURATION);
+        this._setInvulnerableBarColor("#ffd700");
+        this._animateInvulnerableBar(Snake.INVULNERABLE_DURATION);
     };
     Snake.prototype.isInvulnerable = function () {
         return this.invulnerableTime > 0;
+    };
+    Snake.prototype.boost = function (duration) {
+        this.speedupTime = duration;
+        this.speed = Snake.BOOSTED_SPEED;
+        this._setSpeedupBarColor("#c0c0c0");
+        this._animateSpeedupBar(Snake.SPEEDUP_DURATION);
     };
     Snake.prototype.isSpeedingup = function () {
         return this.speedupTime > 0;
@@ -1450,10 +1480,12 @@ var Snake = (function () {
         this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), leftOrRight * rotationAngle);
     };
     Snake.prototype.moveForward = function () {
-        if (this.isSpeedingup())
+        if (this.isSpeedingup()) {
             this.growHead(Snake.BOOSTED_SPEED);
-        else
+        }
+        else {
             this.growHead(Snake.DEFAULT_SPEED);
+        }
         if (this.lengthToGrow <= 0) {
             this.chopTail();
         }
@@ -1471,7 +1503,8 @@ var Snake = (function () {
     Snake.BOOSTED_SPEED = 1 / 30.0;
     Snake.LEFT = 1;
     Snake.RIGHT = -1;
-    Snake.INVULNERABLE_DURATION = 3333;
+    Snake.INVULNERABLE_DURATION = Math.round(Updater.InvulnerableTime / 60 * 1000);
+    Snake.SPEEDUP_DURATION = Math.round(Updater.SpeedupTime / 60 * 1000);
     return Snake;
 })();
 
@@ -1634,8 +1667,7 @@ var Updater = (function () {
                     Sound.powerup();
                 }
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
-                    this.snakeA.speed = Snake.BOOSTED_SPEED;
-                    this.snakeA.speedupTime = Updater.SpeedupTime;
+                    this.snakeA.boost(Updater.SpeedupTime);
                     Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
@@ -1649,8 +1681,7 @@ var Updater = (function () {
                     Sound.powerup();
                 }
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
-                    this.snakeB.speed = Snake.BOOSTED_SPEED;
-                    this.snakeB.speedupTime = Updater.SpeedupTime;
+                    this.snakeB.boost(Updater.SpeedupTime);
                     Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
@@ -1695,12 +1726,12 @@ window.onload = function () {
 
     $('#myModal').on('hidden.bs.modal', function () {
         clock.startTimer();
+        _initSound();
         animate();
     });
 
     var restartButton = $('#restart-button');
     restartButton.click(restart);
-    _initSound();
 }
 
 function _initCamera() {
@@ -1735,8 +1766,8 @@ function _initUpdater() {
     var speed = Snake.DEFAULT_SPEED;
 
     var crimson = new THREE.Color(0xdc143c);
-    snake = new Snake(headPos, dir, Snake.DEFAULT_SPEED, geometricSphere, scene, 'left-status-bar', crimson);
-    snake2 = new Snake(headPos2, dir2, Snake.DEFAULT_SPEED, geometricSphere, scene, 'right-status-bar', new THREE.Color(0x32cd32));
+    snake = new Snake(headPos, dir, Snake.DEFAULT_SPEED, geometricSphere, scene, 'left', crimson);
+    snake2 = new Snake(headPos2, dir2, Snake.DEFAULT_SPEED, geometricSphere, scene, 'right', new THREE.Color(0x32cd32));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
@@ -1843,8 +1874,8 @@ function stopGame() {
     stopAnimation();
     Sound.gameover();
 
-    var leftEndMessage = $('#left-end-message');
-    var rightEndMessage = $('#right-end-message');
+    var leftEndMessage = $('#panel-left');
+    var rightEndMessage = $('#panel-right');
     var restartButton = $('#restart-button');
     // var endStatsMessage = $('#end-stats');
 
@@ -1860,8 +1891,8 @@ function stopAnimation() {
     cancelAnimationFrame(animationFrameId);
 
     // stop status bar animations
-    snake.stopStatusBar();
-    snake2.stopStatusBar();
+    snake.stopStatusBars();
+    snake2.stopStatusBars();
 }
 
 function render() {
@@ -1880,8 +1911,8 @@ function render() {
 
 function restart() {
     // clear everything first
-    var leftEndMessage = $('#left-end-message');
-    var rightEndMessage = $('#right-end-message');
+    var leftEndMessage = $('#panel-left');
+    var rightEndMessage = $('#panel-right');
     var restartButton = $('#restart-button');
     leftEndMessage.hide();
     rightEndMessage.hide();
