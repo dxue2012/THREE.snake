@@ -1,0 +1,36 @@
+{
+    "version": "1.5.0-alpha",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./Clock.ts",
+        "./Collision.ts",
+        "./FoodParticle.ts",
+        "./GameStats.ts",
+        "./NeutralItemCollection.ts",
+        "./Particle.ts",
+        "./Snake.ts",
+        "./Updater.ts",
+        "./typings/All.d.ts",
+        "./typings/Emitter.d.ts",
+        "./typings/Food.d.ts",
+        "./typings/IFoodParticle.d.ts",
+        "./typings/Particle.d.ts",
+        "./typings/ParticleEngine.d.ts",
+        "./typings/Queue.d.ts",
+        "./typings/Renderer.d.ts",
+        "./typings/Scene.d.ts",
+        "./typings/Snake.d.ts",
+        "./typings/SystemSettings.d.ts"
+    ]
+}

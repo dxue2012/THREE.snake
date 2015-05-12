@@ -1,0 +1,231 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+body {
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 20px;
+    color: #eee;
+    background: #222;
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+#main_div {
+    margin: 0 auto;
+    max-width: 55em;
+    padding: 30px;
+    position: absolute;
+}
+
+#game-title {
+    color: white;
+}
+
+#game-timer {
+    color: white;
+    position: absolute;
+    top: 10px;
+    left: 44vw;
+    width: 10vw;
+    font-size: 5em;
+    z-index: 1000;
+}
+
+/*#end-stats-left {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+
+    position: absolute;
+    top: 50vh;
+    left: 30vw;
+    width: 40vw;
+    font-size: 20pt;
+    color: black;
+    z-index: 1000;
+    text-align: center;
+}
+
+#end-stats-right {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+
+    position: absolute;
+    top: 50vh;
+    left: 30vw;
+    width: 40vw;
+    font-size: 20pt;
+    color: black;
+    z-index: 1000;
+    text-align: center;
+}*/
+
+#left-end-message {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+
+    position: absolute;
+    top: 35vh;
+    left: 10vw;
+    width: 30vw;
+    height: 30vh;
+
+    font-size: 20pt;
+    line-height: 2em;
+    color: black;
+    text-align: center;
+
+    display: none;
+}
+
+#restart-button {
+    position: absolute;
+    top: 90vh;
+    left: 40vw;
+
+    height: 10vh;
+    width: 20vw;
+
+    border-radius: 10px;
+    background-color: blue;
+
+    font-size: 2.5em;
+    text-align: center;
+    color: white;
+
+    z-index: 1000;
+
+    display: none;
+}
+
+.end-message {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+
+    font-size: 20pt;
+    line-height: 2em;
+    color: black;
+    text-align: center;
+
+    display: none;
+}
+/*
+#left-end-message {
+    position: absolute;
+    top: 35vh;
+    left: 10vw;
+    width: 30vw;
+    height: 30vh;
+}*/
+
+#right-end-message {
+    position: absolute;
+    top: 35vh;
+    left: 60vw;
+    width: 30vw;
+    height: 30vh;
+}
+
+#left-controls {
+    position: absolute;
+    left: 20vw;
+    bottom: 0;
+
+    width: 40vw;
+}
+
+
+.top {
+    margin: 30px;
+}
+
+#right-controls {
+    position: absolute;
+    left: 70vw;
+    bottom: 0;
+    width: 20vw;
+}
+
+.key-pressed {
+    opacity: 0.5;
+}
+
+img {
+    width: 5vw;
+}
+
+#myModal {
+    top: 20vh;
+}
+
+.top {
+    margin: 30px;
+}
+
+.image {
+    display:inline;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+    margin: 0em 0em 0em;
+    letter-spacing: 2px;
+    opacity: 0.5;
+    text-shadow:
+       -1px -1px 1px #000,
+        1px -1px 1px #000,
+        -1px 1px 1px #000,
+         1px 1px 1px #000;
+}
+
+h1 {
+    font-size: 100%;
+}
+
+
+/*
+h2 {
+    margin-top:10px;
+    font-size: 70%;
+}
+h3 {
+    font-size: 60%;
+}
+
+a, a:visited, a:active {
+    text-decoration: none;
+    color: #8CE;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 14px;
+    color: #eee;
+    background: #222;
+    text-align:center;
+    margin:auto auto auto auto;
+    border:1px solid #c4c5c6;  -webkit-border-radius: 8px; -moz-border-radius: 8px;border-radius: 8px;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+    background-color: #f2f5f6; background-image: -webkit-gradient(linear, left top, left bottom, from(#333), to(#222));
+    background-image: -webkit-linear-gradient(top, #333, #222);
+    background-image: -moz-linear-gradient(top, #333, #222);
+    background-image: -ms-linear-gradient(top, #333, #222);
+    background-image: -o-linear-gradient(top, #333, #222);
+    background-image: linear-gradient(to bottom, #333, #222);
+    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#333, endColorstr=#222);
+}
+
+*/

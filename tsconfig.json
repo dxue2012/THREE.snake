@@ -1,0 +1,43 @@
+{
+    "version": "1.5.0-alpha",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "suppressImplicitAnyIndexErrors": true
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./js/Clock.ts",
+        "./js/Collision.ts",
+        "./js/FoodParticle.ts",
+        "./js/GameStats.ts",
+        "./js/NeutralItemCollection.ts",
+        "./js/Particle.ts",
+        "./js/Snake.ts",
+        "./js/Updater.ts",
+        "./js/typings/All.d.ts",
+        "./js/typings/Emitter.d.ts",
+        "./js/typings/Food.d.ts",
+        "./js/typings/IFoodParticle.d.ts",
+        "./js/typings/Particle.d.ts",
+        "./js/typings/ParticleEngine.d.ts",
+        "./js/typings/Queue.d.ts",
+        "./js/typings/Renderer.d.ts",
+        "./js/typings/Scene.d.ts",
+        "./js/typings/Snake.d.ts",
+        "./js/typings/SystemSettings.d.ts",
+        "./typings/jquery/jquery.d.ts",
+        "./typings/threejs/three.d.ts",
+        "./typings/tsd.d.ts",
+        "./typings/webaudioapi/waa.d.ts",
+        "./typings/webrtc/MediaStream.d.ts"
+    ]
+}
