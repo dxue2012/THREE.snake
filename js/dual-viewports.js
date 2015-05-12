@@ -6,7 +6,7 @@ var updater;
 var clock;
 var animationFrameId;
 
-var GAME_TIME = 30;
+var GAME_TIME = 5;
 
 window.onload = function () {
     init();
