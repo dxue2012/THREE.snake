@@ -50,8 +50,29 @@ class Updater {
         stats.update();
     }
 
+    // rotate and update ui
+    private _updateKeys() {
+        $('#left-left').removeClass('key-pressed');
+        $('#left-right').removeClass('key-pressed');
+        if (keyboard.pressed("A")) {
+            $('#left-left').addClass('key-pressed');
+        } else if (keyboard.pressed("D")) {
+            $('#left-right').addClass('key-pressed');
+        }
+
+        $('#right-left').removeClass('key-pressed');
+        $('#right-right').removeClass('key-pressed');
+
+        if (keyboard.pressed("left")) {
+            $('#right-left').addClass('key-pressed');
+        } else if (keyboard.pressed("right")) {
+            $('#right-right').addClass('key-pressed');
+        }
+    }
+
     public update() {
-        // rotate first
+        this._updateKeys();
+
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
         } else if (keyboard.pressed("D")) {

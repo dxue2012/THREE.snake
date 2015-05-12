@@ -99,6 +99,10 @@ body {
     width: 20vw;
 }
 
+.key-pressed {
+    opacity: 0.5;
+}
+
 img {
     width: 5vw;
 }
@@ -106,7 +110,6 @@ img {
 .top {
     margin: 30px;
 }
-
 
 .image {
     display:inline;
