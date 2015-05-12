@@ -2,12 +2,11 @@ declare var stats;
 declare var keyboard;
 
 class Updater {
+    private static InvulnerableTime = 200;
+    private static SpeedupTime = 200;
     public static SNAKE_A: number = 1;
     public static TIE: number = 0;
     public static SNAKE_B: number = -1;
-
-    private static InvulnerableTime = 200;
-    private static ENHANCE_VALUE = 15;
 
     public gameStats: GameStats;
 
@@ -142,9 +141,16 @@ class Updater {
                 this.snakeA.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeAFood();
 
-                // Food with value 15 makes the snake invulnerable
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                // Food with value 15 makes the snake invincible
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
                     this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+                    Sound.powerup();
+                }
+
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeA.speed = Snake.BOOSTED_SPEED;
+                    this.snakeA.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
 
                 // kill food particle, spawn new food particle
@@ -157,9 +163,16 @@ class Updater {
                 this.gameStats.addSnakeBFood();
                 console.log(this.gameStats.snakeBFood)
 
-                // Food with value 15 makes the snake invulnerable
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
-                    this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+                // Food with value 15 makes the snake invincible
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
+                    this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+                    Sound.powerup();
+                }
+
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeB.speed = Snake.BOOSTED_SPEED;
+                    this.snakeB.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
 
                 this.neutralItemCollection.respawnFood(foodCollection[i]);

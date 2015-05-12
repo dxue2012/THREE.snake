@@ -114,8 +114,14 @@ var Updater = (function () {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
                 this.snakeA.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeAFood();
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
                     this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+                    Sound.powerup();
+                }
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeA.speed = Snake.BOOSTED_SPEED;
+                    this.snakeA.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -123,8 +129,14 @@ var Updater = (function () {
                 this.snakeB.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeBFood();
                 console.log(this.gameStats.snakeBFood);
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
-                    this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
+                    this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+                    Sound.powerup();
+                }
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeB.speed = Snake.BOOSTED_SPEED;
+                    this.snakeB.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -140,10 +152,10 @@ var Updater = (function () {
         this._updateCameraPositions();
         this._updateStats();
     };
+    Updater.InvulnerableTime = 200;
+    Updater.SpeedupTime = 200;
     Updater.SNAKE_A = 1;
     Updater.TIE = 0;
     Updater.SNAKE_B = -1;
-    Updater.InvulnerableTime = 200;
-    Updater.ENHANCE_VALUE = 15;
     return Updater;
 })();

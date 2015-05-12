@@ -12,6 +12,7 @@ var Collision = (function () {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
                     collided = true;
+                    Sound.collision();
                     return false;
                 }
                 return true;
@@ -23,6 +24,7 @@ var Collision = (function () {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
                     collided = true;
+                    Sound.collision();
                     return false;
                 }
                 return true;

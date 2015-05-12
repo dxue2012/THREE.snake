@@ -1,18 +1,23 @@
 declare var Queue;
 
 class Snake implements ISnake {
+    private static INIT_LENGTH: number = 50;
+    private static DEFAULT_COLOR: THREE.Color = new THREE.Color(0x0000ff);
+    public static DEFAULT_SPEED: number = 1/50.0;
+    public static BOOSTED_SPEED: number = 1/30.0;
+
     public static LEFT: number = 1;
     public static RIGHT: number = -1;
 
-    private static INIT_LENGTH: number = 50;
-    private static DEFAULT_COLOR: THREE.Color = new THREE.Color(0x0000ff);
     private static INVULNERABLE_DURATION: number = 3333;
 
     particles: Queue<IParticle>;
     direction: THREE.Vector3;
     headPosition: THREE.Vector3;
     invulnerableTime: number;
+    speedupTime: number;
     lengthToGrow: number;
+    speed: number;
     color: THREE.Color;
     head: THREE.Mesh;
 
@@ -25,7 +30,7 @@ class Snake implements ISnake {
     constructor(
         headPos: THREE.Vector3,
         dir: THREE.Vector3,
-        // head: THREE.Mesh,
+        speed: number,
         sphere: THREE.Sphere,
         scene: THREE.Scene,
         statusBarId: string,
@@ -38,7 +43,9 @@ class Snake implements ISnake {
         this.scene = scene;
 
         this.invulnerableTime = 0;
+        this.speedupTime = 0;
         this.lengthToGrow = 0;
+        this.speed = Snake.DEFAULT_SPEED;
 
         this.color = color ? color : Snake.DEFAULT_COLOR;
 
@@ -60,7 +67,7 @@ class Snake implements ISnake {
       	// this.scene.add(this.head);
 
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
-            this.growHead();
+            this.growHead(Snake.DEFAULT_SPEED);
         }
     }
 
@@ -101,6 +108,10 @@ class Snake implements ISnake {
         return this.invulnerableTime > 0;
     }
 
+    public isSpeedingup(): boolean {
+        return this.speedupTime > 0;
+    }
+
     public shorten(length: number): void {
         for (let i = 0; i < length; i++) {
             this.chopTail();
@@ -111,9 +122,9 @@ class Snake implements ISnake {
         this.lengthToGrow += length;
     }
 
-    public growHead() {
+    public growHead(fastness: number) {
         var headParticle: Particle;
-        var deltaT = 1 / 50.0;
+        var deltaT = fastness;
 
         // update head position
         this.headPosition
@@ -132,8 +143,27 @@ class Snake implements ISnake {
         // add to scene
         this.scene.add(headParticle.sphere);
 
-        // update the head mesh based on invulnerability
-        if (this.isInvulnerable()) {
+        // update the head mesh based on speed and invulnerability
+        var isFast = this.isSpeedingup();
+        var isStrong = this.isInvulnerable();
+        if (!isFast && !isStrong) {
+          this.scene.remove(this.head);
+          var headGeo = new THREE.TetrahedronGeometry(0.08);
+          var headMat = new THREE.MeshBasicMaterial( {color: this.color.getHex(), wireframe: true, wireframeLinewidth:2} );
+          this.head = new THREE.Mesh(headGeo, headMat);
+          this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
+          this.scene.add(this.head);
+        }
+        else if (isFast) {
+            this.scene.remove(this.head);
+            var headGeo = new THREE.TetrahedronGeometry(0.08);
+            var silver = new THREE.Color(0xc0c0c0);
+            var headMat = new THREE.MeshBasicMaterial( {color: silver.getHex(), wireframe: true, wireframeLinewidth:6, wireframeLinecap: 'round'} );
+            this.head = new THREE.Mesh(headGeo, headMat);
+            this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
+            this.scene.add(this.head);
+        }
+        else if (isStrong) {
             this.scene.remove(this.head);
             var headGeo = new THREE.TetrahedronGeometry(0.08);
             var golden = new THREE.Color(0xffd700);
@@ -142,15 +172,6 @@ class Snake implements ISnake {
             this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
             this.scene.add(this.head);
         }
-        else {
-          this.scene.remove(this.head);
-          var headGeo = new THREE.TetrahedronGeometry(0.08);
-          var headMat = new THREE.MeshBasicMaterial( {color: this.color.getHex(), wireframe: true, wireframeLinewidth:2} );
-          this.head = new THREE.Mesh(headGeo, headMat);
-          this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
-          this.scene.add(this.head);
-        }
-        // this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
     }
 
     public chopTail() {
@@ -166,7 +187,8 @@ class Snake implements ISnake {
     }
 
     public moveForward() {
-        this.growHead();
+        if (this.isSpeedingup()) this.growHead(Snake.BOOSTED_SPEED);
+        else this.growHead(Snake.DEFAULT_SPEED);
 
         // grow a certain length
         if (this.lengthToGrow <= 0) {
@@ -176,6 +198,7 @@ class Snake implements ISnake {
         }
 
         this.invulnerableTime = (this.invulnerableTime > 0) ? this.invulnerableTime - 1 : 0;
+        this.speedupTime = (this.speedupTime > 0) ? this.speedupTime - 1 : 0;
     }
 
     private _checkInvariants() {

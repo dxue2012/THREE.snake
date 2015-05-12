@@ -7,7 +7,8 @@ var clock;
 var snake, snake2;
 var animationFrameId;
 
-var GAME_TIME = 30;
+var GAME_TIME = 15;
+
 
 window.onload = function () {
     init();
@@ -22,6 +23,7 @@ window.onload = function () {
 
     var restartButton = $('#restart-button');
     restartButton.click(restart);
+    _initSound();
 }
 
 function _initCamera() {
@@ -53,10 +55,11 @@ function _initUpdater() {
     var dir = new THREE.Vector3(0, 1, 0);
     var headPos2 = new THREE.Vector3(-1, 0, 0);
     var dir2 = new THREE.Vector3(0, -1, 0);
+    var speed = Snake.DEFAULT_SPEED;
 
     var crimson = new THREE.Color(0xdc143c);
-    snake = new Snake(headPos, dir, geometricSphere, scene, 'left-status-bar', crimson);
-    snake2 = new Snake(headPos2, dir2, geometricSphere, scene, 'right-status-bar', new THREE.Color(0x32cd32));
+    snake = new Snake(headPos, dir, Snake.DEFAULT_SPEED, geometricSphere, scene, 'left-status-bar', crimson);
+    snake2 = new Snake(headPos2, dir2, Snake.DEFAULT_SPEED, geometricSphere, scene, 'right-status-bar', new THREE.Color(0x32cd32));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
@@ -138,6 +141,10 @@ function _initClock() {
     clock = new Clock(GAME_TIME, display, stopGame);
 }
 
+function _initSound() {
+    Sound.background();
+}
+
 function init() {
     _initScene();
     _initCamera();
@@ -157,6 +164,7 @@ function animate() {
 
 function stopGame() {
     stopAnimation();
+    Sound.gameover();
 
     var leftEndMessage = $('#left-end-message');
     var rightEndMessage = $('#right-end-message');
