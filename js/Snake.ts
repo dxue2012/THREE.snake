@@ -57,6 +57,7 @@ class Snake implements ISnake {
         this.scene.add(this.head);
 
         this.statusBar = $('#' + statusBarId);
+        this.statusBar.hide();
 
         // var ballTexture = THREE.ImageUtils.loadTexture( 'images/snake.png' );
       	// var ballMaterial = new THREE.MeshBasicMaterial( { map: ballTexture, transparent : true, side: THREE.DoubleSide } );

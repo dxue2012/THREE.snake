@@ -16,6 +16,7 @@ var Snake = (function () {
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
         this.statusBar = $('#' + statusBarId);
+        this.statusBar.hide();
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead(Snake.DEFAULT_SPEED);
         }
