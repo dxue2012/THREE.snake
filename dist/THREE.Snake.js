@@ -1321,6 +1321,7 @@ var GameStats = (function () {
             display.find('.panel-heading').find('.panel-title').text('You lose ):');
         }
         display.find('.panel-body').html("Snake Length:          " + this.snakeA.getLength() + "<br>" +
+            "Food Eaten:             " + this.snakeAFood + "<br>" +
             "Bumped into Enemy:     " + this.snakeAKilled + "<br>" +
             "Bumped into Yourself:  " + this.snakeASuicides);
     };
@@ -1335,6 +1336,7 @@ var GameStats = (function () {
             display.find('.panel-heading').find('.panel-title').text('You win!');
         }
         display.find('.panel-body').html("Snake Length:          " + this.snakeB.getLength() + "<br>" +
+            "Food Eaten:            " + this.snakeBFood + "<br>" +
             "Bumped into Enemy:     " + this.snakeBKilled + "<br>" +
             "Bumped into Yourself:  " + this.snakeBSuicides);
     };
