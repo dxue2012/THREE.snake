@@ -1160,6 +1160,15 @@ var Updater = (function () {
             }
         }
     };
+    Updater.prototype.redLight = function () {
+        var redLight = new THREE.AmbientLight(0xff0000);
+        this.scene.add(redLight);
+        var hex = redLight.color.getHex();
+        for (var i = 0; hex != 0x000000; i++) {
+            hex--;
+            redLight.color.setHex(hex);
+        }
+    };
     Updater.prototype.update = function () {
         this._updateKeys();
         this._updateTurn();
@@ -1194,6 +1203,8 @@ var Clock = (function () {
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
             _this.display.text(minutes + ":" + seconds);
+            if (timer == 11)
+                Sound.countdown();
             if (--timer < 0) {
                 _this.stopTimer();
                 _this.stopCallback();
@@ -1701,6 +1712,13 @@ var Sound = (function () {
         audio.appendChild(source);
         audio.play();
     };
+    Sound.countdown = function () {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.src = 'https://s3-us-west-2.amazonaws.com/three.snake/countdown.mp3';
+        audio.appendChild(source);
+        audio.play();
+    };
     Sound.gameover = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
@@ -1721,7 +1739,6 @@ var snake, snake2;
 var animationFrameId;
 
 var GAME_TIME = 60;
-
 
 window.onload = function () {
     init();
