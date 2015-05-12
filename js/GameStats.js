@@ -43,7 +43,7 @@ var GameStats = (function () {
             display.find('.panel-heading').find('.panel-title').text('Tie');
         }
         else {
-            display.find('.panel-heading').find('.panel-title').text('You lose ):');
+            display.find('.panel-heading').find('.panel-title').text('You win!');
         }
         display.find('.panel-body').html("Snake Length:          " + this.snakeB.getLength() + "<br>" +
             "Bumped into Enemy:     " + this.snakeBKilled + "<br>" +
