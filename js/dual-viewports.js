@@ -6,7 +6,7 @@ var updater;
 var clock;
 var animationFrameId;
 
-var GAME_TIME = 5;
+var GAME_TIME = 60;
 
 window.onload = function () {
     init();
@@ -55,9 +55,13 @@ function _initScene() {
     light.position.set(0, 250, 0);
     scene.add(light);
 
-    var directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(0, 10, 0);
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(0, 1, 0);
     scene.add(directionalLight);
+
+    var directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight2.position.set(0, -1, 0);
+    scene.add(directionalLight2);
 
     // // Skybox with dawnmountain scene
     var imagePrefix = "images/sky-";

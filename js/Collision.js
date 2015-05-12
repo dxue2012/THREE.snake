@@ -7,7 +7,7 @@ var Collision = (function () {
         }
         var snakeAHead = new THREE.Sphere(snakeA.headPosition, 0.05);
         var collided = false;
-        if (snakeA != snakeB) { // Different snake: traverse entire body length
+        if (snakeA !== snakeB) {
             snakeB.particles.forEach(function (currParticle) {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
@@ -16,8 +16,9 @@ var Collision = (function () {
                 }
                 return true;
             });
+            return collided;
         }
-        else { // Same snake: only traverse >10th particles in the body
+        else {
             snakeA.particles.forEachInBody(function (currParticle) {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {

@@ -71,10 +71,8 @@ class Updater {
 
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
-
-        // TODO: self collision
-        // var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
-        // var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
+        var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
+        var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
 
         if (aIntoB && bIntoA) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
@@ -87,6 +85,12 @@ class Updater {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
         } else if (bIntoA) {
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+        } else if (aIntoA) {
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+        } else if (bIntoB) {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
         }
