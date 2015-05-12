@@ -2,7 +2,6 @@
 
 The game is a two player variant of a classic snake game which takes place on a 3-D surface (eg. a sphere, a torus, a mobius strip) instead of on a plane. As with all snake games, eating stuff on the map will allow the snake to grow in length. In addition, causing the other player to bump into your snake will cause the theirs to shorten and yours to grow (so players should try to trap each other) - the longer snake at the end of the game wins.
 
-<<<<<<< HEAD
 ## Getting Started
 
 1. Clone this repo to your local machine
@@ -64,11 +63,6 @@ This re-installs (or if it is the first time, just installs) the definitions lis
 
 Run `grunt compile` to generate the compiled version of the game used in `THREE.Snake.html`.
 The files are listed as `dist/THREE.Snake.js` and `dist/THREE.Snake.min.js`.
-=======
-## Development
-
-Please go to branch **gh-pages** for more info.
->>>>>>> 2f28cc2ecdae7e89071348e4dc6cff0394db76d5
 
 ## Team Members
 
