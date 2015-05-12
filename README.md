@@ -6,13 +6,11 @@ The game is a two player variant of a classic snake game which takes place on a 
 
 1. Clone this repo to your local machine
 2. Change to the subdirectory THREE.snake
-3. Switch branch to gh-pages
-4. Launch a web server on your computer, rooted at this directory
+3. Launch a web server on your computer, rooted at this directory
 
 ```
 git clone https://github.com/dxue2012/THREE.snake.git
 cd THREE.snake
-git checkout gh-pages
 python -m SimpleHTTPServer
 ```
 
