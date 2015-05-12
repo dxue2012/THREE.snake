@@ -30,6 +30,10 @@ function _initStats() {
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
+
+    SCREEN_WIDTH = window.innerWidth;
+    stats.domElement.style.left = Math.floor((SCREEN_WIDTH - 100) / 2) + 'px';
+    //stats.domElement.style.width = '10vw';
     stats.domElement.style.zIndex = 100;
     container.appendChild(stats.domElement);
 }
@@ -193,8 +197,11 @@ function restart() {
     rightEndMessage.hide();
     restartButton.hide();
 
+    // reset things
     var oldCanvas = $('canvas');
     oldCanvas.remove();
+    var oldStats = $('#stats');
+    oldStats.remove();
 
     init();
     animate();
