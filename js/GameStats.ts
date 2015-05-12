@@ -57,7 +57,7 @@ class GameStats  {
         } else if (this.snakeA.getLength() == this.snakeB.getLength()){
             display.find('.panel-heading').find('.panel-title').text('Tie');
         } else {
-          display.find('.panel-heading').find('.panel-title').text('You lose ):');
+          display.find('.panel-heading').find('.panel-title').text('You win!');
         }
 
         display.find('.panel-body').html("Snake Length:          " + this.snakeB.getLength() + "<br>" +
