@@ -165,19 +165,6 @@ function stopGame() {
     updater.gameStats.printLeftStats(leftEndMessage);
     updater.gameStats.printRightStats(rightEndMessage);
 
-    // var winner = updater.getWinner();
-    // if (winner == Updater.SNAKE_A) {
-    //     leftEndMessage.text("You win!");
-    //     rightEndMessage.text("You lose :(");
-    // } else if (winner == Updater.TIE) {
-    //     leftEndMessage.text("Tie");
-    //     rightEndMessage.text("Tie");
-    // } else {
-    //     leftEndMessage.text("You lose :(");
-    //     rightEndMessage.text("You win!");
-    // }
-
-
     leftEndMessage.show();
     rightEndMessage.show();
     restartButton.show();

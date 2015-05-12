@@ -56,8 +56,7 @@ var Updater = (function () {
             $('#right-right').addClass('key-pressed');
         }
     };
-    Updater.prototype.update = function () {
-        this._updateKeys();
+    Updater.prototype._updateTurn = function () {
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
         }
@@ -70,8 +69,8 @@ var Updater = (function () {
         else if (keyboard.pressed("right")) {
             this.snakeB.turn(Snake.RIGHT);
         }
-        this.snakeA.moveForward();
-        this.snakeB.moveForward();
+    };
+    Updater.prototype._updateSnakeCollision = function () {
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
         var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
@@ -104,6 +103,8 @@ var Updater = (function () {
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
             this.gameStats.snakeBSuicides++;
         }
+    };
+    Updater.prototype._updateFoodCollision = function () {
         var foodCollection = this.neutralItemCollection.getFoodCollection();
         for (var i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
@@ -124,6 +125,13 @@ var Updater = (function () {
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
+    };
+    Updater.prototype.update = function () {
+        this._updateKeys();
+        this._updateTurn();
+        this.snakeA.moveForward();
+        this.snakeB.moveForward();
+        this._updateSnakeCollision();
         this.updateCameraPositions();
         this.updateStats();
     };

@@ -7,6 +7,7 @@ class Updater {
     public static SNAKE_A: number = 1;
     public static TIE: number = 0;
     public static SNAKE_B: number = -1;
+
     public gameStats: GameStats;
 
     constructor(
@@ -72,9 +73,7 @@ class Updater {
         }
     }
 
-    public update() {
-        this._updateKeys();
-
+    private _updateTurn() {
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
         } else if (keyboard.pressed("D")) {
@@ -86,11 +85,9 @@ class Updater {
         } else if (keyboard.pressed("right")) {
             this.snakeB.turn(Snake.RIGHT);
         }
+    }
 
-        // always move forward
-        this.snakeA.moveForward();
-        this.snakeB.moveForward();
-
+    private _updateSnakeCollision() {
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
         var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
@@ -109,7 +106,6 @@ class Updater {
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
             this.gameStats.snakeAKilled++;
 
-
         } else if (bIntoA) {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
@@ -125,7 +121,9 @@ class Updater {
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
             this.gameStats.snakeBSuicides++;
         }
+    }
 
+    private _updateFoodCollision() {
         var foodCollection = this.neutralItemCollection.getFoodCollection();
         for (let i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
@@ -156,14 +154,22 @@ class Updater {
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
+    }
+
+    public update() {
+        this._updateKeys();
+        this._updateTurn();
+
+        // always move forward
+        this.snakeA.moveForward();
+        this.snakeB.moveForward();
+
+        this._updateSnakeCollision();
 
         // updateCameraPositions
         this.updateCameraPositions();
 
         // update stats
         this.updateStats();
-
-        // Spawn food
-        // this.spawnFood();
     }
 }
