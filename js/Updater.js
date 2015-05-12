@@ -112,6 +112,7 @@ var Updater = (function () {
                 this.gameStats.addSnakeAFood();
                 if (foodCollection[i].value === FoodParticle.ENHANCE_VALUE) {
                     this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                    Sound.powerup();
                 }
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
                     this.snakeA.speed = Snake.BOOSTED_SPEED;
@@ -125,6 +126,7 @@ var Updater = (function () {
                 console.log(this.gameStats.snakeBFood);
                 if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
                     this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                    Sound.powerup();
                 }
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
                     this.snakeB.speed = Snake.BOOSTED_SPEED;

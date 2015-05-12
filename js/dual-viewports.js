@@ -21,6 +21,7 @@ window.onload = function () {
 
     var restartButton = $('#restart-button');
     restartButton.click(restart);
+    _initSound();
 }
 
 function _initCamera() {
@@ -136,6 +137,10 @@ function _initNeutralItems() {
 function _initClock() {
     var display = $('#game-timer');
     clock = new Clock(GAME_TIME, display, stopGame);
+}
+
+function _initSound() {
+    Sound.background();
 }
 
 function init() {

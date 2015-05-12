@@ -20,6 +20,7 @@ class Collision {
                 }
                 return true;
             });
+            if (collided == true) Sound.collision();
             return collided;
         }
 
@@ -33,7 +34,7 @@ class Collision {
                 return true;
             });
         }
-
+        if (collided == true) Sound.collision();
         return collided;
     }
 
