@@ -15,8 +15,7 @@ window.onload = function () {
     $('#myModal').modal('show');
 
     $('#myModal').on('hidden.bs.modal', function () {
-        // init();
-        _initClock();
+        clock.startTimer();
         animate();
     });
 
@@ -145,6 +144,7 @@ function init() {
     _initStats();
     _initNeutralItems();
     _initUpdater();
+    _initClock();
 }
 
 function animate() {
@@ -204,6 +204,6 @@ function restart() {
     oldStats.remove();
 
     init();
-    _initClock();
+    clock.startTimer();
     animate();
 }

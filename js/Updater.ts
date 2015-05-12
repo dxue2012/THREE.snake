@@ -165,6 +165,7 @@ class Updater {
         this.snakeB.moveForward();
 
         this._updateSnakeCollision();
+        this._updateFoodCollision();
 
         // updateCameraPositions
         this.updateCameraPositions();

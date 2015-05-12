@@ -4,13 +4,12 @@ class Clock {
     constructor(
         private duration: number,
         private display: any,
-        stopCallback: () => any
+        private stopCallback: () => any
     ) {
-        this.startTimer(duration, display, stopCallback);
     }
 
-    public startTimer(duration: number, display, stopCallback) {
-        var timer = duration;
+    public startTimer() {
+        var timer = this.duration;
         var minutes, seconds;
         this.refreshInterval = setInterval(() => {
 
@@ -21,14 +20,14 @@ class Clock {
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
-            display.text(minutes + ":" + seconds);
+            this.display.text(minutes + ":" + seconds);
 
             // update live stats
 
 
             if (--timer < 0) {
                 this.stopTimer();
-                stopCallback();
+                this.stopCallback();
             }
         }, 1000);
     }

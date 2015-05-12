@@ -2,21 +2,21 @@ var Clock = (function () {
     function Clock(duration, display, stopCallback) {
         this.duration = duration;
         this.display = display;
-        this.startTimer(duration, display, stopCallback);
+        this.stopCallback = stopCallback;
     }
-    Clock.prototype.startTimer = function (duration, display, stopCallback) {
+    Clock.prototype.startTimer = function () {
         var _this = this;
-        var timer = duration;
+        var timer = this.duration;
         var minutes, seconds;
         this.refreshInterval = setInterval(function () {
             minutes = parseInt((timer / 60).toString(), 10);
             seconds = parseInt((timer % 60).toString(), 10);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            display.text(minutes + ":" + seconds);
+            _this.display.text(minutes + ":" + seconds);
             if (--timer < 0) {
                 _this.stopTimer();
-                stopCallback();
+                _this.stopCallback();
             }
         }, 1000);
     };
