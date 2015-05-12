@@ -37,11 +37,32 @@ class GameStats  {
       return this.snakeB.getLength()
     }
 
-    public printStats(display) {
-        display.html("<b>" + this.snakeA.getLength() + "   Snake Length   " + this.snakeB.getLength() + "</b><p>"
-        + this.snakeAFood + "   Food Eaten  " + this.snakeBFood + "<p>"
-        + this.snakeAKilled + "   Bumped into enemy   " + this.snakeBKilled + "<p>"
-        + this.snakeASuicides + "   Bumped into yourself   " + this.snakeBSuicides)
+    public printLeftStats(display) {
+        if (this.snakeA.getLength() > this.snakeB.getLength()) {
+            display.html("You win!");
+        } else if (this.snakeA.getLength() == this.snakeB.getLength()){
+            display.html("Tie");
+        } else {
+            display.html("You lose");
+        }
+
+        display.append("<br> Snake Length: " + this.snakeA.getLength());
+        display.append("<br> Bumped into Enemy: " + this.snakeAKilled);
+        display.append("<br> Bumped into Yourself: " + this.snakeASuicides);
+    }
+
+    public printRightStats(display) {
+        if (this.snakeA.getLength() > this.snakeB.getLength()) {
+            display.html("You lose!");
+        } else if (this.snakeA.getLength() == this.snakeB.getLength()){
+            display.html("Tie");
+        } else {
+            display.html("You win");
+        }
+
+        display.append("<br> Snake Length: " + this.snakeB.getLength());
+        display.append("<br> Bumped into Enemy: " + this.snakeBKilled);
+        display.append("<br> Bumped into Yourself: " + this.snakeBSuicides);
     }
 
 

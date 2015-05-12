@@ -21,11 +21,33 @@ var GameStats = (function () {
     GameStats.prototype.getSnakeBLength = function () {
         return this.snakeB.getLength();
     };
-    GameStats.prototype.printStats = function (display) {
-        display.html("<b>" + this.snakeA.getLength() + "   Snake Length   " + this.snakeB.getLength() + "</b><p>"
-            + this.snakeAFood + "   Food Eaten  " + this.snakeBFood + "<p>"
-            + this.snakeAKilled + "   Bumped into enemy   " + this.snakeBKilled + "<p>"
-            + this.snakeASuicides + "   Bumped into yourself   " + this.snakeBSuicides);
+    GameStats.prototype.printLeftStats = function (display) {
+        if (this.snakeA.getLength() > this.snakeB.getLength()) {
+            display.html("You win!");
+        }
+        else if (this.snakeA.getLength() == this.snakeB.getLength()) {
+            display.html("Tie");
+        }
+        else {
+            display.html("You lose");
+        }
+        display.append("<br> Snake Length: " + this.snakeA.getLength());
+        display.append("<br> Bumped into Enemy: " + this.snakeAKilled);
+        display.append("<br> Bumped into Yourself: " + this.snakeASuicides);
+    };
+    GameStats.prototype.printRightStats = function (display) {
+        if (this.snakeA.getLength() > this.snakeB.getLength()) {
+            display.html("You lose!");
+        }
+        else if (this.snakeA.getLength() == this.snakeB.getLength()) {
+            display.html("Tie");
+        }
+        else {
+            display.html("You win");
+        }
+        display.append("<br> Snake Length: " + this.snakeB.getLength());
+        display.append("<br> Bumped into Enemy: " + this.snakeBKilled);
+        display.append("<br> Bumped into Yourself: " + this.snakeBSuicides);
     };
     return GameStats;
 })();

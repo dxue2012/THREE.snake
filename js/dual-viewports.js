@@ -6,7 +6,7 @@ var updater;
 var clock;
 var animationFrameId;
 
-var GAME_TIME = 1;
+var GAME_TIME = 30;
 
 window.onload = function () {
     init();
@@ -153,21 +153,23 @@ function stopGame() {
     var leftEndMessage = $('#left-end-message');
     var rightEndMessage = $('#right-end-message');
     var restartButton = $('#restart-button');
-    var endStatsMessage = $('#end-stats');
+    // var endStatsMessage = $('#end-stats');
 
-    updater.gameStats.printStats(endStatsMessage);
+    updater.gameStats.printLeftStats(leftEndMessage);
+    updater.gameStats.printRightStats(rightEndMessage);
 
-    var winner = updater.getWinner();
-    if (winner == Updater.SNAKE_A) {
-        leftEndMessage.text("You win!");
-        rightEndMessage.text("You lose :(");
-    } else if (winner == Updater.TIE) {
-        leftEndMessage.text("Tie");
-        rightEndMessage.text("Tie");
-    } else {
-        leftEndMessage.text("You lose :(");
-        rightEndMessage.text("You win!");
-    }
+    // var winner = updater.getWinner();
+    // if (winner == Updater.SNAKE_A) {
+    //     leftEndMessage.text("You win!");
+    //     rightEndMessage.text("You lose :(");
+    // } else if (winner == Updater.TIE) {
+    //     leftEndMessage.text("Tie");
+    //     rightEndMessage.text("Tie");
+    // } else {
+    //     leftEndMessage.text("You lose :(");
+    //     rightEndMessage.text("You win!");
+    // }
+
 
     leftEndMessage.show();
     rightEndMessage.show();

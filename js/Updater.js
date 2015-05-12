@@ -105,23 +105,23 @@ var Updater = (function () {
             this.gameStats.snakeBSuicides++;
         }
         var foodCollection = this.neutralItemCollection.getFoodCollection();
-        for (var i_1 = foodCollection.length - 1; i_1 >= 0; i_1--) {
-            if (Collision.snakeWithFood(this.snakeA, foodCollection[i_1])) {
-                this.snakeA.growLength(foodCollection[i_1].value);
+        for (var i = foodCollection.length - 1; i >= 0; i--) {
+            if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
+                this.snakeA.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeAFood();
-                if (foodCollection[i_1].value === Updater.ENHANCE_VALUE) {
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
                     this.snakeA.invulnerableTime += Updater.InvulnerableTime;
                 }
-                this.neutralItemCollection.respawnFood(foodCollection[i_1]);
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
-            if (Collision.snakeWithFood(this.snakeB, foodCollection[i_1])) {
-                this.snakeB.growLength(foodCollection[i_1].value);
+            if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
+                this.snakeB.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeBFood();
                 console.log(this.gameStats.snakeBFood);
-                if (foodCollection[i_1].value === Updater.ENHANCE_VALUE) {
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
                     this.snakeB.invulnerableTime += Updater.InvulnerableTime;
                 }
-                this.neutralItemCollection.respawnFood(foodCollection[i_1]);
+                this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
         this.updateCameraPositions();

@@ -36,7 +36,7 @@ body {
     z-index: 1000;
 }
 
-#end-stats {
+/*#end-stats-left {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
 
@@ -50,6 +50,20 @@ body {
     text-align: center;
 }
 
+#end-stats-right {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 10px;
+
+    position: absolute;
+    top: 50vh;
+    left: 30vw;
+    width: 40vw;
+    font-size: 20pt;
+    color: black;
+    z-index: 1000;
+    text-align: center;
+}*/
+
 #left-end-message {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
@@ -60,7 +74,7 @@ body {
     width: 30vw;
     height: 30vh;
 
-    font-size: 4em;
+    font-size: 20pt;
     line-height: 2em;
     color: black;
     text-align: center;
@@ -91,21 +105,21 @@ body {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
 
-    font-size: 60px;
+    font-size: 20pt;
     line-height: 2em;
     color: black;
     text-align: center;
 
     display: none;
 }
-
+/*
 #left-end-message {
     position: absolute;
     top: 35vh;
     left: 10vw;
     width: 30vw;
     height: 30vh;
-}
+}*/
 
 #right-end-message {
     position: absolute;
@@ -126,14 +140,13 @@ body {
 
 .top {
     margin: 30px;
-=======
+}
+
 #right-controls {
     position: absolute;
     left: 70vw;
     bottom: 0;
-
     width: 20vw;
->>>>>>> gh-pages
 }
 
 .key-pressed {
