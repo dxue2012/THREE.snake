@@ -20,6 +20,7 @@
     "threex.keyboardstate": "*",
     "threejs": "*",
     "jquery": "~2.1.4",
-    "flipclock": "~0.7.7"
+    "flipclock": "~0.7.7",
+    "bootstrap": "~3.3.4"
   }
 }
