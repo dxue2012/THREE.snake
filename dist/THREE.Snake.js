@@ -1481,7 +1481,7 @@ var Sound = (function () {
     Sound.background = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '/sounds/background.mp3';
+        source.src = '../sounds/background.mp3';
         audio.appendChild(source);
         audio.play();
         audio.addEventListener('ended', function () {
@@ -1492,21 +1492,21 @@ var Sound = (function () {
     Sound.collision = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '/sounds/collision.wav';
+        source.src = '../sounds/collision.wav';
         audio.appendChild(source);
         audio.play();
     };
     Sound.powerup = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '/sounds/powerup.wav';
+        source.src = '../sounds/powerup.wav';
         audio.appendChild(source);
         audio.play();
     };
     Sound.gameover = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '/sounds/gameover.wav';
+        source.src = '../sounds/gameover.wav';
         audio.appendChild(source);
         audio.play();
     };
@@ -1684,7 +1684,7 @@ var clock;
 var snake, snake2;
 var animationFrameId;
 
-var GAME_TIME = 15;
+var GAME_TIME = 60;
 
 
 window.onload = function () {
