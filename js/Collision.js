@@ -16,6 +16,8 @@ var Collision = (function () {
                 }
                 return true;
             });
+            if (collided == true)
+                Sound.collision();
             return collided;
         }
         else {
@@ -28,6 +30,8 @@ var Collision = (function () {
                 return true;
             });
         }
+        if (collided == true)
+            Sound.collision();
         return collided;
     };
     Collision.snakeWithFood = function (snake, foodParticle) {

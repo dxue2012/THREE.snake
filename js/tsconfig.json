@@ -20,6 +20,7 @@
         "./NeutralItemCollection.ts",
         "./Particle.ts",
         "./Snake.ts",
+        "./Sound.ts",
         "./Updater.ts",
         "./typings/All.d.ts",
         "./typings/Emitter.d.ts",

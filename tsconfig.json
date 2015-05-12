@@ -22,6 +22,7 @@
         "./js/NeutralItemCollection.ts",
         "./js/Particle.ts",
         "./js/Snake.ts",
+        "./js/Sound.ts",
         "./js/Updater.ts",
         "./js/typings/All.d.ts",
         "./js/typings/Emitter.d.ts",

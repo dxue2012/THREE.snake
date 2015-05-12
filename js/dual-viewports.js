@@ -137,6 +137,10 @@ function _initClock() {
     clock = new Clock(GAME_TIME, display, stopGame);
 }
 
+function _initSound() {
+    Sound.background();
+}
+
 function init() {
     _initScene();
     _initCamera();
@@ -145,6 +149,7 @@ function init() {
     _initNeutralItems();
     _initUpdater();
     _initClock();
+    _initSound();
 }
 
 function animate() {
