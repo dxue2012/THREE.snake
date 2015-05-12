@@ -23,6 +23,9 @@ var Snake = (function () {
     Snake.prototype.getLength = function () {
         return this.particles.getLength();
     };
+    Snake.prototype.stopStatusBar = function () {
+        this.statusBar.stop();
+    };
     Snake.prototype._animateStatusBar = function (duration) {
         var _this = this;
         if (this.statusBar.is(":visible")) {

@@ -181,6 +181,10 @@ function stopGame() {
 
 function stopAnimation() {
     cancelAnimationFrame(animationFrameId);
+
+    // stop status bar animations
+    snake.stopStatusBar();
+    snake2.stopStatusBar();
 }
 
 function render() {

@@ -75,6 +75,10 @@ class Snake implements ISnake {
         return this.particles.getLength();
     }
 
+    public stopStatusBar() {
+        this.statusBar.stop();
+    }
+
     private _animateStatusBar(duration: number) {
         if (this.statusBar.is(":visible")) {
             this.statusBar.stop();
