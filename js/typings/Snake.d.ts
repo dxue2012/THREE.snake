@@ -5,7 +5,9 @@ interface ISnake {
     head: THREE.Mesh;
 
     invulnerableTime: number;
+    speedupTime: number;
     lengthToGrow: number;
+    speed: number;
 
     // its environment
     surface: THREE.Sphere;
@@ -19,4 +21,5 @@ interface ISnake {
 
     makeInvulnerable(time: number): void;
     isInvulnerable(): boolean;
+    isSpeedingup(): boolean;
 }
