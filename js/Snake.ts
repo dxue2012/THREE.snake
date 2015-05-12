@@ -9,6 +9,8 @@ class Snake implements ISnake {
     public static LEFT: number = 1;
     public static RIGHT: number = -1;
 
+    private static INVULNERABLE_DURATION: number = 3333;
+
     particles: Queue<IParticle>;
     direction: THREE.Vector3;
     headPosition: THREE.Vector3;
@@ -18,6 +20,8 @@ class Snake implements ISnake {
     speed: number;
     color: THREE.Color;
     head: THREE.Mesh;
+
+    private statusBar: JQuery;
 
     // for now assume surface is a sphere centered at origin
     surface: THREE.Sphere;
@@ -29,6 +33,7 @@ class Snake implements ISnake {
         speed: number,
         sphere: THREE.Sphere,
         scene: THREE.Scene,
+        statusBarId: string,
         color?: THREE.Color) {
         this.direction = dir;
         this.headPosition = headPos;
@@ -50,6 +55,20 @@ class Snake implements ISnake {
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
 
+<<<<<<< HEAD
+=======
+        this.statusBar = $('#' + statusBarId);
+        this.statusBar.hide();
+
+        // var ballTexture = THREE.ImageUtils.loadTexture( 'images/snake.png' );
+      	// var ballMaterial = new THREE.MeshBasicMaterial( { map: ballTexture, transparent : true, side: THREE.DoubleSide } );
+        //
+      	// var planeGeometry = new THREE.PlaneGeometry(1,1,1);
+      	// this.head = new THREE.Mesh( planeGeometry, ballMaterial );
+      	// this.head.position.set( headPos.x, headPos.y, headPos.z );
+      	// this.scene.add(this.head);
+
+>>>>>>> 42332814a942519380ac3bf476253f1ed9f63042
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead(Snake.DEFAULT_SPEED);
         }
@@ -59,8 +78,37 @@ class Snake implements ISnake {
         return this.particles.getLength();
     }
 
+    public stopStatusBar() {
+        this.statusBar.stop();
+    }
+
+    private _animateStatusBar(duration: number) {
+        if (this.statusBar.is(":visible")) {
+            this.statusBar.stop();
+        }
+
+        this.statusBar.css('width', '100%').attr('aria-valuenow', 100);
+        this.statusBar.show();
+        this.statusBar.animate({
+            width: '0px',
+        }, {
+            duration: duration,
+            easing: "linear",
+            complete: () => {
+                this.statusBar.hide();
+            }
+        });
+    }
+
+    private _setStatusBarColor(color: string) {
+        this.statusBar.css('background-color', color);
+    }
+
     public makeInvulnerable(time: number) {
         this.invulnerableTime = time;
+
+        this._setStatusBarColor("#ffd700");
+        this._animateStatusBar(Snake.INVULNERABLE_DURATION);
     }
 
     public isInvulnerable(): boolean {

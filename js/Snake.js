@@ -1,5 +1,5 @@
 var Snake = (function () {
-    function Snake(headPos, dir, speed, sphere, scene, color) {
+    function Snake(headPos, dir, speed, sphere, scene, statusBarId, color) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
@@ -15,6 +15,8 @@ var Snake = (function () {
         this.head = new THREE.Mesh(headGeo, headMat);
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
+        this.statusBar = $('#' + statusBarId);
+        this.statusBar.hide();
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead(Snake.DEFAULT_SPEED);
         }
@@ -22,8 +24,33 @@ var Snake = (function () {
     Snake.prototype.getLength = function () {
         return this.particles.getLength();
     };
+    Snake.prototype.stopStatusBar = function () {
+        this.statusBar.stop();
+    };
+    Snake.prototype._animateStatusBar = function (duration) {
+        var _this = this;
+        if (this.statusBar.is(":visible")) {
+            this.statusBar.stop();
+        }
+        this.statusBar.css('width', '100%').attr('aria-valuenow', 100);
+        this.statusBar.show();
+        this.statusBar.animate({
+            width: '0px',
+        }, {
+            duration: duration,
+            easing: "linear",
+            complete: function () {
+                _this.statusBar.hide();
+            }
+        });
+    };
+    Snake.prototype._setStatusBarColor = function (color) {
+        this.statusBar.css('background-color', color);
+    };
     Snake.prototype.makeInvulnerable = function (time) {
         this.invulnerableTime = time;
+        this._setStatusBarColor("#ffd700");
+        this._animateStatusBar(Snake.INVULNERABLE_DURATION);
     };
     Snake.prototype.isInvulnerable = function () {
         return this.invulnerableTime > 0;
@@ -110,5 +137,6 @@ var Snake = (function () {
     Snake.BOOSTED_SPEED = 1 / 30.0;
     Snake.LEFT = 1;
     Snake.RIGHT = -1;
+    Snake.INVULNERABLE_DURATION = 3333;
     return Snake;
 })();

@@ -29,6 +29,8 @@ body {
 
 #game-title {
     color: white;
+    position: relative;
+    top: -3vh;
 }
 
 #game-timer {
@@ -69,6 +71,27 @@ body {
     text-align: center;
 }*/
 
+#panel-left {
+    position: absolute;
+    top: 35vh;
+    left: 17vw;
+    font-size: 16pt;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+#panel-right {
+    position: absolute;
+    top: 35vh;
+    left: 67vw;
+    font-size: 16pt;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+#panel-title{
+    font-size:30pt;
+    text-align: center;
+}
+
 #left-end-message {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
@@ -96,11 +119,17 @@ body {
     width: 20vw;
 
     border-radius: 10px;
-    /*background-color: blue;*/
+    background-color: blue;
+    border-color: blue;
 
     font-size: 2.5em;
+<<<<<<< HEAD
     /*text-align: center;*/
     /*color: white;*/
+=======
+    text-align: center;
+    color: white;
+>>>>>>> 42332814a942519380ac3bf476253f1ed9f63042
 
     z-index: 1000;
 
@@ -155,6 +184,39 @@ body {
     width: 20vw;
 }
 
+#left-status-bar-wrapper {
+    position: absolute;
+    top: 8vh;
+    left: 10vw;
+    height: 20px;
+
+    width: 30%;
+}
+
+#right-status-bar-wrapper {
+    position: absolute;
+    top: 8vh;
+    left: 60vw;
+    height: 20px;
+
+    width: 30%;
+}
+
+.progress-bar {
+    -webkit-transition: none !important;
+    transition: none !important;
+}
+
+#left-status-bar {
+    background-image: none;
+    display: none;
+}
+
+#right-status-bar {
+    background-image: none;
+    display: none;
+}
+
 .key-pressed {
     opacity: 0.5;
 }
@@ -190,42 +252,3 @@ h1, h2, h3 {
 h1 {
     font-size: 100%;
 }
-
-
-/*
-h2 {
-    margin-top:10px;
-    font-size: 70%;
-}
-h3 {
-    font-size: 60%;
-}
-
-a, a:visited, a:active {
-    text-decoration: none;
-    color: #8CE;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-button {
-    font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
-    font-size: 14px;
-    color: #eee;
-    background: #222;
-    text-align:center;
-    margin:auto auto auto auto;
-    border:1px solid #c4c5c6;  -webkit-border-radius: 8px; -moz-border-radius: 8px;border-radius: 8px;
-    text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
-    background-color: #f2f5f6; background-image: -webkit-gradient(linear, left top, left bottom, from(#333), to(#222));
-    background-image: -webkit-linear-gradient(top, #333, #222);
-    background-image: -moz-linear-gradient(top, #333, #222);
-    background-image: -ms-linear-gradient(top, #333, #222);
-    background-image: -o-linear-gradient(top, #333, #222);
-    background-image: linear-gradient(to bottom, #333, #222);
-    filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#333, endColorstr=#222);
-}
-
-*/

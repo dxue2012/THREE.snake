@@ -4,9 +4,15 @@ var leftCamera, rightCamera;
 var neutralItems;
 var updater;
 var clock;
+var snake, snake2;
 var animationFrameId;
 
+<<<<<<< HEAD
 var GAME_TIME = 60;
+=======
+var GAME_TIME = 20;
+
+>>>>>>> 42332814a942519380ac3bf476253f1ed9f63042
 
 window.onload = function () {
     init();
@@ -16,12 +22,12 @@ window.onload = function () {
 
     $('#myModal').on('hidden.bs.modal', function () {
         clock.startTimer();
+        _initSound();
         animate();
     });
 
     var restartButton = $('#restart-button');
     restartButton.click(restart);
-    _initSound();
 }
 
 function _initCamera() {
@@ -56,8 +62,8 @@ function _initUpdater() {
     var speed = Snake.DEFAULT_SPEED;
 
     var crimson = new THREE.Color(0xdc143c);
-    var snake = new Snake(headPos, dir, speed, geometricSphere, scene, crimson);
-    var snake2 = new Snake(headPos2, dir2, speed, geometricSphere, scene, new THREE.Color(0x32cd32));
+    snake = new Snake(headPos, dir, Snake.DEFAULT_SPEED, geometricSphere, scene, 'left-status-bar', crimson);
+    snake2 = new Snake(headPos2, dir2, Snake.DEFAULT_SPEED, geometricSphere, scene, 'right-status-bar', new THREE.Color(0x32cd32));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
@@ -162,9 +168,10 @@ function animate() {
 
 function stopGame() {
     stopAnimation();
+    Sound.gameover();
 
-    var leftEndMessage = $('#left-end-message');
-    var rightEndMessage = $('#right-end-message');
+    var leftEndMessage = $('#panel-left');
+    var rightEndMessage = $('#panel-right');
     var restartButton = $('#restart-button');
     // var endStatsMessage = $('#end-stats');
 
@@ -178,6 +185,10 @@ function stopGame() {
 
 function stopAnimation() {
     cancelAnimationFrame(animationFrameId);
+
+    // stop status bar animations
+    snake.stopStatusBar();
+    snake2.stopStatusBar();
 }
 
 function render() {
@@ -196,8 +207,8 @@ function render() {
 
 function restart() {
     // clear everything first
-    var leftEndMessage = $('#left-end-message');
-    var rightEndMessage = $('#right-end-message');
+    var leftEndMessage = $('#panel-left');
+    var rightEndMessage = $('#panel-right');
     var restartButton = $('#restart-button');
     leftEndMessage.hide();
     rightEndMessage.hide();

@@ -4,7 +4,11 @@ var Sound = (function () {
     Sound.background = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
+<<<<<<< HEAD
         source.src = '/sounds/moonlight.mp3';
+=======
+        source.src = '/sounds/background.mp3';
+>>>>>>> 42332814a942519380ac3bf476253f1ed9f63042
         audio.appendChild(source);
         audio.play();
         audio.addEventListener('ended', function () {
@@ -26,5 +30,15 @@ var Sound = (function () {
         audio.appendChild(source);
         audio.play();
     };
+<<<<<<< HEAD
+=======
+    Sound.gameover = function () {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.src = '/sounds/gameover.wav';
+        audio.appendChild(source);
+        audio.play();
+    };
+>>>>>>> 42332814a942519380ac3bf476253f1ed9f63042
     return Sound;
 })();
