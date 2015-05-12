@@ -1677,7 +1677,7 @@ var Sound = (function () {
     Sound.background = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '../sounds/background.mp3';
+        source.src = 'https://s3-us-west-2.amazonaws.com/three.snake/background.mp3';
         audio.appendChild(source);
         audio.play();
         audio.addEventListener('ended', function () {
@@ -1688,21 +1688,21 @@ var Sound = (function () {
     Sound.collision = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '../sounds/collision.wav';
+        source.src = 'https://s3-us-west-2.amazonaws.com/three.snake/collision.wav';
         audio.appendChild(source);
         audio.play();
     };
     Sound.powerup = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '../sounds/powerup.wav';
+        source.src = 'https://s3-us-west-2.amazonaws.com/three.snake/powerup.wav';
         audio.appendChild(source);
         audio.play();
     };
     Sound.gameover = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '../sounds/gameover.wav';
+        source.src = 'https://s3-us-west-2.amazonaws.com/three.snake/gameover.wav';
         audio.appendChild(source);
         audio.play();
     };
