@@ -132,7 +132,7 @@ class Updater {
                 this.gameStats.addSnakeAFood();
 
                 // Food with value 15 makes the snake invincible
-                if (foodCollection[i].value === FoodParticle.ENHANCE_VALUE) {
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
                     this.snakeA.invulnerableTime += Updater.InvulnerableTime;
                     Sound.powerup();
                 }

@@ -110,7 +110,7 @@ var Updater = (function () {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
                 this.snakeA.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeAFood();
-                if (foodCollection[i].value === FoodParticle.ENHANCE_VALUE) {
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
                     this.snakeA.invulnerableTime += Updater.InvulnerableTime;
                     Sound.powerup();
                 }
