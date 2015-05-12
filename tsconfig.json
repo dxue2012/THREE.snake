@@ -15,6 +15,7 @@
         "!./node_modules/**/*.ts"
     ],
     "files": [
+        "./js/Clock.ts",
         "./js/Collision.ts",
         "./js/FoodParticle.ts",
         "./js/NeutralItemCollection.ts",
@@ -32,6 +33,7 @@
         "./js/typings/Scene.d.ts",
         "./js/typings/Snake.d.ts",
         "./js/typings/SystemSettings.d.ts",
+        "./typings/jquery/jquery.d.ts",
         "./typings/threejs/three.d.ts",
         "./typings/tsd.d.ts",
         "./typings/webaudioapi/waa.d.ts",
