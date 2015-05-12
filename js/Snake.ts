@@ -68,7 +68,7 @@ class Snake implements ISnake {
         return this.particles.getLength();
     }
 
-    private animateStatusBar(duration: number) {
+    private _animateStatusBar(duration: number) {
         if (this.statusBar.is(":visible")) {
             this.statusBar.stop();
         }
@@ -86,10 +86,15 @@ class Snake implements ISnake {
         });
     }
 
+    private _setStatusBarColor(color: string) {
+        this.statusBar.css('background-color', color);
+    }
+
     public makeInvulnerable(time: number) {
         this.invulnerableTime = time;
 
-        this.animateStatusBar(Snake.INVULNERABLE_DURATION);
+        this._setStatusBarColor("#ffd700");
+        this._animateStatusBar(Snake.INVULNERABLE_DURATION);
     }
 
     public isInvulnerable(): boolean {

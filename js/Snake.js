@@ -21,7 +21,7 @@ var Snake = (function () {
     Snake.prototype.getLength = function () {
         return this.particles.getLength();
     };
-    Snake.prototype.animateStatusBar = function (duration) {
+    Snake.prototype._animateStatusBar = function (duration) {
         var _this = this;
         if (this.statusBar.is(":visible")) {
             this.statusBar.stop();
@@ -38,9 +38,13 @@ var Snake = (function () {
             }
         });
     };
+    Snake.prototype._setStatusBarColor = function (color) {
+        this.statusBar.css('background-color', color);
+    };
     Snake.prototype.makeInvulnerable = function (time) {
         this.invulnerableTime = time;
-        this.animateStatusBar(Snake.INVULNERABLE_DURATION);
+        this._setStatusBarColor("#ffd700");
+        this._animateStatusBar(Snake.INVULNERABLE_DURATION);
     };
     Snake.prototype.isInvulnerable = function () {
         return this.invulnerableTime > 0;
