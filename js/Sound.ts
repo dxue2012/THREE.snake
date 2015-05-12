@@ -3,7 +3,7 @@ class Sound {
     public static background(): void {
       var audio = document.createElement('audio');
       var source = document.createElement('source');
-      source.src = '/sounds/moonlight.mp3';
+      source.src = '/sounds/background.mp3';
       audio.appendChild(source);
       audio.play();
       audio.addEventListener('ended', function() {
@@ -24,6 +24,14 @@ class Sound {
       var audio = document.createElement('audio');
       var source = document.createElement('source');
       source.src = '/sounds/powerup.wav';
+      audio.appendChild(source);
+      audio.play();
+    }
+
+    public static countdown(): void {
+      var audio = document.createElement('audio');
+      var source = document.createElement('source');
+      source.src = '/sounds/countdown.mp3';
       audio.appendChild(source);
       audio.play();
     }

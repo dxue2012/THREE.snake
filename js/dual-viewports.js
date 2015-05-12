@@ -7,12 +7,7 @@ var clock;
 var snake, snake2;
 var animationFrameId;
 
-<<<<<<< HEAD
-var GAME_TIME = 60;
-=======
-var GAME_TIME = 20;
-
->>>>>>> 42332814a942519380ac3bf476253f1ed9f63042
+var GAME_TIME = 15;
 
 window.onload = function () {
     init();
