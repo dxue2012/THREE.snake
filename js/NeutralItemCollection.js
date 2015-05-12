@@ -28,15 +28,18 @@ var NeutralItemCollection = (function () {
         }
     };
     NeutralItemCollection.prototype.spawnFood = function () {
+        var enhanceProb = 0.15;
+        var invincibleProb = 0.15;
+        var boostProb = 0.15;
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
         var rand = Math.random();
-        if (rand < 0.1) {
-            var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
-        }
-        else if (rand < 0.2) {
+        if (rand < enhanceProb) {
             var food = new FoodParticle(spawnLocation, FoodParticle.ENHANCE_VALUE);
         }
-        else if (rand < 0.3) {
+        else if (rand < enhanceProb + invincibleProb) {
+            var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
+        }
+        else if (rand < enhanceProb + invincibleProb + boostProb) {
             var food = new FoodParticle(spawnLocation, FoodParticle.BOOST_VALUE);
         }
         else {

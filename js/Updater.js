@@ -119,8 +119,7 @@ var Updater = (function () {
                     Sound.powerup();
                 }
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
-                    this.snakeA.speed = Snake.BOOSTED_SPEED;
-                    this.snakeA.speedupTime = Updater.SpeedupTime;
+                    this.snakeA.boost(Updater.SpeedupTime);
                     Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
@@ -134,8 +133,7 @@ var Updater = (function () {
                     Sound.powerup();
                 }
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
-                    this.snakeB.speed = Snake.BOOSTED_SPEED;
-                    this.snakeB.speedupTime = Updater.SpeedupTime;
+                    this.snakeB.boost(Updater.SpeedupTime);
                     Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);

@@ -62,8 +62,8 @@ function _initUpdater() {
     var speed = Snake.DEFAULT_SPEED;
 
     var crimson = new THREE.Color(0xdc143c);
-    snake = new Snake(headPos, dir, Snake.DEFAULT_SPEED, geometricSphere, scene, 'left-status-bar', crimson);
-    snake2 = new Snake(headPos2, dir2, Snake.DEFAULT_SPEED, geometricSphere, scene, 'right-status-bar', new THREE.Color(0x32cd32));
+    snake = new Snake(headPos, dir, Snake.DEFAULT_SPEED, geometricSphere, scene, 'left', crimson);
+    snake2 = new Snake(headPos2, dir2, Snake.DEFAULT_SPEED, geometricSphere, scene, 'right', new THREE.Color(0x32cd32));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
@@ -187,8 +187,8 @@ function stopAnimation() {
     cancelAnimationFrame(animationFrameId);
 
     // stop status bar animations
-    snake.stopStatusBar();
-    snake2.stopStatusBar();
+    snake.stopStatusBars();
+    snake2.stopStatusBars();
 }
 
 function render() {

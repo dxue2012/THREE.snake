@@ -19,7 +19,9 @@ interface ISnake {
     shorten(length: number): void;
     growLength(length: number): void;
 
-    makeInvulnerable(time: number): void;
+    boost(duration: number): void;
+    makeInvulnerable(duration: number): void;
+
     isInvulnerable(): boolean;
     isSpeedingup(): boolean;
 }

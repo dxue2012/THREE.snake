@@ -205,16 +205,23 @@ body {
 .progress-bar {
     -webkit-transition: none !important;
     transition: none !important;
-}
-
-#left-status-bar {
-    background-image: none;
     display: none;
 }
 
-#right-status-bar {
-    background-image: none;
-    display: none;
+.speedup-bar {
+    position: absolute;
+    top: -5px;
+    left: 0;
+
+    z-index: 1000;
+}
+
+.invulnerable-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    z-index: 1000;
 }
 
 .key-pressed {

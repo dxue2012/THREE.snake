@@ -41,18 +41,22 @@ class NeutralItemCollection {
 
     // make food disappear after a while
     public spawnFood() {
+        var enhanceProb = 0.15;
+        var invincibleProb = 0.15;
+        var boostProb = 0.15;
+
         // TODO: assume map is a unit sphere
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
         var rand = Math.random();
-        if (rand < 0.1) {
+        if (rand < enhanceProb) {
+            var food = new FoodParticle(spawnLocation, FoodParticle.ENHANCE_VALUE);
+            // spawn a special food that boosts length by 20
+        }
+        else if (rand < enhanceProb + invincibleProb){
           var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
           // spawn a golden pallet for invulnerability and length boost of 15
         }
-        else if (rand < 0.2){
-          var food = new FoodParticle(spawnLocation, FoodParticle.ENHANCE_VALUE);
-          // spawn a special food that boosts length by 20
-        }
-        else if (rand < 0.3){
+        else if (rand < enhanceProb + invincibleProb + boostProb){
           var food = new FoodParticle(spawnLocation, FoodParticle.BOOST_VALUE);
           // spawn a special food that boosts speed by 1.5
         }

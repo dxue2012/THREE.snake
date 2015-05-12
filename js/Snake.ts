@@ -9,7 +9,8 @@ class Snake implements ISnake {
     public static LEFT: number = 1;
     public static RIGHT: number = -1;
 
-    private static INVULNERABLE_DURATION: number = 3333;
+    private static INVULNERABLE_DURATION: number = Math.round(Updater.InvulnerableTime / 60 * 1000);
+    private static SPEEDUP_DURATION: number = Math.round(Updater.SpeedupTime / 60 * 1000);
 
     particles: Queue<IParticle>;
     direction: THREE.Vector3;
@@ -21,7 +22,8 @@ class Snake implements ISnake {
     color: THREE.Color;
     head: THREE.Mesh;
 
-    private statusBar: JQuery;
+    private invulnerableBar: JQuery;
+    private speedupBar: JQuery;
 
     // for now assume surface is a sphere centered at origin
     surface: THREE.Sphere;
@@ -33,8 +35,9 @@ class Snake implements ISnake {
         speed: number,
         sphere: THREE.Sphere,
         scene: THREE.Scene,
-        statusBarId: string,
-        color?: THREE.Color) {
+        leftOrRight: string,
+        color?: THREE.Color)
+    {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
@@ -55,20 +58,12 @@ class Snake implements ISnake {
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
 
-<<<<<<< HEAD
-=======
-        this.statusBar = $('#' + statusBarId);
-        this.statusBar.hide();
+        this.invulnerableBar = $('#' + leftOrRight + '-invulnerable-bar');
+        this.invulnerableBar.hide();
 
-        // var ballTexture = THREE.ImageUtils.loadTexture( 'images/snake.png' );
-      	// var ballMaterial = new THREE.MeshBasicMaterial( { map: ballTexture, transparent : true, side: THREE.DoubleSide } );
-        //
-      	// var planeGeometry = new THREE.PlaneGeometry(1,1,1);
-      	// this.head = new THREE.Mesh( planeGeometry, ballMaterial );
-      	// this.head.position.set( headPos.x, headPos.y, headPos.z );
-      	// this.scene.add(this.head);
+        this.speedupBar = $('#' + leftOrRight + '-speedup-bar');
+        this.speedupBar.hide();
 
->>>>>>> 42332814a942519380ac3bf476253f1ed9f63042
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead(Snake.DEFAULT_SPEED);
         }
@@ -78,41 +73,91 @@ class Snake implements ISnake {
         return this.particles.getLength();
     }
 
-    public stopStatusBar() {
-        this.statusBar.stop();
+
+    /**
+    Status Bar stuff
+    */
+
+    public stopStatusBars() {
+        this._stopInvulnerableBar();
+        this._stopSpeedupBar();
     }
 
-    private _animateStatusBar(duration: number) {
-        if (this.statusBar.is(":visible")) {
-            this.statusBar.stop();
+    private _stopSpeedupBar() {
+        this.speedupBar.stop();
+    }
+
+    private _stopInvulnerableBar() {
+        this.invulnerableBar.stop();
+    }
+
+    private _animateStatusBar(statusBar: JQuery, duration: number) {
+        if (statusBar.is(":visible")) {
+            statusBar.stop();
         }
 
-        this.statusBar.css('width', '100%').attr('aria-valuenow', 100);
-        this.statusBar.show();
-        this.statusBar.animate({
+        statusBar.css('width', '100%').attr('aria-valuenow', 100);
+        statusBar.show();
+        statusBar.animate({
             width: '0px',
         }, {
             duration: duration,
             easing: "linear",
             complete: () => {
-                this.statusBar.hide();
+                statusBar.hide();
             }
         });
     }
 
-    private _setStatusBarColor(color: string) {
-        this.statusBar.css('background-color', color);
+    private _animateSpeedupBar(duration: number) {
+
+        // lower z-index to set this one behind the other bar
+        var otherZIndex: number = +this.invulnerableBar.css('z-index');
+        this.speedupBar.css('z-index', otherZIndex - 1);
+
+        this._animateStatusBar(this.speedupBar, duration);
+    }
+
+    private _animateInvulnerableBar(duration: number) {
+
+        // lower z-index to set this one behind the other bar
+        var otherZIndex: number = +this.speedupBar.css('z-index');
+        this.invulnerableBar.css('z-index', otherZIndex - 1);
+
+        this._animateStatusBar(this.invulnerableBar, duration);
+    }
+
+    private _setStatusBarColor(statusBar: JQuery, color: string) {
+        statusBar.css('background-color', color);
+    }
+
+    private _setInvulnerableBarColor(color: string) {
+        this._setStatusBarColor(this.invulnerableBar, color);
+    }
+
+    private _setSpeedupBarColor(color: string) {
+        this._setStatusBarColor(this.speedupBar, color);
     }
 
     public makeInvulnerable(time: number) {
         this.invulnerableTime = time;
 
-        this._setStatusBarColor("#ffd700");
-        this._animateStatusBar(Snake.INVULNERABLE_DURATION);
+        this._setInvulnerableBarColor("#ffd700");
+        this._animateInvulnerableBar(Snake.INVULNERABLE_DURATION);
     }
 
     public isInvulnerable(): boolean {
         return this.invulnerableTime > 0;
+    }
+
+    public boost(duration: number) {
+        this.speedupTime = duration;
+
+        // TODO: when do you reset this to default speed??
+        this.speed = Snake.BOOSTED_SPEED;
+
+        this._setSpeedupBarColor("#c0c0c0");
+        this._animateSpeedupBar(Snake.SPEEDUP_DURATION);
     }
 
     public isSpeedingup(): boolean {
@@ -194,8 +239,11 @@ class Snake implements ISnake {
     }
 
     public moveForward() {
-        if (this.isSpeedingup()) this.growHead(Snake.BOOSTED_SPEED);
-        else this.growHead(Snake.DEFAULT_SPEED);
+        if (this.isSpeedingup()) {
+            this.growHead(Snake.BOOSTED_SPEED);
+        } else {
+            this.growHead(Snake.DEFAULT_SPEED);
+        }
 
         // grow a certain length
         if (this.lengthToGrow <= 0) {
