@@ -89,37 +89,34 @@ body {
     display: none;
 }
 
+#left-controls {
+    position: absolute;
+    left: 20vw;
+    bottom: 0;
+
+    width: 20vw;
+}
+
+#right-controls {
+    position: absolute;
+    left: 70vw;
+    bottom: 0;
+
+    width: 20vw;
+}
+
+img {
+    width: 5vw;
+}
+
+/*
 .top {
     margin: 30px;
 }
 
-img {
-    max-width: 640px;
-    margin-left: 30px;
-}
 
 .image {
     display:inline;
-}
-
-#alert_div {
-    position:absolute;
-    top:  50px;
-    left: 50px;
-    height:100px;
-    width: 340px;
-    font-size:14px;
-    font-weight:bold;
-    text-align: center;
-    align: center;
-    font-color:#ddd;
-    background-color:#422;
-    border:1px solid #333;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-    display: none;
-
 }
 
 h1, h2, h3 {
@@ -171,3 +168,5 @@ button {
     background-image: linear-gradient(to bottom, #333, #222);
     filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#333, endColorstr=#222);
 }
+
+*/
