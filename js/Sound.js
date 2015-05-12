@@ -26,5 +26,12 @@ var Sound = (function () {
         audio.appendChild(source);
         audio.play();
     };
+    Sound.gameover = function () {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.src = '/sounds/gameover.wav';
+        audio.appendChild(source);
+        audio.play();
+    };
     return Sound;
 })();

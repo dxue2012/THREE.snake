@@ -12,12 +12,11 @@ var Collision = (function () {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
                     collided = true;
+                    Sound.collision();
                     return false;
                 }
                 return true;
             });
-            if (collided == true)
-                Sound.collision();
             return collided;
         }
         else {
@@ -25,13 +24,12 @@ var Collision = (function () {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
                     collided = true;
+                    Sound.collision();
                     return false;
                 }
                 return true;
             });
         }
-        if (collided == true)
-            Sound.collision();
         return collided;
     };
     Collision.snakeWithFood = function (snake, foodParticle) {

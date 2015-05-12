@@ -27,4 +27,13 @@ class Sound {
       audio.appendChild(source);
       audio.play();
     }
+
+    public static gameover(): void {
+      var audio = document.createElement('audio');
+      var source = document.createElement('source');
+      source.src = '/sounds/gameover.wav';
+      audio.appendChild(source);
+      audio.play();
+    }
+
 }

@@ -6,7 +6,7 @@ var updater;
 var clock;
 var animationFrameId;
 
-var GAME_TIME = 30;
+var GAME_TIME = 15;
 
 window.onload = function () {
     init();
@@ -162,6 +162,7 @@ function animate() {
 
 function stopGame() {
     stopAnimation();
+    Sound.gameover();
 
     var leftEndMessage = $('#left-end-message');
     var rightEndMessage = $('#right-end-message');

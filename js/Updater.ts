@@ -140,6 +140,7 @@ class Updater {
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
                     this.snakeA.speed = Snake.BOOSTED_SPEED;
                     this.snakeA.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
 
                 // kill food particle, spawn new food particle
@@ -161,6 +162,7 @@ class Updater {
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
                     this.snakeB.speed = Snake.BOOSTED_SPEED;
                     this.snakeB.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
 
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
