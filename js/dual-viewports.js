@@ -6,7 +6,7 @@ var updater;
 var clock;
 var animationFrameId;
 
-var GAME_TIME = 60;
+var GAME_TIME = 1;
 
 window.onload = function () {
     init();
@@ -149,6 +149,10 @@ function stopGame() {
     var leftEndMessage = $('#left-end-message');
     var rightEndMessage = $('#right-end-message');
     var restartButton = $('#restart-button');
+    var endStatsMessage = $('#end-stats');
+
+    updater.gameStats.printStats(endStatsMessage);
+
     var winner = updater.getWinner();
     if (winner == Updater.SNAKE_A) {
         leftEndMessage.text("You win!");

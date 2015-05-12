@@ -6,7 +6,7 @@ var Updater = (function () {
         this.cameraA = cameraA;
         this.cameraB = cameraB;
         this.neutralItemCollection = neutralItemCollection;
-        stats = new Stats(snakeA, snakeB);
+        this.gameStats = new GameStats(snakeA, snakeB);
     }
     Updater.prototype.getWinner = function () {
         var snakeALength = this.snakeA.getLength();
@@ -35,6 +35,9 @@ var Updater = (function () {
         this.cameraB.lookAt(new THREE.Vector3(0, 0, 0));
         this.cameraB.up = this.snakeB.direction;
     };
+    Updater.prototype.updateStats = function () {
+        stats.update();
+    };
     Updater.prototype.update = function () {
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
@@ -59,33 +62,40 @@ var Updater = (function () {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
-            stats.snakeAKilled++;
-            stats.snakeBKilled++;
+            this.gameStats.snakeAKilled++;
+            this.gameStats.snakeBKilled++;
         }
         else if (aIntoB) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+            this.gameStats.snakeAKilled++;
         }
         else if (bIntoA) {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+            this.gameStats.snakeBKilled++;
         }
         else if (aIntoA) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+            this.gameStats.snakeASuicides++;
         }
         else if (bIntoB) {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+            this.gameStats.snakeBSuicides++;
         }
         var foodCollection = this.neutralItemCollection.getFoodCollection();
         for (var i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
                 this.snakeA.growLength(foodCollection[i].value);
+                this.gameStats.addSnakeAFood();
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
             if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
                 this.snakeB.growLength(foodCollection[i].value);
+                this.gameStats.addSnakeBFood();
+                console.log(this.gameStats.snakeBFood);
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
