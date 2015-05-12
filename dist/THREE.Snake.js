@@ -1022,21 +1022,21 @@ var Clock = (function () {
     function Clock(duration, display, stopCallback) {
         this.duration = duration;
         this.display = display;
-        this.startTimer(duration, display, stopCallback);
+        this.stopCallback = stopCallback;
     }
-    Clock.prototype.startTimer = function (duration, display, stopCallback) {
+    Clock.prototype.startTimer = function () {
         var _this = this;
-        var timer = duration;
+        var timer = this.duration;
         var minutes, seconds;
         this.refreshInterval = setInterval(function () {
             minutes = parseInt((timer / 60).toString(), 10);
             seconds = parseInt((timer % 60).toString(), 10);
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
-            display.text(minutes + ":" + seconds);
+            _this.display.text(minutes + ":" + seconds);
             if (--timer < 0) {
                 _this.stopTimer();
-                stopCallback();
+                _this.stopCallback();
             }
         }, 1000);
     };
@@ -1060,6 +1060,7 @@ var Collision = (function () {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
                     collided = true;
+                    Sound.collision();
                     return false;
                 }
                 return true;
@@ -1071,6 +1072,7 @@ var Collision = (function () {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
                     collided = true;
+                    Sound.collision();
                     return false;
                 }
                 return true;
@@ -1091,22 +1093,28 @@ var FoodParticle = (function () {
         this.position = pos;
         this.value = value ? value : FoodParticle.DEFAULT_VALUE;
         if (this.value === FoodParticle.DEFAULT_VALUE) {
-            var sphereGeo = new THREE.SphereGeometry(0.04, 4, 4);
-            var pink = new THREE.Color(0xffb6c1);
-            var normMaterial = new THREE.MeshLambertMaterial({ color: pink.getHex() });
-            this.sphere = new THREE.Mesh(sphereGeo, normMaterial);
+            var tetraGeo = new THREE.SphereGeometry(0.04, 4, 4);
+            var lightBlue = new THREE.Color(0xadd8e6);
+            var normMaterial = new THREE.MeshPhongMaterial({ color: lightBlue.getHex() });
+            this.sphere = new THREE.Mesh(tetraGeo, normMaterial);
         }
         else if (this.value === FoodParticle.ENHANCE_VALUE) {
             var sphereGeo = new THREE.SphereGeometry(0.05, 16, 16);
-            var lavTexture = THREE.ImageUtils.loadTexture('images/stripe.png');
-            var lavMaterial = new THREE.MeshLambertMaterial({ map: lavTexture });
-            this.sphere = new THREE.Mesh(sphereGeo, lavMaterial);
+            var stripeTexture = THREE.ImageUtils.loadTexture('images/stripe.png');
+            var stripeMaterial = new THREE.MeshPhongMaterial({ map: stripeTexture });
+            this.sphere = new THREE.Mesh(sphereGeo, stripeMaterial);
         }
         else if (this.value === FoodParticle.INVINCIBLE_VALUE) {
             var sphereGeo = new THREE.SphereGeometry(0.05, 16, 16);
             var goldTexture = THREE.ImageUtils.loadTexture('images/golden.jpg');
-            var goldMaterial = new THREE.MeshLambertMaterial({ map: goldTexture });
+            var goldMaterial = new THREE.MeshPhongMaterial({ map: goldTexture });
             this.sphere = new THREE.Mesh(sphereGeo, goldMaterial);
+        }
+        else if (this.value === FoodParticle.BOOST_VALUE) {
+            var sphereGeo = new THREE.SphereGeometry(0.05, 16, 16);
+            var stripeTexture = THREE.ImageUtils.loadTexture('images/uv_grid.jpg');
+            var stripeMaterial = new THREE.MeshPhongMaterial({ map: stripeTexture });
+            this.sphere = new THREE.Mesh(sphereGeo, stripeMaterial);
         }
         this.sphere.position.x = pos.x;
         this.sphere.position.y = pos.y;
@@ -1115,6 +1123,7 @@ var FoodParticle = (function () {
     FoodParticle.DEFAULT_VALUE = 10;
     FoodParticle.ENHANCE_VALUE = 20;
     FoodParticle.INVINCIBLE_VALUE = 15;
+    FoodParticle.BOOST_VALUE = 5;
     return FoodParticle;
 })();
 
@@ -1205,10 +1214,13 @@ var NeutralItemCollection = (function () {
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
         var rand = Math.random();
         if (rand < 0.1) {
-            var food = new FoodParticle(spawnLocation, 15);
+            var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
         }
         else if (rand < 0.2) {
-            var food = new FoodParticle(spawnLocation, 20);
+            var food = new FoodParticle(spawnLocation, FoodParticle.ENHANCE_VALUE);
+        }
+        else if (rand < 0.3) {
+            var food = new FoodParticle(spawnLocation, FoodParticle.BOOST_VALUE);
         }
         else {
             var food = new FoodParticle(spawnLocation);
@@ -1321,32 +1333,64 @@ function Queue() {
 }
 
 var Snake = (function () {
-    function Snake(headPos, dir, sphere, scene, color) {
+    function Snake(headPos, dir, speed, sphere, scene, statusBarId, color) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
         this.surface = sphere;
         this.scene = scene;
         this.invulnerableTime = 0;
+        this.speedupTime = 0;
         this.lengthToGrow = 0;
+        this.speed = Snake.DEFAULT_SPEED;
         this.color = color ? color : Snake.DEFAULT_COLOR;
         var headGeo = new THREE.TetrahedronGeometry(0.05);
         var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true });
         this.head = new THREE.Mesh(headGeo, headMat);
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
+        this.statusBar = $('#' + statusBarId);
+        this.statusBar.hide();
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
-            this.growHead();
+            this.growHead(Snake.DEFAULT_SPEED);
         }
     }
     Snake.prototype.getLength = function () {
         return this.particles.getLength();
     };
+    Snake.prototype.stopStatusBar = function () {
+        this.statusBar.stop();
+    };
+    Snake.prototype._animateStatusBar = function (duration) {
+        var _this = this;
+        if (this.statusBar.is(":visible")) {
+            this.statusBar.stop();
+        }
+        this.statusBar.css('width', '100%').attr('aria-valuenow', 100);
+        this.statusBar.show();
+        this.statusBar.animate({
+            width: '0px',
+        }, {
+            duration: duration,
+            easing: "linear",
+            complete: function () {
+                _this.statusBar.hide();
+            }
+        });
+    };
+    Snake.prototype._setStatusBarColor = function (color) {
+        this.statusBar.css('background-color', color);
+    };
     Snake.prototype.makeInvulnerable = function (time) {
         this.invulnerableTime = time;
+        this._setStatusBarColor("#ffd700");
+        this._animateStatusBar(Snake.INVULNERABLE_DURATION);
     };
     Snake.prototype.isInvulnerable = function () {
         return this.invulnerableTime > 0;
+    };
+    Snake.prototype.isSpeedingup = function () {
+        return this.speedupTime > 0;
     };
     Snake.prototype.shorten = function (length) {
         for (var i = 0; i < length; i++) {
@@ -1356,9 +1400,9 @@ var Snake = (function () {
     Snake.prototype.growLength = function (length) {
         this.lengthToGrow += length;
     };
-    Snake.prototype.growHead = function () {
+    Snake.prototype.growHead = function (fastness) {
         var headParticle;
-        var deltaT = 1 / 50.0;
+        var deltaT = fastness;
         this.headPosition
             .add(this.direction.clone().multiplyScalar(deltaT))
             .setLength(this.surface.radius);
@@ -1368,19 +1412,30 @@ var Snake = (function () {
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
         this.direction.sub(normDir).normalize();
         this.scene.add(headParticle.sphere);
-        if (this.isInvulnerable()) {
+        var isFast = this.isSpeedingup();
+        var isStrong = this.isInvulnerable();
+        if (!isFast && !isStrong) {
             this.scene.remove(this.head);
             var headGeo = new THREE.TetrahedronGeometry(0.08);
-            var golden = new THREE.Color(0xffd700);
-            var headMat = new THREE.MeshBasicMaterial({ color: golden.getHex(), wireframe: true, wireframeLinewidth: 6, wireframeLinecap: 'round' });
+            var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true, wireframeLinewidth: 2 });
             this.head = new THREE.Mesh(headGeo, headMat);
             this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
             this.scene.add(this.head);
         }
-        else {
+        else if (isFast) {
             this.scene.remove(this.head);
             var headGeo = new THREE.TetrahedronGeometry(0.08);
-            var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true, wireframeLinewidth: 2 });
+            var silver = new THREE.Color(0xc0c0c0);
+            var headMat = new THREE.MeshBasicMaterial({ color: silver.getHex(), wireframe: true, wireframeLinewidth: 6, wireframeLinecap: 'round' });
+            this.head = new THREE.Mesh(headGeo, headMat);
+            this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
+            this.scene.add(this.head);
+        }
+        else if (isStrong) {
+            this.scene.remove(this.head);
+            var headGeo = new THREE.TetrahedronGeometry(0.08);
+            var golden = new THREE.Color(0xffd700);
+            var headMat = new THREE.MeshBasicMaterial({ color: golden.getHex(), wireframe: true, wireframeLinewidth: 6, wireframeLinecap: 'round' });
             this.head = new THREE.Mesh(headGeo, headMat);
             this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
             this.scene.add(this.head);
@@ -1395,7 +1450,10 @@ var Snake = (function () {
         this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), leftOrRight * rotationAngle);
     };
     Snake.prototype.moveForward = function () {
-        this.growHead();
+        if (this.isSpeedingup())
+            this.growHead(Snake.BOOSTED_SPEED);
+        else
+            this.growHead(Snake.DEFAULT_SPEED);
         if (this.lengthToGrow <= 0) {
             this.chopTail();
         }
@@ -1403,14 +1461,56 @@ var Snake = (function () {
             this.lengthToGrow--;
         }
         this.invulnerableTime = (this.invulnerableTime > 0) ? this.invulnerableTime - 1 : 0;
+        this.speedupTime = (this.speedupTime > 0) ? this.speedupTime - 1 : 0;
     };
     Snake.prototype._checkInvariants = function () {
     };
     Snake.INIT_LENGTH = 50;
     Snake.DEFAULT_COLOR = new THREE.Color(0x0000ff);
+    Snake.DEFAULT_SPEED = 1 / 50.0;
+    Snake.BOOSTED_SPEED = 1 / 30.0;
     Snake.LEFT = 1;
     Snake.RIGHT = -1;
+    Snake.INVULNERABLE_DURATION = 3333;
     return Snake;
+})();
+
+var Sound = (function () {
+    function Sound() {
+    }
+    Sound.background = function () {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.src = '/sounds/background.mp3';
+        audio.appendChild(source);
+        audio.play();
+        audio.addEventListener('ended', function () {
+            this.currentTime = 0;
+            this.play();
+        }, false);
+    };
+    Sound.collision = function () {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.src = '/sounds/collision.wav';
+        audio.appendChild(source);
+        audio.play();
+    };
+    Sound.powerup = function () {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.src = '/sounds/powerup.wav';
+        audio.appendChild(source);
+        audio.play();
+    };
+    Sound.gameover = function () {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.src = '/sounds/gameover.wav';
+        audio.appendChild(source);
+        audio.play();
+    };
+    return Sound;
 })();
 
 var Updater = (function () {
@@ -1422,6 +1522,10 @@ var Updater = (function () {
         this.cameraB = cameraB;
         this.neutralItemCollection = neutralItemCollection;
         this.gameStats = new GameStats(snakeA, snakeB);
+        this.$leftLeft = $('#left-left');
+        this.$leftRight = $('#left-right');
+        this.$rightLeft = $('#right-left');
+        this.$rightRight = $('#right-right');
     }
     Updater.prototype.getWinner = function () {
         var snakeALength = this.snakeA.getLength();
@@ -1436,7 +1540,7 @@ var Updater = (function () {
             return Updater.SNAKE_B;
         }
     };
-    Updater.prototype.updateCameraPositions = function () {
+    Updater.prototype._updateCameraPositions = function () {
         var snakeHead = this.snakeA.headPosition;
         this.cameraA.position.x = snakeHead.x * 3.5;
         this.cameraA.position.y = snakeHead.y * 3.5;
@@ -1450,29 +1554,28 @@ var Updater = (function () {
         this.cameraB.lookAt(new THREE.Vector3(0, 0, 0));
         this.cameraB.up = this.snakeB.direction;
     };
-    Updater.prototype.updateStats = function () {
+    Updater.prototype._updateStats = function () {
         stats.update();
     };
     Updater.prototype._updateKeys = function () {
-        $('#left-left').removeClass('key-pressed');
-        $('#left-right').removeClass('key-pressed');
+        this.$leftLeft.removeClass('key-pressed');
+        this.$leftRight.removeClass('key-pressed');
         if (keyboard.pressed("A")) {
-            $('#left-left').addClass('key-pressed');
+            this.$leftLeft.addClass('key-pressed');
         }
         else if (keyboard.pressed("D")) {
-            $('#left-right').addClass('key-pressed');
+            this.$leftRight.addClass('key-pressed');
         }
-        $('#right-left').removeClass('key-pressed');
-        $('#right-right').removeClass('key-pressed');
+        this.$rightLeft.removeClass('key-pressed');
+        this.$rightRight.removeClass('key-pressed');
         if (keyboard.pressed("left")) {
-            $('#right-left').addClass('key-pressed');
+            this.$rightLeft.addClass('key-pressed');
         }
         else if (keyboard.pressed("right")) {
-            $('#right-right').addClass('key-pressed');
+            this.$rightRight.addClass('key-pressed');
         }
     };
-    Updater.prototype.update = function () {
-        this._updateKeys();
+    Updater.prototype._updateTurn = function () {
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
         }
@@ -1485,8 +1588,8 @@ var Updater = (function () {
         else if (keyboard.pressed("right")) {
             this.snakeB.turn(Snake.RIGHT);
         }
-        this.snakeA.moveForward();
-        this.snakeB.moveForward();
+    };
+    Updater.prototype._updateSnakeCollision = function () {
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
         var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
@@ -1519,13 +1622,21 @@ var Updater = (function () {
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
             this.gameStats.snakeBSuicides++;
         }
+    };
+    Updater.prototype._updateFoodCollision = function () {
         var foodCollection = this.neutralItemCollection.getFoodCollection();
         for (var i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
                 this.snakeA.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeAFood();
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
-                    this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
+                    this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+                    Sound.powerup();
+                }
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeA.speed = Snake.BOOSTED_SPEED;
+                    this.snakeA.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -1533,17 +1644,31 @@ var Updater = (function () {
                 this.snakeB.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeBFood();
                 console.log(this.gameStats.snakeBFood);
-                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
-                    this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                if (foodCollection[i].value === FoodParticle.INVINCIBLE_VALUE) {
+                    this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+                    Sound.powerup();
+                }
+                if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
+                    this.snakeB.speed = Snake.BOOSTED_SPEED;
+                    this.snakeB.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
-        this.updateCameraPositions();
-        this.updateStats();
+    };
+    Updater.prototype.update = function () {
+        this._updateKeys();
+        this._updateTurn();
+        this.snakeA.moveForward();
+        this.snakeB.moveForward();
+        this._updateSnakeCollision();
+        this._updateFoodCollision();
+        this._updateCameraPositions();
+        this._updateStats();
     };
     Updater.InvulnerableTime = 200;
-    Updater.ENHANCE_VALUE = 15;
+    Updater.SpeedupTime = 200;
     Updater.SNAKE_A = 1;
     Updater.TIE = 0;
     Updater.SNAKE_B = -1;
@@ -1556,9 +1681,11 @@ var leftCamera, rightCamera;
 var neutralItems;
 var updater;
 var clock;
+var snake, snake2;
 var animationFrameId;
 
-var GAME_TIME = 30;
+var GAME_TIME = 15;
+
 
 window.onload = function () {
     init();
@@ -1567,13 +1694,13 @@ window.onload = function () {
     $('#myModal').modal('show');
 
     $('#myModal').on('hidden.bs.modal', function () {
-        // init();
-        _initClock();
+        clock.startTimer();
         animate();
     });
 
     var restartButton = $('#restart-button');
     restartButton.click(restart);
+    _initSound();
 }
 
 function _initCamera() {
@@ -1605,10 +1732,11 @@ function _initUpdater() {
     var dir = new THREE.Vector3(0, 1, 0);
     var headPos2 = new THREE.Vector3(-1, 0, 0);
     var dir2 = new THREE.Vector3(0, -1, 0);
+    var speed = Snake.DEFAULT_SPEED;
 
     var crimson = new THREE.Color(0xdc143c);
-    var snake = new Snake(headPos, dir, geometricSphere, scene, crimson);
-    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene, new THREE.Color(0x32cd32));
+    snake = new Snake(headPos, dir, Snake.DEFAULT_SPEED, geometricSphere, scene, 'left-status-bar', crimson);
+    snake2 = new Snake(headPos2, dir2, Snake.DEFAULT_SPEED, geometricSphere, scene, 'right-status-bar', new THREE.Color(0x32cd32));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
@@ -1690,6 +1818,10 @@ function _initClock() {
     clock = new Clock(GAME_TIME, display, stopGame);
 }
 
+function _initSound() {
+    Sound.background();
+}
+
 function init() {
     _initScene();
     _initCamera();
@@ -1697,6 +1829,7 @@ function init() {
     _initStats();
     _initNeutralItems();
     _initUpdater();
+    _initClock();
 }
 
 function animate() {
@@ -1708,6 +1841,7 @@ function animate() {
 
 function stopGame() {
     stopAnimation();
+    Sound.gameover();
 
     var leftEndMessage = $('#left-end-message');
     var rightEndMessage = $('#right-end-message');
@@ -1717,19 +1851,6 @@ function stopGame() {
     updater.gameStats.printLeftStats(leftEndMessage);
     updater.gameStats.printRightStats(rightEndMessage);
 
-    // var winner = updater.getWinner();
-    // if (winner == Updater.SNAKE_A) {
-    //     leftEndMessage.text("You win!");
-    //     rightEndMessage.text("You lose :(");
-    // } else if (winner == Updater.TIE) {
-    //     leftEndMessage.text("Tie");
-    //     rightEndMessage.text("Tie");
-    // } else {
-    //     leftEndMessage.text("You lose :(");
-    //     rightEndMessage.text("You win!");
-    // }
-
-
     leftEndMessage.show();
     rightEndMessage.show();
     restartButton.show();
@@ -1737,6 +1858,10 @@ function stopGame() {
 
 function stopAnimation() {
     cancelAnimationFrame(animationFrameId);
+
+    // stop status bar animations
+    snake.stopStatusBar();
+    snake2.stopStatusBar();
 }
 
 function render() {
@@ -1769,7 +1894,7 @@ function restart() {
     oldStats.remove();
 
     init();
-    _initClock();
+    clock.startTimer();
     animate();
 }
 
