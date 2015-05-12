@@ -30,6 +30,10 @@ function _initStats() {
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
+
+    SCREEN_WIDTH = window.innerWidth;
+    stats.domElement.style.left = Math.floor((SCREEN_WIDTH - 100) / 2) + 'px';
+    //stats.domElement.style.width = '10vw';
     stats.domElement.style.zIndex = 100;
     container.appendChild(stats.domElement);
 }
@@ -42,8 +46,9 @@ function _initUpdater() {
     var headPos2 = new THREE.Vector3(-1, 0, 0);
     var dir2 = new THREE.Vector3(0, -1, 0);
 
-    var snake = new Snake(headPos, dir, geometricSphere, scene, new THREE.Color(0, 0, 1));
-    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene, new THREE.Color(1, 0, 0));
+    var crimson = new THREE.Color(0xdc143c);
+    var snake = new Snake(headPos, dir, geometricSphere, scene, crimson);
+    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene, new THREE.Color(0x32cd32));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
@@ -51,9 +56,8 @@ function _initUpdater() {
 function _initScene() {
     scene = new THREE.Scene();
 
-    var light = new THREE.PointLight(0xffffff);
-    light.position.set(0, 250, 0);
-    scene.add(light);
+    var ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
 
     var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(0, 1, 0);
@@ -64,35 +68,35 @@ function _initScene() {
     scene.add(directionalLight2);
 
     // // Skybox with dawnmountain scene
-    var imagePrefix = "images/sky-";
-    var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
-    var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
-
-    var materialArray = [];
-    for (var i = 0; i < 6; i++)
-        materialArray.push( new THREE.MeshBasicMaterial({
-            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
-            side: THREE.BackSide
-        }));
-
-    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-    scene.add( skyBox );
-
-    // Skybox with stars
+    // var imagePrefix = "images/sky-";
+    // var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+    // var imageSuffix = ".jpg";
     // var skyGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
     //
     // var materialArray = [];
     // for (var i = 0; i < 6; i++)
     //     materialArray.push( new THREE.MeshBasicMaterial({
-    //         map: THREE.ImageUtils.loadTexture( "images/stars.jpg" ),
+    //         map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
     //         side: THREE.BackSide
     //     }));
     //
     // var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
     // var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
     // scene.add( skyBox );
+
+    // Skybox with stars
+    var skyGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+        materialArray.push( new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture( "images/stars2.png" ),
+            side: THREE.BackSide
+        }));
+
+    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+    scene.add( skyBox );
 
     // Translucent with image texture
     var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.png' );
@@ -197,8 +201,11 @@ function restart() {
     rightEndMessage.hide();
     restartButton.hide();
 
+    // reset things
     var oldCanvas = $('canvas');
     oldCanvas.remove();
+    var oldStats = $('#stats');
+    oldStats.remove();
 
     init();
     animate();

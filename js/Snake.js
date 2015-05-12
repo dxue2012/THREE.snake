@@ -8,7 +8,7 @@ var Snake = (function () {
         this.invulnerableTime = 0;
         this.lengthToGrow = 0;
         this.color = color ? color : Snake.DEFAULT_COLOR;
-        var headGeo = new THREE.SphereGeometry(0.05, 2, 2);
+        var headGeo = new THREE.TetrahedronGeometry(0.05);
         var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true });
         this.head = new THREE.Mesh(headGeo, headMat);
         this.head.position.set(headPos.x, headPos.y, headPos.z);
@@ -46,13 +46,23 @@ var Snake = (function () {
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
         this.direction.sub(normDir).normalize();
         this.scene.add(headParticle.sphere);
-        if (this.isInvulnerable) {
-            ;
+        if (this.isInvulnerable()) {
+            this.scene.remove(this.head);
+            var headGeo = new THREE.TetrahedronGeometry(0.08);
+            var golden = new THREE.Color(0xffd700);
+            var headMat = new THREE.MeshBasicMaterial({ color: golden.getHex(), wireframe: true, wireframeLinewidth: 6, wireframeLinecap: 'round' });
+            this.head = new THREE.Mesh(headGeo, headMat);
+            this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
+            this.scene.add(this.head);
         }
         else {
-            ;
+            this.scene.remove(this.head);
+            var headGeo = new THREE.TetrahedronGeometry(0.08);
+            var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true, wireframeLinewidth: 2 });
+            this.head = new THREE.Mesh(headGeo, headMat);
+            this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
+            this.scene.add(this.head);
         }
-        this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
     };
     Snake.prototype.chopTail = function () {
         var tailParticle = this.particles.dequeue();

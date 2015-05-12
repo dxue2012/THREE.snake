@@ -38,7 +38,26 @@ var Updater = (function () {
     Updater.prototype.updateStats = function () {
         stats.update();
     };
+    Updater.prototype._updateKeys = function () {
+        $('#left-left').removeClass('key-pressed');
+        $('#left-right').removeClass('key-pressed');
+        if (keyboard.pressed("A")) {
+            $('#left-left').addClass('key-pressed');
+        }
+        else if (keyboard.pressed("D")) {
+            $('#left-right').addClass('key-pressed');
+        }
+        $('#right-left').removeClass('key-pressed');
+        $('#right-right').removeClass('key-pressed');
+        if (keyboard.pressed("left")) {
+            $('#right-left').addClass('key-pressed');
+        }
+        else if (keyboard.pressed("right")) {
+            $('#right-right').addClass('key-pressed');
+        }
+    };
     Updater.prototype.update = function () {
+        this._updateKeys();
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
         }
@@ -86,23 +105,30 @@ var Updater = (function () {
             this.gameStats.snakeBSuicides++;
         }
         var foodCollection = this.neutralItemCollection.getFoodCollection();
-        for (var i = foodCollection.length - 1; i >= 0; i--) {
-            if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
-                this.snakeA.growLength(foodCollection[i].value);
+        for (var i_1 = foodCollection.length - 1; i_1 >= 0; i_1--) {
+            if (Collision.snakeWithFood(this.snakeA, foodCollection[i_1])) {
+                this.snakeA.growLength(foodCollection[i_1].value);
                 this.gameStats.addSnakeAFood();
-                this.neutralItemCollection.respawnFood(foodCollection[i]);
+                if (foodCollection[i_1].value === Updater.ENHANCE_VALUE) {
+                    this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                }
+                this.neutralItemCollection.respawnFood(foodCollection[i_1]);
             }
-            if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
-                this.snakeB.growLength(foodCollection[i].value);
+            if (Collision.snakeWithFood(this.snakeB, foodCollection[i_1])) {
+                this.snakeB.growLength(foodCollection[i_1].value);
                 this.gameStats.addSnakeBFood();
                 console.log(this.gameStats.snakeBFood);
-                this.neutralItemCollection.respawnFood(foodCollection[i]);
+                if (foodCollection[i_1].value === Updater.ENHANCE_VALUE) {
+                    this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                }
+                this.neutralItemCollection.respawnFood(foodCollection[i_1]);
             }
         }
         this.updateCameraPositions();
         this.updateStats();
     };
     Updater.InvulnerableTime = 200;
+    Updater.ENHANCE_VALUE = 15;
     Updater.SNAKE_A = 1;
     Updater.TIE = 0;
     Updater.SNAKE_B = -1;

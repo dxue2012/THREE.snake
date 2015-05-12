@@ -1048,7 +1048,7 @@ var Collision = (function () {
         }
         var snakeAHead = new THREE.Sphere(snakeA.headPosition, 0.05);
         var collided = false;
-        if (snakeA != snakeB) { // Different snake: traverse entire body length
+        if (snakeA !== snakeB) {
             snakeB.particles.forEach(function (currParticle) {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
@@ -1057,8 +1057,9 @@ var Collision = (function () {
                 }
                 return true;
             });
+            return collided;
         }
-        else { // Same snake: only traverse >10th particles in the body
+        else {
             snakeA.particles.forEachInBody(function (currParticle) {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
@@ -1083,22 +1084,30 @@ var FoodParticle = (function () {
         this.position = pos;
         this.value = value ? value : FoodParticle.DEFAULT_VALUE;
         if (this.value === FoodParticle.DEFAULT_VALUE) {
-            var sphereGeo = new THREE.SphereGeometry(0.05, 16, 16);
-            var grassTexture = THREE.ImageUtils.loadTexture('images/amethyst.png');
-            var grassMaterial = new THREE.MeshLambertMaterial({ map: grassTexture });
-            this.sphere = new THREE.Mesh(sphereGeo, grassMaterial);
+            var sphereGeo = new THREE.SphereGeometry(0.03, 4, 4);
+            var normTexture = THREE.ImageUtils.loadTexture('images/amethyst.png');
+            var normMaterial = new THREE.MeshLambertMaterial({ map: normTexture });
+            this.sphere = new THREE.Mesh(sphereGeo, normMaterial);
         }
-        else {
+        else if (this.value === FoodParticle.ENHANCE_VALUE) {
             var sphereGeo = new THREE.SphereGeometry(0.05, 16, 16);
             var lavTexture = THREE.ImageUtils.loadTexture('images/stripe.png');
             var lavMaterial = new THREE.MeshLambertMaterial({ map: lavTexture });
             this.sphere = new THREE.Mesh(sphereGeo, lavMaterial);
+        }
+        else if (this.value === FoodParticle.INVINCIBLE_VALUE) {
+            var sphereGeo = new THREE.SphereGeometry(0.05, 16, 16);
+            var goldTexture = THREE.ImageUtils.loadTexture('images/golden.jpg');
+            var goldMaterial = new THREE.MeshLambertMaterial({ map: goldTexture });
+            this.sphere = new THREE.Mesh(sphereGeo, goldMaterial);
         }
         this.sphere.position.x = pos.x;
         this.sphere.position.y = pos.y;
         this.sphere.position.z = pos.z;
     }
     FoodParticle.DEFAULT_VALUE = 10;
+    FoodParticle.ENHANCE_VALUE = 20;
+    FoodParticle.INVINCIBLE_VALUE = 15;
     return FoodParticle;
 })();
 
@@ -1134,7 +1143,10 @@ var NeutralItemCollection = (function () {
     NeutralItemCollection.prototype.spawnFood = function () {
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
         var rand = Math.random();
-        if (rand < 0.1) {
+        if (rand < 0.2) {
+            var food = new FoodParticle(spawnLocation, 15);
+        }
+        else if (rand < 0.4) {
             var food = new FoodParticle(spawnLocation, 20);
         }
         else {
@@ -1149,7 +1161,7 @@ var NeutralItemCollection = (function () {
 var Particle = (function () {
     function Particle(pos, color) {
         this.position = pos;
-        var sphereGeo = new THREE.SphereGeometry(0.03, 6, 6);
+        var sphereGeo = new THREE.SphereGeometry(0.03, 4, 4);
         var standardMaterial = new THREE.MeshBasicMaterial({ color: color.getHex() });
         this.sphere = new THREE.Mesh(sphereGeo, standardMaterial);
         this.sphere.position.x = pos.x;
@@ -1257,7 +1269,7 @@ var Snake = (function () {
         this.invulnerableTime = 0;
         this.lengthToGrow = 0;
         this.color = color ? color : Snake.DEFAULT_COLOR;
-        var headGeo = new THREE.SphereGeometry(0.05, 2, 2);
+        var headGeo = new THREE.TetrahedronGeometry(0.05);
         var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true });
         this.head = new THREE.Mesh(headGeo, headMat);
         this.head.position.set(headPos.x, headPos.y, headPos.z);
@@ -1295,13 +1307,23 @@ var Snake = (function () {
         var normDir = normal.clone().multiplyScalar(this.direction.dot(normal));
         this.direction.sub(normDir).normalize();
         this.scene.add(headParticle.sphere);
-        if (this.isInvulnerable) {
-            ;
+        if (this.isInvulnerable()) {
+            this.scene.remove(this.head);
+            var headGeo = new THREE.TetrahedronGeometry(0.08);
+            var golden = new THREE.Color(0xffd700);
+            var headMat = new THREE.MeshBasicMaterial({ color: golden.getHex(), wireframe: true, wireframeLinewidth: 6, wireframeLinecap: 'round' });
+            this.head = new THREE.Mesh(headGeo, headMat);
+            this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
+            this.scene.add(this.head);
         }
         else {
-            ;
+            this.scene.remove(this.head);
+            var headGeo = new THREE.TetrahedronGeometry(0.08);
+            var headMat = new THREE.MeshBasicMaterial({ color: this.color.getHex(), wireframe: true, wireframeLinewidth: 2 });
+            this.head = new THREE.Mesh(headGeo, headMat);
+            this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
+            this.scene.add(this.head);
         }
-        this.head.position.set(this.headPosition.x, this.headPosition.y, this.headPosition.z);
     };
     Snake.prototype.chopTail = function () {
         var tailParticle = this.particles.dequeue();
@@ -1369,7 +1391,26 @@ var Updater = (function () {
     Updater.prototype.updateStats = function () {
         stats.update();
     };
+    Updater.prototype._updateKeys = function () {
+        $('#left-left').removeClass('key-pressed');
+        $('#left-right').removeClass('key-pressed');
+        if (keyboard.pressed("A")) {
+            $('#left-left').addClass('key-pressed');
+        }
+        else if (keyboard.pressed("D")) {
+            $('#left-right').addClass('key-pressed');
+        }
+        $('#right-left').removeClass('key-pressed');
+        $('#right-right').removeClass('key-pressed');
+        if (keyboard.pressed("left")) {
+            $('#right-left').addClass('key-pressed');
+        }
+        else if (keyboard.pressed("right")) {
+            $('#right-right').addClass('key-pressed');
+        }
+    };
     Updater.prototype.update = function () {
+        this._updateKeys();
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
         }
@@ -1386,6 +1427,8 @@ var Updater = (function () {
         this.snakeB.moveForward();
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
+        var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
+        var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
         if (aIntoB && bIntoA) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
@@ -1400,14 +1443,28 @@ var Updater = (function () {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
         }
+        else if (aIntoA) {
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+        }
+        else if (bIntoB) {
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+        }
         var foodCollection = this.neutralItemCollection.getFoodCollection();
         for (var i = foodCollection.length - 1; i >= 0; i--) {
             if (Collision.snakeWithFood(this.snakeA, foodCollection[i])) {
                 this.snakeA.growLength(foodCollection[i].value);
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                    this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
             if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
                 this.snakeB.growLength(foodCollection[i].value);
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                    this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
@@ -1415,6 +1472,7 @@ var Updater = (function () {
         this.updateStats();
     };
     Updater.InvulnerableTime = 200;
+    Updater.ENHANCE_VALUE = 15;
     Updater.SNAKE_A = 1;
     Updater.TIE = 0;
     Updater.SNAKE_B = -1;
@@ -1429,7 +1487,7 @@ var updater;
 var clock;
 var animationFrameId;
 
-var GAME_TIME = 5;
+var GAME_TIME = 60;
 
 window.onload = function () {
     init();
@@ -1453,6 +1511,10 @@ function _initStats() {
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
+
+    SCREEN_WIDTH = window.innerWidth;
+    stats.domElement.style.left = Math.floor((SCREEN_WIDTH - 100) / 2) + 'px';
+    //stats.domElement.style.width = '10vw';
     stats.domElement.style.zIndex = 100;
     container.appendChild(stats.domElement);
 }
@@ -1465,8 +1527,9 @@ function _initUpdater() {
     var headPos2 = new THREE.Vector3(-1, 0, 0);
     var dir2 = new THREE.Vector3(0, -1, 0);
 
-    var snake = new Snake(headPos, dir, geometricSphere, scene, new THREE.Color(0, 0, 1));
-    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene, new THREE.Color(1, 0, 0));
+    var crimson = new THREE.Color(0xdc143c);
+    var snake = new Snake(headPos, dir, geometricSphere, scene, crimson);
+    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene, new THREE.Color(0x32cd32));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }
@@ -1478,9 +1541,13 @@ function _initScene() {
     light.position.set(0, 250, 0);
     scene.add(light);
 
-    var directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(0, 10, 0);
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(0, 1, 0);
     scene.add(directionalLight);
+
+    var directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight2.position.set(0, -1, 0);
+    scene.add(directionalLight2);
 
     // // Skybox with dawnmountain scene
     var imagePrefix = "images/sky-";
@@ -1612,8 +1679,11 @@ function restart() {
     rightEndMessage.hide();
     restartButton.hide();
 
+    // reset things
     var oldCanvas = $('canvas');
     oldCanvas.remove();
+    var oldStats = $('#stats');
+    oldStats.remove();
 
     init();
     animate();

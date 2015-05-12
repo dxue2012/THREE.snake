@@ -3,6 +3,7 @@ declare var keyboard;
 
 class Updater {
     private static InvulnerableTime = 200;
+    private static ENHANCE_VALUE = 15;
     public static SNAKE_A: number = 1;
     public static TIE: number = 0;
     public static SNAKE_B: number = -1;
@@ -51,8 +52,29 @@ class Updater {
         stats.update();
     }
 
+    // rotate and update ui
+    private _updateKeys() {
+        $('#left-left').removeClass('key-pressed');
+        $('#left-right').removeClass('key-pressed');
+        if (keyboard.pressed("A")) {
+            $('#left-left').addClass('key-pressed');
+        } else if (keyboard.pressed("D")) {
+            $('#left-right').addClass('key-pressed');
+        }
+
+        $('#right-left').removeClass('key-pressed');
+        $('#right-right').removeClass('key-pressed');
+
+        if (keyboard.pressed("left")) {
+            $('#right-left').addClass('key-pressed');
+        } else if (keyboard.pressed("right")) {
+            $('#right-right').addClass('key-pressed');
+        }
+    }
+
     public update() {
-        // rotate first
+        this._updateKeys();
+
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
         } else if (keyboard.pressed("D")) {
@@ -111,6 +133,11 @@ class Updater {
                 this.snakeA.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeAFood();
 
+                // Food with value 15 makes the snake invincible
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                    this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                }
+
                 // kill food particle, spawn new food particle
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -120,6 +147,12 @@ class Updater {
                 this.snakeB.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeBFood();
                 console.log(this.gameStats.snakeBFood)
+
+                // Food with value 15 makes the snake invincible
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                    this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                }
+
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
