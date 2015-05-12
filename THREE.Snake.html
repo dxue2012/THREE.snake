@@ -61,17 +61,7 @@
 
 <div id="left-end-message" class="end-message"> </div>
 <div id="right-end-message" class="end-message"> </div>
-<button id="restart-button"> restart </button>
-
-<div id="left-status-bar-wrapper">
-    <div id="left-status-bar" class="progress progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-    </div>
-</div>
-
-<div id="right-status-bar-wrapper">
-    <div id="right-status-bar" class="progress progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-    </div>
-</div>
+<button type="button" class="btn btn-primary" id="restart-button">Restart</button>
 
 <div class="modal fade" id="myModal">
   <div class="modal-dialog">
@@ -93,6 +83,25 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+
+<div class="panel panel-danger" id="panel-left" hidden=true>
+  <div class="panel-heading">
+    <div class="panel-title" id="panel-title">Panel title</div>
+  </div>
+  <div class="panel-body">
+    Panel content
+  </div>
+</div>
+
+<div class="panel panel-success" id="panel-right" hidden=true>
+  <div class="panel-heading">
+    <div class="panel-title" id="panel-title">Panel title</div>
+  </div>
+  <div class="panel-body">
+    Panel content
+  </div>
+</div>
 
     <!-- Dev Version -->
     <script src="libjs/stats.min.js"></script>
