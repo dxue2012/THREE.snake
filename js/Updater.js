@@ -132,6 +132,7 @@ var Updater = (function () {
         this.snakeA.moveForward();
         this.snakeB.moveForward();
         this._updateSnakeCollision();
+        this._updateFoodCollision();
         this.updateCameraPositions();
         this.updateStats();
     };
