@@ -11,9 +11,9 @@ class FoodParticle implements IFoodParticle {
         this.position = pos;
         this.value = value ? value : FoodParticle.DEFAULT_VALUE;
         if (this.value === FoodParticle.DEFAULT_VALUE) {
-            var sphereGeo = new THREE.SphereGeometry(0.03, 4, 4);
-            var normTexture = THREE.ImageUtils.loadTexture('images/amethyst.png');
-            var normMaterial = new THREE.MeshLambertMaterial({ map: normTexture });
+            var sphereGeo = new THREE.SphereGeometry(0.04, 4, 4);
+            var pink = new THREE.Color(0xffb6c1);
+            var normMaterial = new THREE.MeshLambertMaterial({ color: pink.getHex() });
             this.sphere = new THREE.Mesh(sphereGeo, normMaterial);
         }
         else if (this.value === FoodParticle.ENHANCE_VALUE){

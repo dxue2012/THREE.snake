@@ -56,9 +56,8 @@ function _initUpdater() {
 function _initScene() {
     scene = new THREE.Scene();
 
-    var light = new THREE.PointLight(0xffffff);
-    light.position.set(0, 250, 0);
-    scene.add(light);
+    var ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
 
     var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(0, 1, 0);
@@ -69,35 +68,35 @@ function _initScene() {
     scene.add(directionalLight2);
 
     // // Skybox with dawnmountain scene
-    var imagePrefix = "images/sky-";
-    var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
-    var imageSuffix = ".jpg";
-    var skyGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
-
-    var materialArray = [];
-    for (var i = 0; i < 6; i++)
-        materialArray.push( new THREE.MeshBasicMaterial({
-            map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
-            side: THREE.BackSide
-        }));
-
-    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-    scene.add( skyBox );
-
-    // Skybox with stars
+    // var imagePrefix = "images/sky-";
+    // var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+    // var imageSuffix = ".jpg";
     // var skyGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
     //
     // var materialArray = [];
     // for (var i = 0; i < 6; i++)
     //     materialArray.push( new THREE.MeshBasicMaterial({
-    //         map: THREE.ImageUtils.loadTexture( "images/stars.jpg" ),
+    //         map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
     //         side: THREE.BackSide
     //     }));
     //
     // var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
     // var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
     // scene.add( skyBox );
+
+    // Skybox with stars
+    var skyGeometry = new THREE.BoxGeometry( 5000, 5000, 5000 );
+
+    var materialArray = [];
+    for (var i = 0; i < 6; i++)
+        materialArray.push( new THREE.MeshBasicMaterial({
+            map: THREE.ImageUtils.loadTexture( "images/stars2.png" ),
+            side: THREE.BackSide
+        }));
+
+    var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+    var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+    scene.add( skyBox );
 
     // Translucent with image texture
     var moonTexture = THREE.ImageUtils.loadTexture( 'images/moon.png' );
