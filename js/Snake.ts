@@ -1,11 +1,12 @@
 declare var Queue;
 
 class Snake implements ISnake {
-    private static INIT_LENGTH: number = 50;
-    private static DEFAULT_COLOR: THREE.Color = new THREE.Color(0x0000ff);
-
     public static LEFT: number = 1;
     public static RIGHT: number = -1;
+
+    private static INIT_LENGTH: number = 50;
+    private static DEFAULT_COLOR: THREE.Color = new THREE.Color(0x0000ff);
+    private static INVULNERABLE_DURATION: number = 3333;
 
     particles: Queue<IParticle>;
     direction: THREE.Vector3;
@@ -14,6 +15,8 @@ class Snake implements ISnake {
     lengthToGrow: number;
     color: THREE.Color;
     head: THREE.Mesh;
+
+    private statusBar: JQuery;
 
     // for now assume surface is a sphere centered at origin
     surface: THREE.Sphere;
@@ -25,6 +28,7 @@ class Snake implements ISnake {
         // head: THREE.Mesh,
         sphere: THREE.Sphere,
         scene: THREE.Scene,
+        statusBarId: string,
         color?: THREE.Color) {
         this.direction = dir;
         this.headPosition = headPos;
@@ -45,6 +49,8 @@ class Snake implements ISnake {
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
 
+        this.statusBar = $('#' + statusBarId);
+
         // var ballTexture = THREE.ImageUtils.loadTexture( 'images/snake.png' );
       	// var ballMaterial = new THREE.MeshBasicMaterial( { map: ballTexture, transparent : true, side: THREE.DoubleSide } );
         //
@@ -62,8 +68,28 @@ class Snake implements ISnake {
         return this.particles.getLength();
     }
 
+    private animateStatusBar(duration: number) {
+        if (this.statusBar.is(":visible")) {
+            this.statusBar.stop();
+        }
+
+        this.statusBar.css('width', '100%').attr('aria-valuenow', 100);
+        this.statusBar.show();
+        this.statusBar.animate({
+            width: '0px',
+        }, {
+            duration: duration,
+            easing: "linear",
+            complete: () => {
+                this.statusBar.hide();
+            }
+        });
+    }
+
     public makeInvulnerable(time: number) {
         this.invulnerableTime = time;
+
+        this.animateStatusBar(Snake.INVULNERABLE_DURATION);
     }
 
     public isInvulnerable(): boolean {

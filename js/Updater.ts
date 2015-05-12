@@ -2,13 +2,19 @@ declare var stats;
 declare var keyboard;
 
 class Updater {
-    private static InvulnerableTime = 200;
-    private static ENHANCE_VALUE = 15;
     public static SNAKE_A: number = 1;
     public static TIE: number = 0;
     public static SNAKE_B: number = -1;
 
+    private static InvulnerableTime = 200;
+    private static ENHANCE_VALUE = 15;
+
     public gameStats: GameStats;
+
+    private $leftLeft: JQuery;
+    private $leftRight: JQuery;
+    private $rightLeft: JQuery;
+    private $rightRight: JQuery;
 
     constructor(
         private scene: THREE.Scene,
@@ -19,6 +25,11 @@ class Updater {
         private neutralItemCollection: NeutralItemCollection
     ) {
         this.gameStats = new GameStats(snakeA, snakeB);
+
+        this.$leftLeft = $('#left-left');
+        this.$leftRight = $('#left-right');
+        this.$rightLeft = $('#right-left');
+        this.$rightRight = $('#right-right');
     }
 
     public getWinner(): number {
@@ -33,7 +44,7 @@ class Updater {
         }
     }
 
-    public updateCameraPositions() {
+    private _updateCameraPositions() {
         var snakeHead = this.snakeA.headPosition;
         this.cameraA.position.x = snakeHead.x * 3.5;
         this.cameraA.position.y = snakeHead.y * 3.5;
@@ -49,27 +60,27 @@ class Updater {
         this.cameraB.up = this.snakeB.direction;
     }
 
-    public updateStats() {
+    private _updateStats() {
         stats.update();
     }
 
     // rotate and update ui
     private _updateKeys() {
-        $('#left-left').removeClass('key-pressed');
-        $('#left-right').removeClass('key-pressed');
+        this.$leftLeft.removeClass('key-pressed');
+        this.$leftRight.removeClass('key-pressed');
         if (keyboard.pressed("A")) {
-            $('#left-left').addClass('key-pressed');
+            this.$leftLeft.addClass('key-pressed');
         } else if (keyboard.pressed("D")) {
-            $('#left-right').addClass('key-pressed');
+            this.$leftRight.addClass('key-pressed');
         }
 
-        $('#right-left').removeClass('key-pressed');
-        $('#right-right').removeClass('key-pressed');
+        this.$rightLeft.removeClass('key-pressed');
+        this.$rightRight.removeClass('key-pressed');
 
         if (keyboard.pressed("left")) {
-            $('#right-left').addClass('key-pressed');
+            this.$rightLeft.addClass('key-pressed');
         } else if (keyboard.pressed("right")) {
-            $('#right-right').addClass('key-pressed');
+            this.$rightRight.addClass('key-pressed');
         }
     }
 
@@ -131,9 +142,9 @@ class Updater {
                 this.snakeA.growLength(foodCollection[i].value);
                 this.gameStats.addSnakeAFood();
 
-                // Food with value 15 makes the snake invincible
+                // Food with value 15 makes the snake invulnerable
                 if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
-                    this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                    this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
                 }
 
                 // kill food particle, spawn new food particle
@@ -146,9 +157,9 @@ class Updater {
                 this.gameStats.addSnakeBFood();
                 console.log(this.gameStats.snakeBFood)
 
-                // Food with value 15 makes the snake invincible
+                // Food with value 15 makes the snake invulnerable
                 if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
-                    this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                    this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
                 }
 
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
@@ -167,10 +178,10 @@ class Updater {
         this._updateSnakeCollision();
         this._updateFoodCollision();
 
-        // updateCameraPositions
-        this.updateCameraPositions();
+        // camera positions
+        this._updateCameraPositions();
 
         // update stats
-        this.updateStats();
+        this._updateStats();
     }
 }

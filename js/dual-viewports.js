@@ -4,9 +4,10 @@ var leftCamera, rightCamera;
 var neutralItems;
 var updater;
 var clock;
+var snake, snake2;
 var animationFrameId;
 
-var GAME_TIME = 5;
+var GAME_TIME = 30;
 
 window.onload = function () {
     init();
@@ -54,8 +55,8 @@ function _initUpdater() {
     var dir2 = new THREE.Vector3(0, -1, 0);
 
     var crimson = new THREE.Color(0xdc143c);
-    var snake = new Snake(headPos, dir, geometricSphere, scene, crimson);
-    var snake2 = new Snake(headPos2, dir2, geometricSphere, scene, new THREE.Color(0x32cd32));
+    snake = new Snake(headPos, dir, geometricSphere, scene, 'left-status-bar', crimson);
+    snake2 = new Snake(headPos2, dir2, geometricSphere, scene, 'right-status-bar', new THREE.Color(0x32cd32));
 
     updater = new Updater(scene, snake, snake2, leftCamera, rightCamera, neutralItems);
 }

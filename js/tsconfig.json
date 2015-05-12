@@ -18,6 +18,7 @@
         "./FoodParticle.ts",
         "./GameStats.ts",
         "./NeutralItemCollection.ts",
+        "./Observer.ts",
         "./Particle.ts",
         "./Snake.ts",
         "./Updater.ts",
