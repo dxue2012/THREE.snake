@@ -38,6 +38,7 @@ module.exports = function(grunt) {
                 './bower_components/threejs/build/three.min.js',
                 'bower_components/threex.keyboardstate/threex.keyboardstate.js',
                 'bower_components/jquery/dist/jquery.min.js',
+                'bower_components/bootstrap/dist/js/bootstrap.min.js',
                 './js/*.js'],
             dest: 'dist/<%= pkg.name %>.js'
         }
@@ -49,7 +50,7 @@ module.exports = function(grunt) {
         },
         target: {
             files: {
-                'dist/THREE.Snake.css': ['css/style.css']
+                'dist/THREE.Snake.css': ['css/style.css', 'bower_components/bootstrap/dist/css/bootstrap.min.css']
             }
         }
     },

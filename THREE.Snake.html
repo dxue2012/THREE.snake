@@ -4,52 +4,54 @@
 <head>
     <title>THREE.Snake</title>
     <!-- dev version -->
-    <link href="css/style.css" type="text/css" rel="stylesheet"/>
+    <!-- <link href="css/style.css" type="text/css" rel="stylesheet"/>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet"/> -->
 
     <!-- compiled version -->
-    <!-- <link rel="stylesheet" href="dist/THREE.Snake.css"> -->
+    <link rel="stylesheet" href="dist/THREE.Snake.css">
 </head>
 
 <body>
     <script id="vertexShader" type="x-shader/x-vertex">
-        // attribute vec3 position; // apparently three.js builds in position. Similarly the projection and model-view matrices
-        attribute float size;
-        attribute vec3 velocity;
-        attribute vec4 color;
-        attribute float lifetime;
+    // attribute vec3 position; // apparently three.js builds in position. Similarly the projection and model-view matrices
+    attribute float size;
+    attribute vec3 velocity;
+    attribute vec4 color;
+    attribute float lifetime;
 
-        varying vec4 vColor;
+    varying vec4 vColor;
 
-        void main() {
+    void main() {
 
-            vColor = color;
+        vColor = color;
 
-            // calculate required position
-            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-            gl_PointSize    = size * ( 300.0 / length( mvPosition.xyz ) ); // make points bigget if we are closer to them?
-            gl_Position     = projectionMatrix *
-                              mvPosition;
-        }
+        // calculate required position
+        vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+        gl_PointSize    = size * ( 300.0 / length( mvPosition.xyz ) ); // make points bigget if we are closer to them?
+        gl_Position     = projectionMatrix *
+        mvPosition;
+    }
     </script>
 
     <script id="fragmentShader" type="x-shader/x-fragment" >
-        uniform vec3 globColor;
-        uniform sampler2D texture;
+    uniform vec3 globColor;
+    uniform sampler2D texture;
 
-        varying vec4 vColor;
+    varying vec4 vColor;
 
-        void main() {
-            vec4 tex = texture2D(texture, gl_PointCoord);
-            gl_FragColor = tex * vColor;
-        }
+    void main() {
+        vec4 tex = texture2D(texture, gl_PointCoord);
+        gl_FragColor = tex * vColor;
+    }
     </script>
 
-        <!-- Dev Version -->
-    <script src="libjs/stats.min.js"></script>
+    <!-- Dev Version -->
+    <!-- <script src="libjs/stats.min.js"></script>
     <script src="bower_components/threejs/build/three.js"></script>
     <script src="bower_components/threex.keyboardstate/threex.keyboardstate.js"></script>
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script src="js/Snake.js"></script>
     <script src="js/Particle.js"></script>
@@ -60,28 +62,49 @@
     <script src="js/NeutralItemCollection.js"></script>
     <script src="js/Clock.js"></script>
     <script src="js/dual-viewports.js"></script>
-    <script src="js/GameStats.js"></script>
+    <script src="js/GameStats.js"></script> -->
 
-        <!-- Compiled Version -->
-    <!-- <script src="dist/THREE.Snake.js"></script> -->
+<!-- Compiled Version -->
+<script src="dist/THREE.Snake.js"></script>
 
-    <div id="main_div">
-        <h1> THREE.Snake </h1>
-        <div id="game-timer"> </div>
-    </div>
+<div id="main_div">
+    <h3 id="game-title"> THREE.Snake </h3>
+    <div id="game-timer"> </div>
+</div>
 
-    <div id="left-controls">
-        <img id="left-left" src="images/controls/a.png" alt="a">
-        <img id="left-right" src="images/controls/d.png" alt="d">
-    </div>
-    <div id="right-controls">
-        <img id="right-left" src="images/controls/cursor-left.png" alt="<-">
-        <img id="right-right" src="images/controls/cursor-right.png" alt="->">
-    </div>
+<div id="left-controls">
+    <img id="left-left" src="images/controls/a.png" alt="a">
+    <img id="left-right" src="images/controls/d.png" alt="d">
+</div>
+<div id="right-controls">
+    <img id="right-left" src="images/controls/cursor-left.png" alt="<-">
+    <img id="right-right" src="images/controls/cursor-right.png" alt="->">
+</div>
 
-    <div id="left-end-message" class="end-message"> </div>
-    <div id="right-end-message" class="end-message"> </div>
-    <div id="restart-button"> restart </div>
-    <div id="end-stats"> </div>
+<div id="left-end-message" class="end-message"> </div>
+<div id="right-end-message" class="end-message"> </div>
+<div id="restart-button"> restart </div>
+
+<div class="modal fade" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">THREE.Snake</h4>
+      </div>
+      <div class="modal-body">
+          <ul>
+              <li>Welcome, snake masters, to the ultimate arena!</li>
+              <li> Use 'a', 'd', or the cursor to turn.</li>
+              <li>Collect food to outgrow your opponent. </li>
+              <li>Bumping into your opponent costs you half of your length (unless you are invulnerable).</li>
+          </ul>
+              </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Got it!</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 </body>
 </html>
