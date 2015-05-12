@@ -6,6 +6,7 @@ class Updater {
     public static SNAKE_A: number = 1;
     public static TIE: number = 0;
     public static SNAKE_B: number = -1;
+    public static stats;
 
     constructor(
         private scene: THREE.Scene,
@@ -15,6 +16,7 @@ class Updater {
         private cameraB: THREE.PerspectiveCamera,
         private neutralItemCollection: NeutralItemCollection
     ) {
+        stats = new Stats(snakeA, snakeB)
     }
 
     public getWinner(): number {
@@ -45,9 +47,9 @@ class Updater {
         this.cameraB.up = this.snakeB.direction;
     }
 
-    public updateStats() {
-        stats.update();
-    }
+    // public updateStats() {
+    //     stats.update();
+    // }
 
     public update() {
         // rotate first
@@ -79,6 +81,8 @@ class Updater {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+            stats.snakeAKilled++;
+            stats.snakeBKilled++;
         } else if (aIntoB) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);

@@ -6,6 +6,7 @@ var Updater = (function () {
         this.cameraA = cameraA;
         this.cameraB = cameraB;
         this.neutralItemCollection = neutralItemCollection;
+        stats = new Stats(snakeA, snakeB);
     }
     Updater.prototype.getWinner = function () {
         var snakeALength = this.snakeA.getLength();
@@ -34,9 +35,6 @@ var Updater = (function () {
         this.cameraB.lookAt(new THREE.Vector3(0, 0, 0));
         this.cameraB.up = this.snakeB.direction;
     };
-    Updater.prototype.updateStats = function () {
-        stats.update();
-    };
     Updater.prototype.update = function () {
         if (keyboard.pressed("A")) {
             this.snakeA.turn(Snake.LEFT);
@@ -59,6 +57,8 @@ var Updater = (function () {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+            stats.snakeAKilled++;
+            stats.snakeBKilled++;
         }
         else if (aIntoB) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);

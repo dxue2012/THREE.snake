@@ -19,6 +19,7 @@
         "./NeutralItemCollection.ts",
         "./Particle.ts",
         "./Snake.ts",
+        "./Stats.ts",
         "./Updater.ts",
         "./typings/All.d.ts",
         "./typings/Emitter.d.ts",
