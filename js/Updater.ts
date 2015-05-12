@@ -3,6 +3,7 @@ declare var keyboard;
 
 class Updater {
     private static InvulnerableTime = 200;
+    private static ENHANCE_VALUE = 15;
     public static SNAKE_A: number = 1;
     public static TIE: number = 0;
     public static SNAKE_B: number = -1;
@@ -97,6 +98,11 @@ class Updater {
                 // grow snake
                 this.snakeA.growLength(foodCollection[i].value);
 
+                // Food with value 15 makes the snake invincible
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                    this.snakeA.invulnerableTime += Updater.InvulnerableTime;
+                }
+
                 // kill food particle, spawn new food particle
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -104,6 +110,11 @@ class Updater {
             if (Collision.snakeWithFood(this.snakeB, foodCollection[i])) {
                 // grow snake
                 this.snakeB.growLength(foodCollection[i].value);
+
+                // Food with value 15 makes the snake invincible
+                if (foodCollection[i].value === Updater.ENHANCE_VALUE) {
+                    this.snakeB.invulnerableTime += Updater.InvulnerableTime;
+                }
 
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
