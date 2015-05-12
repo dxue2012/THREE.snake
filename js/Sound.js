@@ -4,7 +4,7 @@ var Sound = (function () {
     Sound.background = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');
-        source.src = '/sounds/background.mp3';
+        source.src = '/sounds/moonlight.mp3';
         audio.appendChild(source);
         audio.play();
         audio.addEventListener('ended', function () {

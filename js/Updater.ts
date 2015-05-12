@@ -110,6 +110,7 @@ class Updater {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
             this.gameStats.snakeBKilled++;
+            // this.redLight();
 
         } else if (aIntoA) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
@@ -140,6 +141,7 @@ class Updater {
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
                     this.snakeA.speed = Snake.BOOSTED_SPEED;
                     this.snakeA.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
 
                 // kill food particle, spawn new food particle
@@ -166,6 +168,18 @@ class Updater {
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
         }
+    }
+
+    private redLight() {
+        var redLight = new THREE.AmbientLight(0xff0000);
+        this.scene.add(redLight);
+        var hex = redLight.color.getHex();
+        for (var i = 0; hex != 0x000000; i++) {
+          hex--;
+          redLight.color.setHex(hex);
+        }
+
+        // this.scene.remove(redLight);
     }
 
     public update() {

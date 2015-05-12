@@ -117,6 +117,7 @@ var Updater = (function () {
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
                     this.snakeA.speed = Snake.BOOSTED_SPEED;
                     this.snakeA.speedupTime = Updater.SpeedupTime;
+                    Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
@@ -134,6 +135,15 @@ var Updater = (function () {
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);
             }
+        }
+    };
+    Updater.prototype.redLight = function () {
+        var redLight = new THREE.AmbientLight(0xff0000);
+        this.scene.add(redLight);
+        var hex = redLight.color.getHex();
+        for (var i = 0; hex != 0x000000; i++) {
+            hex--;
+            redLight.color.setHex(hex);
         }
     };
     Updater.prototype.update = function () {
