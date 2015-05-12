@@ -39,6 +39,7 @@ module.exports = function(grunt) {
                 'bower_components/threex.keyboardstate/threex.keyboardstate.js',
                 'bower_components/jquery/dist/jquery.min.js',
                 'bower_components/bootstrap/dist/js/bootstrap.min.js',
+                './js/Updater.js',
                 './js/*.js'],
             dest: 'dist/<%= pkg.name %>.js'
         }
