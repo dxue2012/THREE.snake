@@ -3,10 +3,10 @@ var FoodParticle = (function () {
         this.position = pos;
         this.value = value ? value : FoodParticle.DEFAULT_VALUE;
         if (this.value === FoodParticle.DEFAULT_VALUE) {
-            var sphereGeo = new THREE.SphereGeometry(0.05, 16, 16);
-            var grassTexture = THREE.ImageUtils.loadTexture('images/amethyst.png');
-            var grassMaterial = new THREE.MeshLambertMaterial({ map: grassTexture });
-            this.sphere = new THREE.Mesh(sphereGeo, grassMaterial);
+            var sphereGeo = new THREE.SphereGeometry(0.03, 4, 4);
+            var lavTexture = THREE.ImageUtils.loadTexture('images/amethyst.png');
+            var lavMaterial = new THREE.MeshLambertMaterial({ map: lavTexture });
+            this.sphere = new THREE.Mesh(sphereGeo, lavMaterial);
         }
         else {
             var sphereGeo = new THREE.SphereGeometry(0.05, 16, 16);

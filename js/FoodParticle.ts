@@ -9,7 +9,7 @@ class FoodParticle implements IFoodParticle {
         this.position = pos;
         this.value = value ? value : FoodParticle.DEFAULT_VALUE;
         if (this.value === FoodParticle.DEFAULT_VALUE) {
-            var sphereGeo = new THREE.SphereGeometry(0.05, 4, 4);
+            var sphereGeo = new THREE.SphereGeometry(0.03, 4, 4);
             var standardMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
             this.sphere = new THREE.Mesh(sphereGeo, standardMaterial);
         }
