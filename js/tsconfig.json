@@ -16,6 +16,7 @@
         "./Clock.ts",
         "./Collision.ts",
         "./FoodParticle.ts",
+        "./GameStats.ts",
         "./NeutralItemCollection.ts",
         "./Particle.ts",
         "./Snake.ts",

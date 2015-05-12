@@ -18,6 +18,7 @@
         "./js/Clock.ts",
         "./js/Collision.ts",
         "./js/FoodParticle.ts",
+        "./js/GameStats.ts",
         "./js/NeutralItemCollection.ts",
         "./js/Particle.ts",
         "./js/Snake.ts",
