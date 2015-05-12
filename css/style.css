@@ -179,15 +179,6 @@ body {
 .progress-bar {
     -webkit-transition: none !important;
     transition: none !important;
-}
-
-#left-status-bar {
-    background-image: none;
-    display: none;
-}
-
-#right-status-bar {
-    background-image: none;
     display: none;
 }
 

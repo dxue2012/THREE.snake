@@ -1,5 +1,5 @@
 var Snake = (function () {
-    function Snake(headPos, dir, speed, sphere, scene, statusBarId, color) {
+    function Snake(headPos, dir, speed, sphere, scene, leftOrRight, color) {
         this.direction = dir;
         this.headPosition = headPos;
         this.particles = new Queue();
@@ -15,8 +15,10 @@ var Snake = (function () {
         this.head = new THREE.Mesh(headGeo, headMat);
         this.head.position.set(headPos.x, headPos.y, headPos.z);
         this.scene.add(this.head);
-        this.statusBar = $('#' + statusBarId);
-        this.statusBar.hide();
+        this.invulnerableBar = $('#' + leftOrRight + '-invulnerable-bar');
+        this.invulnerableBar.hide();
+        this.speedupBar = $('#' + leftOrRight + '-speedup-bar');
+        this.speedupBar.hide();
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead(Snake.DEFAULT_SPEED);
         }
@@ -24,36 +26,60 @@ var Snake = (function () {
     Snake.prototype.getLength = function () {
         return this.particles.getLength();
     };
-    Snake.prototype.stopStatusBar = function () {
-        this.statusBar.stop();
+    Snake.prototype.stopStatusBars = function () {
+        this._stopInvulnerableBar();
+        this._stopSpeedupBar();
     };
-    Snake.prototype._animateStatusBar = function (duration) {
-        var _this = this;
-        if (this.statusBar.is(":visible")) {
-            this.statusBar.stop();
+    Snake.prototype._stopSpeedupBar = function () {
+        this.speedupBar.stop();
+    };
+    Snake.prototype._stopInvulnerableBar = function () {
+        this.invulnerableBar.stop();
+    };
+    Snake.prototype._animateStatusBar = function (statusBar, duration) {
+        if (statusBar.is(":visible")) {
+            statusBar.stop();
         }
-        this.statusBar.css('width', '100%').attr('aria-valuenow', 100);
-        this.statusBar.show();
-        this.statusBar.animate({
+        statusBar.css('width', '100%').attr('aria-valuenow', 100);
+        statusBar.show();
+        statusBar.animate({
             width: '0px',
         }, {
             duration: duration,
             easing: "linear",
             complete: function () {
-                _this.statusBar.hide();
+                statusBar.hide();
             }
         });
     };
-    Snake.prototype._setStatusBarColor = function (color) {
-        this.statusBar.css('background-color', color);
+    Snake.prototype._animateSpeedupBar = function (duration) {
+        this._animateStatusBar(this.speedupBar, duration);
+    };
+    Snake.prototype._animateInvulnerableBar = function (duration) {
+        this._animateStatusBar(this.invulnerableBar, duration);
+    };
+    Snake.prototype._setStatusBarColor = function (statusBar, color) {
+        statusBar.css('background-color', color);
+    };
+    Snake.prototype._setInvulnerableBarColor = function (color) {
+        this._setStatusBarColor(this.invulnerableBar, color);
+    };
+    Snake.prototype._setSpeedupBarColor = function (color) {
+        this._setStatusBarColor(this.speedupBar, color);
     };
     Snake.prototype.makeInvulnerable = function (time) {
         this.invulnerableTime = time;
-        this._setStatusBarColor("#ffd700");
-        this._animateStatusBar(Snake.INVULNERABLE_DURATION);
+        this._setInvulnerableBarColor("#ffd700");
+        this._animateInvulnerableBar(Snake.INVULNERABLE_DURATION);
     };
     Snake.prototype.isInvulnerable = function () {
         return this.invulnerableTime > 0;
+    };
+    Snake.prototype.boost = function (duration) {
+        this.speedupTime = duration;
+        this.speed = Snake.BOOSTED_SPEED;
+        this._setSpeedupBarColor("#c0c0c0");
+        this._animateSpeedupBar(Snake.SPEEDUP_DURATION);
     };
     Snake.prototype.isSpeedingup = function () {
         return this.speedupTime > 0;
@@ -116,10 +142,12 @@ var Snake = (function () {
         this.direction = this.direction.applyAxisAngle(this.headPosition.clone().normalize(), leftOrRight * rotationAngle);
     };
     Snake.prototype.moveForward = function () {
-        if (this.isSpeedingup())
+        if (this.isSpeedingup()) {
             this.growHead(Snake.BOOSTED_SPEED);
-        else
+        }
+        else {
             this.growHead(Snake.DEFAULT_SPEED);
+        }
         if (this.lengthToGrow <= 0) {
             this.chopTail();
         }
@@ -137,6 +165,7 @@ var Snake = (function () {
     Snake.BOOSTED_SPEED = 1 / 30.0;
     Snake.LEFT = 1;
     Snake.RIGHT = -1;
-    Snake.INVULNERABLE_DURATION = 3333;
+    Snake.INVULNERABLE_DURATION = Math.round(Updater.InvulnerableTime / 60 * 1000);
+    Snake.SPEEDUP_DURATION = Math.round(Updater.SpeedupTime / 60 * 1000);
     return Snake;
 })();

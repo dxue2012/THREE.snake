@@ -2,8 +2,8 @@ declare var stats;
 declare var keyboard;
 
 class Updater {
-    private static InvulnerableTime = 200;
-    private static SpeedupTime = 200;
+    public static InvulnerableTime = 200;
+    public static SpeedupTime = 200;
     public static SNAKE_A: number = 1;
     public static TIE: number = 0;
     public static SNAKE_B: number = -1;
@@ -148,8 +148,7 @@ class Updater {
                 }
 
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
-                    this.snakeA.speed = Snake.BOOSTED_SPEED;
-                    this.snakeA.speedupTime = Updater.SpeedupTime;
+                    this.snakeA.boost(Updater.SpeedupTime);
                     Sound.powerup();
                 }
 
@@ -170,8 +169,7 @@ class Updater {
                 }
 
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
-                    this.snakeB.speed = Snake.BOOSTED_SPEED;
-                    this.snakeB.speedupTime = Updater.SpeedupTime;
+                    this.snakeA.boost(Updater.SpeedupTime);
                     Sound.powerup();
                 }
 
