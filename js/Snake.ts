@@ -52,7 +52,6 @@ class Snake implements ISnake {
 
         this.color = color ? color : Snake.DEFAULT_COLOR;
 
-        // var headGeo = new THREE.SphereGeometry(0.1, 2,2);
         var headGeo = new THREE.TetrahedronGeometry(0.05);
         var headMat = new THREE.MeshBasicMaterial( {color: this.color.getHex(), wireframe: true} );
         this.head = new THREE.Mesh(headGeo, headMat);
@@ -64,14 +63,6 @@ class Snake implements ISnake {
 
         this.speedupBar = $('#' + leftOrRight + '-speedup-bar');
         this.speedupBar.hide();
-
-        // var ballTexture = THREE.ImageUtils.loadTexture( 'images/snake.png' );
-      	// var ballMaterial = new THREE.MeshBasicMaterial( { map: ballTexture, transparent : true, side: THREE.DoubleSide } );
-        //
-      	// var planeGeometry = new THREE.PlaneGeometry(1,1,1);
-      	// this.head = new THREE.Mesh( planeGeometry, ballMaterial );
-      	// this.head.position.set( headPos.x, headPos.y, headPos.z );
-      	// this.scene.add(this.head);
 
         for (var i = 0; i < Snake.INIT_LENGTH; i++) {
             this.growHead(Snake.DEFAULT_SPEED);

@@ -26,6 +26,13 @@ var Sound = (function () {
         audio.appendChild(source);
         audio.play();
     };
+    Sound.countdown = function () {
+        var audio = document.createElement('audio');
+        var source = document.createElement('source');
+        source.src = 'https://s3-us-west-2.amazonaws.com/three.snake/countdown.mp3';
+        audio.appendChild(source);
+        audio.play();
+    };
     Sound.gameover = function () {
         var audio = document.createElement('audio');
         var source = document.createElement('source');

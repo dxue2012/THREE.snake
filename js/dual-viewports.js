@@ -9,7 +9,6 @@ var animationFrameId;
 
 var GAME_TIME = 60;
 
-
 window.onload = function () {
     init();
     // animate();

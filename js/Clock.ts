@@ -23,7 +23,7 @@ class Clock {
             this.display.text(minutes + ":" + seconds);
 
             // update live stats
-
+            if (timer == 11) Sound.countdown();
 
             if (--timer < 0) {
                 this.stopTimer();

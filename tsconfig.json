@@ -35,7 +35,6 @@
         "./js/typings/Scene.d.ts",
         "./js/typings/Snake.d.ts",
         "./js/typings/SystemSettings.d.ts",
-        "./typings/jquery/jquery.d.ts",
         "./typings/threejs/three.d.ts",
         "./typings/tsd.d.ts",
         "./typings/webaudioapi/waa.d.ts",

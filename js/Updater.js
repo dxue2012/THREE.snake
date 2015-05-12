@@ -140,6 +140,15 @@ var Updater = (function () {
             }
         }
     };
+    Updater.prototype.redLight = function () {
+        var redLight = new THREE.AmbientLight(0xff0000);
+        this.scene.add(redLight);
+        var hex = redLight.color.getHex();
+        for (var i = 0; hex != 0x000000; i++) {
+            hex--;
+            redLight.color.setHex(hex);
+        }
+    };
     Updater.prototype.update = function () {
         this._updateKeys();
         this._updateTurn();

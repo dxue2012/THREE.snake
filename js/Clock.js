@@ -14,6 +14,8 @@ var Clock = (function () {
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
             _this.display.text(minutes + ":" + seconds);
+            if (timer == 11)
+                Sound.countdown();
             if (--timer < 0) {
                 _this.stopTimer();
                 _this.stopCallback();

@@ -28,6 +28,14 @@ class Sound {
       audio.play();
     }
 
+    public static countdown(): void {
+      var audio = document.createElement('audio');
+      var source = document.createElement('source');
+      source.src = 'https://s3-us-west-2.amazonaws.com/three.snake/countdown.mp3';
+      audio.appendChild(source);
+      audio.play();
+    }
+
     public static gameover(): void {
       var audio = document.createElement('audio');
       var source = document.createElement('source');
