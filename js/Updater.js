@@ -133,7 +133,7 @@ var Updater = (function () {
                     Sound.powerup();
                 }
                 if (foodCollection[i].value === FoodParticle.BOOST_VALUE) {
-                    this.snakeA.boost(Updater.SpeedupTime);
+                    this.snakeB.boost(Updater.SpeedupTime);
                     Sound.powerup();
                 }
                 this.neutralItemCollection.respawnFood(foodCollection[i]);

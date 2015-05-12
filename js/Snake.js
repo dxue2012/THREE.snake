@@ -53,9 +53,13 @@ var Snake = (function () {
         });
     };
     Snake.prototype._animateSpeedupBar = function (duration) {
+        var otherZIndex = +this.invulnerableBar.css('z-index');
+        this.speedupBar.css('z-index', otherZIndex - 1);
         this._animateStatusBar(this.speedupBar, duration);
     };
     Snake.prototype._animateInvulnerableBar = function (duration) {
+        var otherZIndex = +this.speedupBar.css('z-index');
+        this.invulnerableBar.css('z-index', otherZIndex - 1);
         this._animateStatusBar(this.invulnerableBar, duration);
     };
     Snake.prototype._setStatusBarColor = function (statusBar, color) {

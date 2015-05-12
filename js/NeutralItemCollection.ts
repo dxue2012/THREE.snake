@@ -45,14 +45,14 @@ class NeutralItemCollection {
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
         var rand = Math.random();
         if (rand < 0.1) {
+            var food = new FoodParticle(spawnLocation, FoodParticle.ENHANCE_VALUE);
+            // spawn a special food that boosts length by 20
+        }
+        else if (rand < 0.5){
           var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
           // spawn a golden pallet for invulnerability and length boost of 15
         }
-        else if (rand < 0.2){
-          var food = new FoodParticle(spawnLocation, FoodParticle.ENHANCE_VALUE);
-          // spawn a special food that boosts length by 20
-        }
-        else if (rand < 0.3){
+        else if (rand < 0.9){
           var food = new FoodParticle(spawnLocation, FoodParticle.BOOST_VALUE);
           // spawn a special food that boosts speed by 1.5
         }

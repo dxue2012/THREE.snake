@@ -119,10 +119,20 @@ class Snake implements ISnake {
     }
 
     private _animateSpeedupBar(duration: number) {
+
+        // lower z-index to set this one behind the other bar
+        var otherZIndex: number = +this.invulnerableBar.css('z-index');
+        this.speedupBar.css('z-index', otherZIndex - 1);
+
         this._animateStatusBar(this.speedupBar, duration);
     }
 
     private _animateInvulnerableBar(duration: number) {
+
+        // lower z-index to set this one behind the other bar
+        var otherZIndex: number = +this.speedupBar.css('z-index');
+        this.invulnerableBar.css('z-index', otherZIndex - 1);
+
         this._animateStatusBar(this.invulnerableBar, duration);
     }
 

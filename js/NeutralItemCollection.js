@@ -31,12 +31,12 @@ var NeutralItemCollection = (function () {
         var spawnLocation = NeutralItemCollection.randomPointOnSphere(1);
         var rand = Math.random();
         if (rand < 0.1) {
-            var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
-        }
-        else if (rand < 0.2) {
             var food = new FoodParticle(spawnLocation, FoodParticle.ENHANCE_VALUE);
         }
-        else if (rand < 0.3) {
+        else if (rand < 0.5) {
+            var food = new FoodParticle(spawnLocation, FoodParticle.INVINCIBLE_VALUE);
+        }
+        else if (rand < 0.9) {
             var food = new FoodParticle(spawnLocation, FoodParticle.BOOST_VALUE);
         }
         else {
