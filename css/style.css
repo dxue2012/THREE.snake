@@ -36,24 +36,6 @@ body {
     z-index: 1000;
 }
 
-#left-end-message {
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 10px;
-
-    position: absolute;
-    top: 35vh;
-    left: 10vw;
-    width: 30vw;
-    height: 30vh;
-
-    font-size: 4em;
-    line-height: 2em;
-    color: black;
-    text-align: center;
-
-    display: none;
-}
-
 #restart-button {
     position: absolute;
     top: 90vh;
@@ -73,22 +55,32 @@ body {
     display: none;
 }
 
-#right-end-message {
+.end-message {
     background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
 
-    position: absolute;
-    top: 35vh;
-    left: 60vw;
-    width: 30vw;
-    height: 30vh;
-
-    font-size: 4em;
+    font-size: 60px;
     line-height: 2em;
     color: black;
     text-align: center;
 
     display: none;
+}
+
+#left-end-message {
+    position: absolute;
+    top: 35vh;
+    left: 10vw;
+    width: 30vw;
+    height: 30vh;
+}
+
+#right-end-message {
+    position: absolute;
+    top: 35vh;
+    left: 60vw;
+    width: 30vw;
+    height: 30vh;
 }
 
 #left-controls {
