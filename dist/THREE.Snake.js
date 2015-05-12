@@ -1048,7 +1048,7 @@ var Collision = (function () {
         }
         var snakeAHead = new THREE.Sphere(snakeA.headPosition, 0.05);
         var collided = false;
-        if (snakeA != snakeB) { // Different snake: traverse entire body length
+        if (snakeA !== snakeB) {
             snakeB.particles.forEach(function (currParticle) {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
@@ -1057,8 +1057,9 @@ var Collision = (function () {
                 }
                 return true;
             });
+            return collided;
         }
-        else { // Same snake: only traverse >10th particles in the body
+        else {
             snakeA.particles.forEachInBody(function (currParticle) {
                 var currPart = new THREE.Sphere(currParticle.position, 0.05);
                 if (currPart.intersectsSphere(snakeAHead)) {
@@ -1386,6 +1387,8 @@ var Updater = (function () {
         this.snakeB.moveForward();
         var aIntoB = Collision.snakeWithSnake(this.snakeA, this.snakeB);
         var bIntoA = Collision.snakeWithSnake(this.snakeB, this.snakeA);
+        var aIntoA = Collision.snakeWithSnake(this.snakeA, this.snakeA);
+        var bIntoB = Collision.snakeWithSnake(this.snakeB, this.snakeB);
         if (aIntoB && bIntoA) {
             this.snakeA.shorten(this.snakeA.getLength() * 0.5);
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
@@ -1397,6 +1400,14 @@ var Updater = (function () {
             this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
         }
         else if (bIntoA) {
+            this.snakeB.shorten(this.snakeB.getLength() * 0.5);
+            this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
+        }
+        else if (aIntoA) {
+            this.snakeA.shorten(this.snakeA.getLength() * 0.5);
+            this.snakeA.makeInvulnerable(Updater.InvulnerableTime);
+        }
+        else if (bIntoB) {
             this.snakeB.shorten(this.snakeB.getLength() * 0.5);
             this.snakeB.makeInvulnerable(Updater.InvulnerableTime);
         }
@@ -1429,7 +1440,7 @@ var updater;
 var clock;
 var animationFrameId;
 
-var GAME_TIME = 5;
+var GAME_TIME = 60;
 
 window.onload = function () {
     init();
@@ -1453,6 +1464,10 @@ function _initStats() {
     stats = new Stats();
     stats.domElement.style.position = 'absolute';
     stats.domElement.style.bottom = '0px';
+
+    SCREEN_WIDTH = window.innerWidth;
+    stats.domElement.style.left = Math.floor((SCREEN_WIDTH - 100) / 2) + 'px';
+    //stats.domElement.style.width = '10vw';
     stats.domElement.style.zIndex = 100;
     container.appendChild(stats.domElement);
 }
@@ -1478,9 +1493,13 @@ function _initScene() {
     light.position.set(0, 250, 0);
     scene.add(light);
 
-    var directionalLight = new THREE.DirectionalLight(0xffffff);
-    directionalLight.position.set(0, 10, 0);
+    var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(0, 1, 0);
     scene.add(directionalLight);
+
+    var directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    directionalLight2.position.set(0, -1, 0);
+    scene.add(directionalLight2);
 
     // // Skybox with dawnmountain scene
     var imagePrefix = "images/sky-";
@@ -1612,8 +1631,11 @@ function restart() {
     rightEndMessage.hide();
     restartButton.hide();
 
+    // reset things
     var oldCanvas = $('canvas');
     oldCanvas.remove();
+    var oldStats = $('#stats');
+    oldStats.remove();
 
     init();
     animate();

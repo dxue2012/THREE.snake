@@ -68,6 +68,8 @@ body {
     font-size: 2.5em;
     text-align: center;
 
+    z-index: 1000;
+
     display: none;
 }
 
@@ -94,7 +96,7 @@ body {
     left: 20vw;
     bottom: 0;
 
-    width: 20vw;
+    width: 40vw;
 }
 
 #right-controls {
