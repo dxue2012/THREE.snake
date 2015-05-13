@@ -172,7 +172,6 @@ body {
     width: 40vw;
 }
 
-
 .top {
     margin: 30px;
 }
@@ -222,6 +221,38 @@ body {
     left: 0;
 
     z-index: 1000;
+}
+
+/* invisible touch boxes */
+
+.touch-box {
+    width: 25%;
+    height: 100%;
+    z-index: 1000;
+}
+
+#touch-left-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#touch-left-right {
+    position: absolute;
+    top: 0;
+    left: 25%;
+}
+
+#touch-right-left {
+    position: absolute;
+    top: 0;
+    left: 50%;
+}
+
+#touch-right-right {
+    position: absolute;
+    top: 0;
+    left: 75%;
 }
 
 .key-pressed {
