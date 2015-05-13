@@ -1740,6 +1740,19 @@ var animationFrameId;
 
 var GAME_TIME = 60;
 
+function fireKeyboardEvent(eventType, keyCode) {
+    var event = document.createEvent("KeyboardEvent");
+    event.initKeyboardEvent(eventType, true, true, window, false, false, false, false, 0, 0);
+
+    Object.defineProperty(event, 'keyCode', {
+        get : function() {
+            return keyCode;
+        }
+    });
+
+    document.dispatchEvent(event);
+}
+
 window.onload = function () {
     init();
     // animate();
@@ -1750,6 +1763,38 @@ window.onload = function () {
         clock.startTimer();
         _initSound();
         animate();
+
+        $('#touch-left-left').on('touchstart', function() {
+            fireKeyboardEvent("keydown", 65);
+        });
+
+        $('#touch-left-right').on('touchstart', function() {
+            fireKeyboardEvent("keydown", 68);
+        });
+
+        $('#touch-right-left').on('touchstart', function() {
+            fireKeyboardEvent("keydown", 37);
+        });
+
+        $('#touch-right-right').on('touchstart', function() {
+            fireKeyboardEvent("keydown", 39);
+        });
+
+        $('#touch-left-left').on('touchend', function() {
+            fireKeyboardEvent("keyup", 65);
+        });
+
+        $('#touch-left-right').on('touchend', function() {
+            fireKeyboardEvent("keyup", 68);
+        });
+
+        $('#touch-right-left').on('touchend', function() {
+            fireKeyboardEvent("keyup", 37);
+        });
+
+        $('#touch-right-right').on('touchend', function() {
+            fireKeyboardEvent("keyup", 39);
+        });
     });
 
     var restartButton = $('#restart-button');
