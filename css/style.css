@@ -123,15 +123,10 @@ body {
     border-color: blue;
 
     font-size: 2.5em;
-<<<<<<< HEAD
-    /*text-align: center;*/
-    /*color: white;*/
-=======
     text-align: center;
     color: white;
->>>>>>> 42332814a942519380ac3bf476253f1ed9f63042
 
-    z-index: 1000;
+    z-index: 2000;
 
     display: none;
 }
@@ -184,7 +179,8 @@ body {
 }
 
 #left-status-bar-wrapper {
-    position: absolute;
+
+   position: absolute;
     top: 8vh;
     left: 10vw;
     height: 20px;
